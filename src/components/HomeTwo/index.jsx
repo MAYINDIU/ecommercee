@@ -18,7 +18,7 @@ export default function HomeTwo() {
   const [Habib, setHabib] = useState([]);
   const [popular, setPopular] = useState([]);
   const [new_arrival, setNewArrival] = useState([]);
-
+  const [top_sell, setTopSell] = useState([]);
 
   //All category
   useEffect(() => {
@@ -50,6 +50,15 @@ export default function HomeTwo() {
       "https://habib.munihaelectronics.com/public/api/home/new-arrival/product")
       .then((res) => res.json())
       .then((data) => setNewArrival(data));
+  }, []);
+
+
+  //Top sell Products
+  useEffect(() => {
+    fetch(
+      "http://habib.munihaelectronics.com/public/api/home/top-sell/product")
+      .then((res) => res.json())
+      .then((data) => setTopSell(data));
   }, []);
 
 
@@ -95,7 +104,7 @@ export default function HomeTwo() {
         seeMoreUrl="/all-products"
         categoryTitle="Top Selling Products"
       >
-        <SectionStyleTwo products={products.slice(3, products.length)} />
+        <SectionStyleTwo habib={top_sell} products={products.slice(3, products.length)} />
       </ViewMoreTitle>
       <ProductsAds
         ads={[`${process.env.PUBLIC_URL}/assets/images/ads-2.3.png`]}

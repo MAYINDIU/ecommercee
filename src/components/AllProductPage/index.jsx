@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import "react-input-range/lib/css/index.css";
 import productDatas from "../../data/products.json";
 import BreadcrumbCom from "../BreadcrumbCom";
@@ -52,6 +52,18 @@ export default function AllProductPage() {
   const [filterToggle, setToggle] = useState(false);
 
   const { products } = productDatas;
+  const [allproducts, setAllproducts] = useState([]);
+  console.log(allproducts);
+  //All New Arrivals 
+  useEffect(() => {
+    fetch(
+      "http://habib.munihaelectronics.com/public/api/home/all-product")
+      .then((res) => res.json())
+      .then((data) => setAllproducts(data));
+  }, []);
+
+
+
 
   return (
     <>

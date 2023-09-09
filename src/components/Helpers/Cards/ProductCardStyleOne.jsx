@@ -4,7 +4,7 @@ import Star from "../icons/Star";
 import ThinLove from "../icons/ThinLove";
 
 export default function ProductCardStyleOne({ datas, type }) {
-  console.log(datas);
+
   const available =
     (datas.cam_product_sale /
       (datas.cam_product_available + datas.cam_product_sale)) *
