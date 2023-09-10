@@ -5,6 +5,8 @@ import ThinLove from "../icons/ThinLove";
 
 export default function ProductCardStyleOne({ datas, type }) {
 
+
+
   const available =
     (datas.cam_product_sale /
       (datas.cam_product_available + datas.cam_product_sale)) *
@@ -89,7 +91,7 @@ export default function ProductCardStyleOne({ datas, type }) {
             </span>
           ))}
         </div>
-        <a href="/single-product">
+        <a href="/single-product" state={datas} >
           <p className="title mb-2 text-[15px] font-600 text-qblack leading-[24px] line-clamp-2 hover:text-blue-600">
             {/* {datas.title} */}
 

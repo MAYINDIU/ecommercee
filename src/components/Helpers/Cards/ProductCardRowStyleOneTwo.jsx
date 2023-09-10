@@ -1,10 +1,11 @@
+import { Link } from "react-router-dom";
 import Compair from "../icons/Compair";
 import QuickViewIco from "../icons/QuickViewIco";
 import ThinLove from "../icons/ThinLove";
 
 export default function ProductCardRowStyleOneTwo({ className, datas }) {
 
-
+  const single_data = [datas];
   return (
     <div
       data-aos="fade-left"
@@ -12,13 +13,15 @@ export default function ProductCardRowStyleOneTwo({ className, datas }) {
         }`}
     >
       <div className="flex space-x-5 items-center w-full h-full p-[16px]">
-        <div className="w-1/3 h-full">
-          <img
-            src={`https://habib.munihaelectronics.com/public/${datas?.image_path}`}
-            alt=""
-            className="w-full h-full object-contain"
-          />
-        </div>
+        <Link to={'/single-product'} state={single_data}>
+          <div className="w-1/3 h-full">
+            <img
+              src={`https://habib.munihaelectronics.com/public/${datas?.image_path}`}
+              alt=""
+              className="w-full h-full object-contain"
+            />
+          </div>
+        </Link>
         <div className="flex-1 flex flex-col justify-center h-full">
           <div>
             <a href="/single-product">
@@ -42,11 +45,11 @@ export default function ProductCardRowStyleOneTwo({ className, datas }) {
       </div>
       {/* quick-access-btns */}
       <div className="quick-access-btns flex flex-col space-y-2 absolute group-hover:right-4 -right-10 top-[30px]  transition-all duration-300 ease-in-out">
-        <a href="#">
+        <Link to={'/single-product'} state={single_data}>
           <span className="w-10 h-10 flex justify-center items-center bg-primarygray rounded">
             <QuickViewIco />
           </span>
-        </a>
+        </Link>
         <a href="#">
           <span className="w-10 h-10 flex justify-center items-center bg-primarygray rounded">
             <ThinLove />

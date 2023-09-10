@@ -1,8 +1,15 @@
 import { useState } from "react";
-import Star from "../Helpers/icons/Star";
+import { useLocation } from "react-router-dom";
 import Selectbox from "../Helpers/Selectbox";
+import Star from "../Helpers/icons/Star";
 
 export default function ProductView({ className, reportHandler }) {
+
+
+  const location = useLocation();
+  const details = location?.state
+  console.log(details[0]?.name);
+
   const productsImg = [
     {
       id: 1,
@@ -47,15 +54,15 @@ export default function ProductView({ className, reportHandler }) {
 
   return (
     <div
-      className={`product-view w-full lg:flex justify-between ${
-        className || ""
-      }`}
+      className={`product-view w-full lg:flex justify-between ${className || ""
+        }`}
     >
       <div data-aos="fade-right" className="lg:w-1/2 xl:mr-[70px] lg:mr-[50px]">
         <div className="w-full">
           <div className="w-full h-[600px] border border-qgray-border flex justify-center items-center overflow-hidden relative mb-3">
             <img
-              src={`${process.env.PUBLIC_URL}/assets/images/${src}`}
+              src={`https://habib.munihaelectronics.com/public/${details[0]?.image_path}`}
+
               alt=""
               className="object-contain"
             />
@@ -75,9 +82,8 @@ export default function ProductView({ className, reportHandler }) {
                   <img
                     src={`${process.env.PUBLIC_URL}/assets/images/${img.src}`}
                     alt=""
-                    className={`w-full h-full object-contain ${
-                      src !== img.src ? "opacity-50" : ""
-                    } `}
+                    className={`w-full h-full object-contain ${src !== img.src ? "opacity-50" : ""
+                      } `}
                   />
                 </div>
               ))}
@@ -90,13 +96,13 @@ export default function ProductView({ className, reportHandler }) {
             data-aos="fade-up"
             className="text-qgray text-xs font-normal uppercase tracking-wider mb-2 inline-block"
           >
-            Mobile Phones
+            {details[0]?.name}
           </span>
           <p
             data-aos="fade-up"
             className="text-xl font-medium text-qblack mb-4"
           >
-            Samsung Galaxy Z Fold3 5G 3 colors in 512GB
+            {details[0]?.name}
           </p>
 
           <div
@@ -117,9 +123,10 @@ export default function ProductView({ className, reportHandler }) {
 
           <div data-aos="fade-up" className="flex space-x-2 items-center mb-7">
             <span className="text-sm font-500 text-qgray line-through mt-2">
-              $9.99
+              {details[0]?.current_purchase_cost}
             </span>
-            <span className="text-2xl font-500 text-qred">$6.99</span>
+            <span className="text-2xl font-500 text-qred">
+              {details[0]?.current_sale_price}</span>
           </div>
 
           <p
@@ -175,7 +182,7 @@ export default function ProductView({ className, reportHandler }) {
                       </div>
                       <div className="flex space-x-10 items-center">
                         <span className="text-[13px] text-qblack">
-                          3”W x 3”D x 7”H
+                          {details[0]?.size}
                         </span>
                         <span>
                           <svg
