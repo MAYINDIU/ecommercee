@@ -2,7 +2,6 @@ import React, { useEffect, useState } from "react";
 import LayoutHomeTwo from "../Partials/LayoutHomeTwo";
 
 import datas from "../../data/productsTwo.json";
-import SectionStyleFour from "../Helpers/SectionStyleFour";
 import SectionStylePopular from "../Helpers/SectionStylePopular";
 import SectionStyleThreeHomeTwo from "../Helpers/SectionStyleThreeHomeTwo";
 import SectionStyleTwo from "../Helpers/SectionStyleTwoHomeTwo";
@@ -123,12 +122,12 @@ export default function HomeTwo() {
         ads={[`${process.env.PUBLIC_URL}/assets/images/ads-2.4.png`]}
         className="products-ads-section mb-[60px]"
       />
-      <SectionStyleFour
+      {/* <SectionStyleFour
         products={products}
         sectionTitle="Popular Sales"
         seeMoreUrl="/all-products"
         className="category-products mb-[60px]"
-      />
+      /> */}
     </LayoutHomeTwo>
   );
 }

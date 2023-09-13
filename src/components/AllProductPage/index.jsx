@@ -4,7 +4,7 @@ import productDatas from "../../data/products.json";
 import BreadcrumbCom from "../BreadcrumbCom";
 import ProductCardStyleOne from "../Helpers/Cards/ProductCardStyleOne";
 import DataIteration from "../Helpers/DataIteration";
-import Layout from "../Partials/Layout";
+import Layout from "../Partials/LayoutHomeTwo";
 import ProductsFilter from "./ProductsFilter";
 
 export default function AllProductPage() {
@@ -52,17 +52,18 @@ export default function AllProductPage() {
   const [filterToggle, setToggle] = useState(false);
 
   const { products } = productDatas;
-  const [allproducts, setAllproducts] = useState([]);
-  console.log(allproducts);
-  //All New Arrivals 
+  const [Habib, setHabib] = useState([]);
+
+  //All products 
   useEffect(() => {
     fetch(
       "http://habib.munihaelectronics.com/public/api/home/all-product")
       .then((res) => res.json())
-      .then((data) => setAllproducts(data));
+      .then((data) => setHabib(data));
   }, []);
 
 
+  const habibDatas = Habib?.products;
 
 
   return (
@@ -143,7 +144,7 @@ export default function AllProductPage() {
                   </button>
                 </div>
                 <div className="grid xl:grid-cols-3 sm:grid-cols-2 grid-cols-1  xl:gap-[30px] gap-5 mb-[40px]">
-                  <DataIteration datas={products} startLength={0} endLength={6}>
+                  <DataIteration datas={habibDatas} startLength={0} endLength={6}>
                     {({ datas }) => (
                       <div data-aos="fade-up" key={datas.id}>
                         <ProductCardStyleOne datas={datas} />
@@ -161,7 +162,7 @@ export default function AllProductPage() {
                 </div>
                 <div className="grid xl:grid-cols-3 sm:grid-cols-2 grid-cols-1 xl:gap-[30px] gap-5 mb-[40px]">
                   <DataIteration
-                    datas={products}
+                    datas={habibDatas}
                     startLength={6}
                     endLength={15}
                   >

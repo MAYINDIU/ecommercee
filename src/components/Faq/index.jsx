@@ -1,7 +1,7 @@
 import Accodion from "../Helpers/Accodion";
 import InputCom from "../Helpers/InputCom";
 import PageTitle from "../Helpers/PageTitle";
-import Layout from "../Partials/Layout";
+import Layout from "../Partials/LayoutHomeTwo";
 
 export default function Faq() {
   return (

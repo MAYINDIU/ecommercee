@@ -5,7 +5,7 @@ import BreadcrumbCom from "../BreadcrumbCom";
 import ProductCardStyleOne from "../Helpers/Cards/ProductCardStyleOne";
 import DataIteration from "../Helpers/DataIteration";
 import InputCom from "../Helpers/InputCom";
-import Layout from "../Partials/Layout";
+import Layout from "../Partials/LayoutHomeTwo";
 import ProductView from "./ProductView";
 import Reviews from "./Reviews";
 import SallerInfo from "./SallerInfo";

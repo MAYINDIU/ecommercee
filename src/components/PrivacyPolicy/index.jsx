@@ -1,5 +1,5 @@
 import PageTitle from "../Helpers/PageTitle";
-import Layout from "../Partials/Layout";
+import Layout from "../Partials/LayoutHomeTwo";
 
 export default function PrivacyPolicy() {
   return (

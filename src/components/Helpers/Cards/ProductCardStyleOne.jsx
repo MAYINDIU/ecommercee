@@ -100,10 +100,10 @@ export default function ProductCardStyleOne({ datas, type }) {
         </a>
         <p className="price">
           <span className="main-price text-qgray line-through font-600 text-[18px]">
-            {datas.price}
+            {datas.current_sale_price}
           </span>
           <span className="offer-price text-qred font-600 text-[18px] ml-2">
-            {datas.offer_price}
+            {datas.current_purchase_cost}
           </span>
         </p>
       </div>
