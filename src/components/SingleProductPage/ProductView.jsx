@@ -102,7 +102,7 @@ export default function ProductView({ className, reportHandler }) {
             data-aos="fade-up"
             className="text-xl font-medium text-qblack mb-4"
           >
-            {details[0]?.name}
+            {details[0]?.description}
           </p>
 
           <div

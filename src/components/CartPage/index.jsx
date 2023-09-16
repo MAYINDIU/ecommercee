@@ -2,7 +2,7 @@ import BreadcrumbCom from "../BreadcrumbCom";
 import EmptyCardError from "../EmptyCardError";
 import InputCom from "../Helpers/InputCom";
 import PageTitle from "../Helpers/PageTitle";
-import Layout from "../Partials/Layout";
+import Layout from "../Partials/LayoutHomeTwo";
 import ProductsTable from "./ProductsTable";
 
 export default function CardPage({ cart = true }) {

@@ -1,3 +1,4 @@
+import { Link } from "react-router-dom";
 import Compair from "../icons/Compair";
 import QuickViewIco from "../icons/QuickViewIco";
 import Star from "../icons/Star";
@@ -5,7 +6,7 @@ import ThinLove from "../icons/ThinLove";
 
 export default function ProductCardStyleOne({ datas, type }) {
 
-
+  const single_data = [datas];
 
   const available =
     (datas.cam_product_sale /
@@ -14,8 +15,8 @@ export default function ProductCardStyleOne({ datas, type }) {
   return (
     <div
       className="product-card-one w-full h-full bg-white relative group overflow-hidden"
-      style={{ boxShadow: "0px 15px 64px 0px rgba(0, 0, 0, 0.05)" }}
-    >
+      style={{ boxShadow: "0px 15px 64px 0px rgba(0, 0, 0, 0.05)" }}>
+
       <div
         className="product-card-img w-full h-[300px]"
         style={{
@@ -91,13 +92,13 @@ export default function ProductCardStyleOne({ datas, type }) {
             </span>
           ))}
         </div>
-        <a href="/single-product" state={datas} >
+        <Link to={'/single-product'} state={single_data}>
           <p className="title mb-2 text-[15px] font-600 text-qblack leading-[24px] line-clamp-2 hover:text-blue-600">
             {/* {datas.title} */}
 
             {datas?.name}
           </p>
-        </a>
+        </Link>
         <p className="price">
           <span className="main-price text-qgray line-through font-600 text-[18px]">
             {datas.current_sale_price}
@@ -109,11 +110,11 @@ export default function ProductCardStyleOne({ datas, type }) {
       </div>
       {/* quick-access-btns */}
       <div className="quick-access-btns flex flex-col space-y-2 absolute group-hover:right-4 -right-10 top-20  transition-all duration-300 ease-in-out">
-        <a href="#">
+        <Link to={'/single-product'} state={single_data}>
           <span className="w-10 h-10 flex justify-center items-center bg-primarygray rounded">
             <QuickViewIco />
           </span>
-        </a>
+        </Link>
         <a href="#">
           <span className="w-10 h-10 flex justify-center items-center bg-primarygray rounded">
             <ThinLove />

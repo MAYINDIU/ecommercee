@@ -10,8 +10,7 @@ export default function NewarrivalesCard({ datas }) {
     return (
         <div
             className="product-card-style-one-two w-full h-full bg-white relative group overflow-hidden"
-            style={{ boxShadow: "0px 15px 64px 0px rgba(0, 0, 0, 0.05)" }}
-        >
+            style={{ boxShadow: "0px 15px 64px 0px rgba(0, 0, 0, 0.05)" }}>
             <Link to={'/single-product'} state={single_data}>
                 <div
                     className="product-card-img w-full h-[322px] mt-4"

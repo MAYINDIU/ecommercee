@@ -2,8 +2,6 @@ import { useRef, useState } from "react";
 import { useLocation } from "react-router-dom";
 import data from "../../data/products.json";
 import BreadcrumbCom from "../BreadcrumbCom";
-import ProductCardStyleOne from "../Helpers/Cards/ProductCardStyleOne";
-import DataIteration from "../Helpers/DataIteration";
 import InputCom from "../Helpers/InputCom";
 import Layout from "../Partials/LayoutHomeTwo";
 import ProductView from "./ProductView";
@@ -234,7 +232,7 @@ export default function SingleProductPage() {
             </div>
           </div>
 
-          <div className="related-product w-full bg-white">
+          {/* <div className="related-product w-full bg-white">
             <div className="container-x mx-auto">
               <div className="w-full py-[60px]">
                 <h1 className="sm:text-3xl text-xl font-600 text-qblacktext leading-none mb-[30px]">
@@ -258,7 +256,7 @@ export default function SingleProductPage() {
                 </div>
               </div>
             </div>
-          </div>
+          </div> */}
         </div>
         {report && (
           <div className="w-full h-full flex fixed left-0 top-0 justify-center z-50 items-center">
