@@ -52,7 +52,7 @@ export default function ProductView({ className, reportHandler }) {
   //   },
   // ];
 
-  const [src, setSrc] = useState(productsImg[0]);
+  const [src, setSrc] = useState(details[0]?.image_path);
   console.log(src);
   const changeImgHandler = (current) => {
     setSrc(current);
@@ -75,16 +75,30 @@ export default function ProductView({ className, reportHandler }) {
       <div data-aos="fade-right" className="lg:w-1/2 xl:mr-[70px] lg:mr-[50px]">
         <div className="w-full">
           <div className="w-full h-[600px] border border-qgray-border flex justify-center items-center overflow-hidden relative mb-3">
+
             <img
-              src={`https://habib.munihaelectronics.com/public/${details[0]?.image_path}`}
+              src={`https://habib.munihaelectronics.com/public/${src}`}
               alt=""
               className="object-contain"
             />
+
             <div className="w-[80px] h-[80px] rounded-full bg-qyellow text-qblack flex justify-center items-center text-xl font-medium absolute left-[30px] top-[30px]">
               <span>-50%</span>
             </div>
           </div>
           <div className="flex gap-2 flex-wrap">
+            <div
+              onClick={() => changeImgHandler(details[0]?.image_path)}
+
+              className="w-[110px] h-[110px] p-[15px] border border-qgray-border cursor-pointer"
+            >
+              <img
+                // src={`${process.env.PUBLIC_URL}/assets/images/${img.src}`}
+                src={`https://habib.munihaelectronics.com/public/${details[0]?.image_path}`}
+                alt=""
+                className={`w-full h-full object-contain`}
+              />
+            </div>
             {productsImg &&
               productsImg.length > 0 &&
               productsImg.map((img) => (
@@ -93,6 +107,7 @@ export default function ProductView({ className, reportHandler }) {
                   key={img.id}
                   className="w-[110px] h-[110px] p-[15px] border border-qgray-border cursor-pointer"
                 >
+
                   <img
                     // src={`${process.env.PUBLIC_URL}/assets/images/${img.src}`}
                     src={`https://habib.munihaelectronics.com/public/${img}`}

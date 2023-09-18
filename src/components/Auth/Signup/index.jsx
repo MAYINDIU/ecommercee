@@ -1,12 +1,36 @@
 import { useState } from "react";
-import InputCom from "../../Helpers/InputCom";
+import { useNavigate } from "react-router-dom";
 import Layout from "../../Partials/Layout";
 import Thumbnail from "./Thumbnail";
 
 export default function Signup() {
   const [checked, setValue] = useState(false);
+  const [userData, setUserData] = useState("");
+  console.log(userData);
+  const navigate = useNavigate();
   const rememberMe = () => {
     setValue(!checked);
+  };
+
+  //Handle Submit
+  const handleSubmit = async (e) => {
+    event.preventDefault();
+    const email = event.target.email.value;
+    const password = event.target.password.value;
+    const name = event.target.name.value;
+    const addItem = { email, password, name };
+    // console.log(addItem);
+
+    const url = "https://habib.munihaelectronics.com/public/api/signup";
+    fetch(url, {
+      method: "POST",
+      headers: {
+        "content-type": "application/json",
+      },
+      body: JSON.stringify(addItem),
+    })
+      .then((Response) => Response.json())
+      .then((data) => setUserData(data));
   };
   return (
     <Layout childrenClasses="pt-0 pb-0">
@@ -37,83 +61,69 @@ export default function Signup() {
                   </div>
                 </div>
                 <div className="input-area">
-                  <div className="flex sm:flex-row flex-col space-y-5 sm:space-y-0 sm:space-x-5 mb-5">
-                    <InputCom
-                      placeholder="Demo Name"
-                      label="Frist Name*"
-                      name="fname"
-                      type="text"
-                      inputClasses="h-[50px]"
-                    />
+                  <form role="form" onSubmit={handleSubmit}>
+                    <div className="flex sm:flex-row flex-col space-y-5 sm:space-y-0 sm:space-x-5 mb-5">
+                      <input
+                        placeholder="First Name"
+                        label="Frist Name*"
+                        name="name"
+                        type="text"
+                        className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+                      // onChange={(e) => setName(e.target.value)}
+                      />
 
-                    <InputCom
-                      placeholder="Demo Name"
-                      label="Last Name*"
-                      name="lname"
-                      type="text"
-                      inputClasses="h-[50px]"
-                    />
-                  </div>
-                  <div className="flex sm:flex-row flex-col space-y-5 sm:space-y-0 sm:space-x-5 mb-5">
-                    <InputCom
-                      placeholder="Demo@gmail.com"
-                      label="Email Address*"
-                      name="email"
-                      type="email"
-                      inputClasses="h-[50px]"
-                    />
-
-                    <InputCom
-                      placeholder="0213 *********"
-                      label="Phone*"
-                      name="phone"
-                      type="text"
-                      inputClasses="h-[50px]"
-                    />
-                  </div>
-
-                  <div className="input-item mb-5">
-                    <h6 className="input-label text-qgray capitalize text-[13px] font-normal block mb-2 ">
-                      Country*
-                    </h6>
-                    <div className="w-full h-[50px] border border-[#EDEDED] px-5 flex justify-between items-center mb-2">
-                      <span className="text-[13px] text-qgraytwo">
-                        Select Country
-                      </span>
-                      <span>
-                        <svg
-                          width="11"
-                          height="7"
-                          viewBox="0 0 11 7"
-                          fill="none"
-                          xmlns="http://www.w3.org/2000/svg"
-                        >
-                          <path
-                            d="M5.4 6.8L0 1.4L1.4 0L5.4 4L9.4 0L10.8 1.4L5.4 6.8Z"
-                            fill="#222222"
-                          />
-                        </svg>
-                      </span>
+                      <input
+                        className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+                        placeholder="Last Name"
+                        label="Last Name*"
+                        name="lname"
+                        type="text"
+                      />
                     </div>
-                  </div>
+                    <div className="flex sm:flex-row flex-col space-y-5 sm:space-y-0 sm:space-x-5 mb-5">
+                      <input
+                        className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+                        placeholder="Demo@gmail.com"
+                        label="Email Address*"
+                        name="email"
+                        type="email"
+                      // onChange={(e) => setEmail(e.target.value)}
+                      />
 
-                  <div className="input-item mb-5">
-                    <InputCom
-                      placeholder="Your address Here"
-                      label="Address*"
-                      name="address"
-                      type="text"
-                      inputClasses="h-[50px]"
-                    />
-                  </div>
-                  <div className="flex sm:flex-row flex-col space-y-5 sm:space-y-0 sm:space-x-5 mb-5">
-                    <div className="w-1/2">
+                      <input
+                        className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+                        placeholder="0213 *******"
+                        label="Phone*"
+                        name="phone"
+                        type="text"
+                      />
+                    </div>
+                    <div className="flex sm:flex-row flex-col space-y-5 sm:space-y-0 sm:space-x-5 mb-5">
+                      <input
+                        className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+                        placeholder="Password"
+                        // label="Email Address*"
+                        name="password"
+                        type="password"
+                      // onChange={(e) => setPassword(e.target.value)}
+                      />
+
+                      <input
+                        className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+                        placeholder="Confirm Password"
+                        // label="Phone*"
+                        name="cpassword"
+                        type="password"
+                      />
+                    </div>
+
+                    <div className="input-item mb-5">
                       <h6 className="input-label text-qgray capitalize text-[13px] font-normal block mb-2 ">
-                        Town / City*
+                        Country*
                       </h6>
                       <div className="w-full h-[50px] border border-[#EDEDED] px-5 flex justify-between items-center mb-2">
                         <span className="text-[13px] text-qgraytwo">
-                          Maiyami
+                          Select Country
                         </span>
                         <span>
                           <svg
@@ -131,60 +141,97 @@ export default function Signup() {
                         </span>
                       </div>
                     </div>
-                    <div className="flex-1">
-                      <div className="w-full h-[50px] mb-5 sm:mb-0">
-                        <InputCom
-                          label="Postcode / ZIP*"
-                          inputClasses="w-full h-full"
-                          type="text"
-                          placeholder="00000"
-                        />
+
+                    <div className="input-item mb-5">
+                      <input
+                        className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+                        placeholder="Your address Here"
+                        label="Address*"
+                        name="address"
+                        type="text"
+                      />
+                    </div>
+                    <div className="flex sm:flex-row flex-col space-y-5 sm:space-y-0 sm:space-x-5 mb-5">
+                      <div className="w-1/2">
+                        <h6 className="input-label text-qgray capitalize text-[13px] font-normal block mb-2 ">
+                          Town / City*
+                        </h6>
+                        <div className="w-full h-[50px] border border-[#EDEDED] px-5 flex justify-between items-center mb-2">
+                          <span className="text-[13px] text-qgraytwo">
+                            Maiyami
+                          </span>
+                          <span>
+                            <svg
+                              width="11"
+                              height="7"
+                              viewBox="0 0 11 7"
+                              fill="none"
+                              xmlns="http://www.w3.org/2000/svg"
+                            >
+                              <path
+                                d="M5.4 6.8L0 1.4L1.4 0L5.4 4L9.4 0L10.8 1.4L5.4 6.8Z"
+                                fill="#222222"
+                              />
+                            </svg>
+                          </span>
+                        </div>
+                      </div>
+                      <div className="flex-1">
+                        <div className="w-full h-[50px] mb-5 sm:mb-0">
+                          <input
+                            className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+                            label="Postcode / ZIP*"
+                            type="text"
+                            placeholder="00000"
+                          />
+                        </div>
                       </div>
                     </div>
-                  </div>
-                  <div className="forgot-password-area mb-7">
-                    <div className="remember-checkbox flex items-center space-x-2.5">
-                      <button
-                        onClick={rememberMe}
-                        type="button"
-                        className="w-5 h-5 text-qblack flex justify-center items-center border border-light-gray"
-                      >
-                        {checked && (
-                          <svg
-                            xmlns="http://www.w3.org/2000/svg"
-                            className="h-5 w-5"
-                            viewBox="0 0 20 20"
-                            fill="currentColor"
-                          >
-                            <path
-                              fillRule="evenodd"
-                              d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z"
-                              clipRule="evenodd"
-                            />
-                          </svg>
-                        )}
-                      </button>
-                      <span
-                        onClick={rememberMe}
-                        className="text-base text-black"
-                      >
-                        I agree all
-                        <span className="text-qblack">tarm and condition</span>
-                        in BigShop.
-                      </span>
+                    <div className="forgot-password-area mb-7">
+                      <div className="remember-checkbox flex items-center space-x-2.5">
+                        <button
+                          onClick={rememberMe}
+                          type="button"
+                          className="w-5 h-5 text-qblack flex justify-center items-center border border-light-gray"
+                        >
+                          {checked && (
+                            <svg
+                              xmlns="http://www.w3.org/2000/svg"
+                              className="h-5 w-5"
+                              viewBox="0 0 20 20"
+                              fill="currentColor"
+                            >
+                              <path
+                                fillRule="evenodd"
+                                d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z"
+                                clipRule="evenodd"
+                              />
+                            </svg>
+                          )}
+                        </button>
+                        <span
+                          onClick={rememberMe}
+                          className="text-base text-black"
+                        >
+                          I agree all
+                          <span className="text-qblack">
+                            tarm and condition
+                          </span>
+                          in BigShop.
+                        </span>
+                      </div>
                     </div>
-                  </div>
-                  <div className="signin-area mb-3">
-                    <div className="flex justify-center">
-                      <button
-                        type="button"
-                        className="black-btn text-sm text-white w-full h-[50px] font-semibold flex justify-center bg-purple items-center"
-                      >
-                        <span>Create Account</span>
-                      </button>
+                    <div className="signin-area mb-3">
+                      <div className="flex justify-center">
+                        <button
+                          type="submit"
+                          className="black-btn text-sm text-white w-full h-[50px] font-semibold flex justify-center bg-purple items-center"
+                        >
+                          <span>Create Account</span>
+                        </button>
+                      </div>
                     </div>
-                  </div>
-
+                  </form>
                   <div className="signup-area flex justify-center">
                     <p className="text-base text-qgraytwo font-normal">
                       Alrady have an Account?
