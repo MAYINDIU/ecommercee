@@ -12,7 +12,7 @@ export default function SingleProductPage() {
 
   const location = useLocation();
   const details = location?.state
-  console.log(details[0]?.name);
+  console.log(details);
 
   const [tab, setTab] = useState("des");
   const [rating, setRating] = useState(0);

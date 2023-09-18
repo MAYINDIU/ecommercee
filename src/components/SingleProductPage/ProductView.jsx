@@ -8,48 +8,52 @@ export default function ProductView({ className, reportHandler }) {
 
   const location = useLocation();
   const details = location?.state
-  console.log(details[0]);
-
+  const productsImg = (details[0]?.productImages);
 
   const [selectedSize, setSelectedSize] = useState('');
-
-  const handleSizeChange = (event) => {
-    setSelectedSize(event.target.value);
+  console.log(selectedSize);
+  const handleSizeChange = (current) => {
+    setSelectedSize(current);
   };
 
   const colors = details[0]?.color.split(',');
   const sizes = details[0]?.size.split(',');
   const [selectColor, setSelectColor] = useState('');
   console.log(selectColor);
-  const productsImg = [
-    {
-      id: 1,
-      src: "product-details-1.png",
-      color: "#FFBC63",
-    },
-    {
-      id: 2,
-      src: "product-details-2.png",
-      color: "#649EFF",
-    },
-    {
-      id: 3,
-      src: "product-details-3.png",
-      color: "#FFFFFF",
-    },
-    {
-      id: 4,
-      src: "product-details-4.png",
-      color: "#FF7173",
-    },
-    {
-      id: 6,
-      src: "product-details-5.png",
-      color: "",
-    },
-  ];
+  const changeColorHandler = (current) => {
+    setSelectColor(current);
+  };
 
-  const [src, setSrc] = useState(productsImg[0].src);
+  // const productsImg = [
+  //   {
+  //     id: 1,
+  //     src: "product-details-1.png",
+  //     color: "#FFBC63",
+  //   },
+  //   {
+  //     id: 2,
+  //     src: "product-details-2.png",
+  //     color: "#649EFF",
+  //   },
+  //   {
+  //     id: 3,
+  //     src: "product-details-3.png",
+  //     color: "#FFFFFF",
+  //   },
+  //   {
+  //     id: 4,
+  //     src: "product-details-4.png",
+  //     color: "#FF7173",
+  //   },
+  //   {
+  //     id: 6,
+  //     src: "product-details-5.png",
+  //     color: "",
+  //   },
+  // ];
+
+  const [src, setSrc] = useState(productsImg[0]);
+  console.log(src);
   const changeImgHandler = (current) => {
     setSrc(current);
   };
@@ -73,7 +77,6 @@ export default function ProductView({ className, reportHandler }) {
           <div className="w-full h-[600px] border border-qgray-border flex justify-center items-center overflow-hidden relative mb-3">
             <img
               src={`https://habib.munihaelectronics.com/public/${details[0]?.image_path}`}
-
               alt=""
               className="object-contain"
             />
@@ -86,16 +89,18 @@ export default function ProductView({ className, reportHandler }) {
               productsImg.length > 0 &&
               productsImg.map((img) => (
                 <div
-                  onClick={() => changeImgHandler(img.src)}
+                  onClick={() => changeImgHandler(img)}
                   key={img.id}
                   className="w-[110px] h-[110px] p-[15px] border border-qgray-border cursor-pointer"
                 >
                   <img
-                    src={`${process.env.PUBLIC_URL}/assets/images/${img.src}`}
+                    // src={`${process.env.PUBLIC_URL}/assets/images/${img.src}`}
+                    src={`https://habib.munihaelectronics.com/public/${img}`}
                     alt=""
-                    className={`w-full h-full object-contain ${src !== img.src ? "opacity-50" : ""
+                    className={`w-full h-full object-contain ${src !== img ? "opacity-50" : ""
                       } `}
                   />
+
                 </div>
               ))}
           </div>
@@ -180,12 +185,14 @@ export default function ProductView({ className, reportHandler }) {
               ></span>
               <h2>Color:{details[0]?.color}</h2> */}
               {colors.map((color, index) => (
-                <span
-                  key={index}
-                  style={{ background: color, marginRight: '5px' }}
-                  className="w-[20px] h-[20px] block rounded-full border"
-                // onClick={this.setSelectColor}
-                ></span>
+                <button onClick={() => changeColorHandler(color)}>
+                  <span
+                    key={index}
+                    style={{ background: color, marginRight: '5px' }}
+                    className="w-[20px] h-[20px] block rounded-full border"
+
+                  ></span>
+                </button>
               ))}
 
             </div>
@@ -197,10 +204,10 @@ export default function ProductView({ className, reportHandler }) {
             </span>
             <div className="w-full">
               <div className=" border border-qgray-border h-[50px] flex justify-between items-center px-6 cursor-pointer">
-                <Selectbox className="w-full" datas={sizes}>
+                <Selectbox className="w-full" datas={sizes} onClick={() => handleSizeChange(item)} >
                   {({ item }) => (
                     <>
-                      <div>
+                      <div >
                         <span className="text-[13px] text-qblack">{item}</span>
                       </div>
                       <div className="flex space-x-10 items-center">
