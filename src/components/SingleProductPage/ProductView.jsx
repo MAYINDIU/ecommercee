@@ -8,8 +8,19 @@ export default function ProductView({ className, reportHandler }) {
 
   const location = useLocation();
   const details = location?.state
-  console.log(details[0]?.name);
+  console.log(details[0]);
 
+
+  const [selectedSize, setSelectedSize] = useState('');
+
+  const handleSizeChange = (event) => {
+    setSelectedSize(event.target.value);
+  };
+
+  const colors = details[0]?.color.split(',');
+  const sizes = details[0]?.size.split(',');
+  const [selectColor, setSelectColor] = useState('');
+  console.log(selectColor);
   const productsImg = [
     {
       id: 1,
@@ -143,7 +154,7 @@ export default function ProductView({ className, reportHandler }) {
             </span>
 
             <div className="flex space-x-4 items-center">
-              {productsImg &&
+              {/* {productsImg &&
                 productsImg.length > 0 &&
                 productsImg.map((img) => (
                   <div key={img.id}>
@@ -161,7 +172,22 @@ export default function ProductView({ className, reportHandler }) {
                       </button>
                     )}
                   </div>
-                ))}
+                ))} */}
+
+              {/* <span
+                style={{ background: `${details[1]?.color}` }}
+                className="w-[20px] h-[20px] block rounded-full border"
+              ></span>
+              <h2>Color:{details[0]?.color}</h2> */}
+              {colors.map((color, index) => (
+                <span
+                  key={index}
+                  style={{ background: color, marginRight: '5px' }}
+                  className="w-[20px] h-[20px] block rounded-full border"
+                // onClick={this.setSelectColor}
+                ></span>
+              ))}
+
             </div>
           </div>
 
@@ -171,10 +197,7 @@ export default function ProductView({ className, reportHandler }) {
             </span>
             <div className="w-full">
               <div className=" border border-qgray-border h-[50px] flex justify-between items-center px-6 cursor-pointer">
-                <Selectbox
-                  className="w-full"
-                  datas={["Small", "Medium", "Large", "Extra Large"]}
-                >
+                <Selectbox className="w-full" datas={sizes}>
                   {({ item }) => (
                     <>
                       <div>
@@ -182,7 +205,7 @@ export default function ProductView({ className, reportHandler }) {
                       </div>
                       <div className="flex space-x-10 items-center">
                         <span className="text-[13px] text-qblack">
-                          {details[0]?.size}
+
                         </span>
                         <span>
                           <svg
