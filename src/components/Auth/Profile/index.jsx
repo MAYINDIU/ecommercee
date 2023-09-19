@@ -1,8 +1,8 @@
 import { useEffect, useState } from "react";
-import { Link, useLocation } from "react-router-dom";
+import { Link, useLocation, useNavigate } from "react-router-dom";
 import datas from "../../../data/products.json";
 import BreadcrumbCom from "../../BreadcrumbCom";
-import Layout from "../../Partials/Layout";
+import Layout from "../../Partials/LayoutHomeTwo";
 import IcoAdress from "./icons/IcoAdress";
 import IcoCart from "./icons/IcoCart";
 import IcoDashboard from "./icons/IcoDashboard";
@@ -28,6 +28,15 @@ export default function Profile() {
   const location = useLocation();
   const getHashContent = location.hash.split("#");
   const [active, setActive] = useState("dashboard");
+  const userProfile = JSON.parse(localStorage.getItem("user"));
+
+  const navigate = useNavigate();
+  const handleLogout = () => {
+    localStorage.removeItem("user");
+    navigate("/");
+  };
+
+
   useEffect(() => {
     setActive(
       getHashContent && getHashContent.length > 1
@@ -59,9 +68,8 @@ export default function Profile() {
                     className="w-[73px] h-[31px] border border-[#D9D9D9] rounded-full relative "
                   >
                     <div
-                      className={`w-[23px] h-[23px] bg-qblack rounded-full absolute top-[3px] transition-all duration-300 ease-in-out ${
-                        switchDashboard ? "left-[44px]" : "left-[4px]"
-                      }`}
+                      className={`w-[23px] h-[23px] bg-qblack rounded-full absolute top-[3px] transition-all duration-300 ease-in-out ${switchDashboard ? "left-[44px]" : "left-[4px]"
+                        }`}
                     ></div>
                   </button>
                 </div>
@@ -177,16 +185,16 @@ export default function Profile() {
                       </Link>
                     </div>
                     <div className="item group">
-                      <Link to="/profile#profile">
+                      <button onClick={handleLogout}>
                         <div className="flex space-x-3 items-center text-qgray hover:text-qblack">
                           <span>
                             <IcoLogout />
                           </span>
                           <span className=" font-normal text-base">
-                            Logoout
+                            Logout
                           </span>
                         </div>
-                      </Link>
+                      </button>
                     </div>
                   </div>
                 </div>

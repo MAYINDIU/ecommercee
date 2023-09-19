@@ -1,6 +1,10 @@
 import React from "react";
 
 export default function Dashboard() {
+  const userProfile = JSON.parse(localStorage.getItem("user"));
+  const userdata = (userProfile?.user);
+
+
   return (
     <>
       <div className="welcome-msg w-full">
@@ -113,7 +117,7 @@ export default function Dashboard() {
                   <div>Name:</div>
                 </td>
                 <td className="text-base text-qblack font-medium">
-                  Shuvo khan
+                  {userdata?.name}
                 </td>
               </tr>
               <tr className="inline-flex mb-5">
@@ -121,7 +125,7 @@ export default function Dashboard() {
                   <div>Email:</div>
                 </td>
                 <td className="text-base text-qblack font-medium">
-                  rafiqulislamsuvobd@gmail.com
+                  {userdata?.email}
                 </td>
               </tr>
               <tr className="inline-flex mb-5">

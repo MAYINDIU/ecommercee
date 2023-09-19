@@ -1,5 +1,6 @@
-import { useState } from "react";
-import Layout from "../../Partials/Layout";
+import { useEffect, useState } from "react";
+import { useNavigate } from "react-router-dom";
+import Layout from "../../Partials/LayoutHomeTwo";
 import Thumbnail from "./Thumbnail";
 
 export default function Login() {
@@ -7,6 +8,15 @@ export default function Login() {
   const [userData, setUserData] = useState("");
   console.log(userData);
 
+  const status = userData?.status;
+  console.log(status);
+
+  localStorage.setItem("user", JSON.stringify(userData));
+
+  const from = location.state?.from?.pathname || '/profile'
+
+
+  const navigate = useNavigate();
   const handleSubmit = (event) => {
     event.preventDefault();
     const email = event.target.email.value;
@@ -25,6 +35,21 @@ export default function Login() {
       .then((Response) => Response.json())
       .then((data) => setUserData(data));
   };
+
+
+  useEffect(() => {
+    if (status === 200) {
+      // navigate(`/profile`);
+      navigate(from, { replace: true });
+    }
+    // else if(status?.message === 'User not found') {
+    //     alert('Please type proper user id & pass');
+    //     setSpinner(false);
+    //     //  toast.error(`Opps!Please type proper emp code & password`);
+    // }
+  });
+
+
   const rememberMe = () => {
     setValue(!checked);
   };

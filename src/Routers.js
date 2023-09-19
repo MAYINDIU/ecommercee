@@ -15,6 +15,7 @@ import FlashSale from "./components/FlashSale";
 import FourZeroFour from "./components/FourZeroFour";
 import HomeTwo from "./components/HomeTwo";
 import PrivacyPolicy from "./components/PrivacyPolicy";
+import Requireauth from "./components/PrivateRoute/Requireauth";
 import ProductsCompaire from "./components/ProductsCompaire/index";
 import SallerPage from "./components/SallerPage";
 import Sallers from "./components/Sellers";
@@ -34,7 +35,7 @@ export default function Routers() {
       <Route exact path="/all-products" element={<AllProductPage />} />
       <Route exact path="/single-product" element={<SingleProductPage />} />
       <Route exact path="/cart" element={<CardPage />} />
-      <Route exact path="/checkout" element={<CheakoutPage />} />
+      <Route exact path="/checkout" element={<Requireauth><CheakoutPage /></Requireauth>} />
       <Route exact path="/wishlist" element={<Wishlist />} />
       <Route exact path="/flash-sale" element={<FlashSale />} />
       <Route exact path="/saller-page" element={<SallerPage />} />
@@ -48,7 +49,7 @@ export default function Routers() {
       <Route exact path="/faq" element={<Faq />} />
       <Route exact path="/login" element={<Login />} />
       <Route exact path="/signup" element={<Signup />} />
-      <Route exact path="/profile" element={<Profile />} />
+      <Route exact path="/profile" element={<Requireauth><Profile /></Requireauth>} />
       <Route exact path="/become-saller" element={<BecomeSaller />} />
       <Route exact path="/privacy-policy" element={<PrivacyPolicy />} />
       <Route exact path="/terms-condition" element={<TermsCondition />} />

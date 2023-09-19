@@ -29,7 +29,7 @@ export default function ProductCardStyleOneTwo({ datas }) {
         <div className="absolute w-[204px] h-[54px] left-[80px] -bottom-20 group-hover:bottom-[65px] transition-all duration-300 ease-in-out">
           <button type="button" className="yellow-btn">
             <div>
-              <span>Add To Cart {datas?.id}</span>
+              <span>Add To Cart </span>
             </div>
           </button>
         </div>

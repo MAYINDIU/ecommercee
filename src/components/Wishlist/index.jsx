@@ -1,7 +1,7 @@
 import BreadcrumbCom from "../BreadcrumbCom";
 import EmptyWishlistError from "../EmptyWishlistError";
 import PageTitle from "../Helpers/PageTitle";
-import Layout from "../Partials/Layout";
+import Layout from "../Partials/LayoutHomeTwo";
 import ProductsTable from "./ProductsTable";
 
 export default function Wishlist({ wishlist = true }) {
