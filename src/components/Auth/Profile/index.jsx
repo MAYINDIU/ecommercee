@@ -9,10 +9,8 @@ import IcoDashboard from "./icons/IcoDashboard";
 import IcoLogout from "./icons/IcoLogout";
 import IcoLove from "./icons/IcoLove";
 import IcoPassword from "./icons/IcoPassword";
-import IcoPayment from "./icons/IcoPayment";
 import IcoPeople from "./icons/IcoPeople";
 import IcoReviewHand from "./icons/IcoReviewHand";
-import IcoSupport from "./icons/IcoSupport";
 import AddressesTab from "./tabs/AddressesTab";
 import Dashboard from "./tabs/Dashboard";
 import OrderTab from "./tabs/OrderTab";
@@ -60,7 +58,7 @@ export default function Profile() {
                 <h1 className="text-[22px] font-bold text-qblack">
                   Your Dashboard
                 </h1>
-                <div className="switch-dashboard flex space-x-3 items-center">
+                {/* <div className="switch-dashboard flex space-x-3 items-center">
                   <p className="text-qgray text-base">Switch Dashboard</p>
                   <button
                     onClick={() => setSwitchDashboard(!switchDashboard)}
@@ -72,7 +70,7 @@ export default function Profile() {
                         }`}
                     ></div>
                   </button>
-                </div>
+                </div> */}
               </div>
               <div className="profile-wrapper w-full mt-8 flex space-x-10">
                 <div className="w-[236px] min-h-[600px] border-r border-[rgba(0, 0, 0, 0.1)]">
@@ -102,7 +100,7 @@ export default function Profile() {
                       </Link>
                     </div>
 
-                    <div className="item group">
+                    {/* <div className="item group">
                       <Link to="/profile#payment">
                         <div className="flex space-x-3 items-center text-qgray hover:text-qblack">
                           <span>
@@ -113,7 +111,7 @@ export default function Profile() {
                           </span>
                         </div>
                       </Link>
-                    </div>
+                    </div> */}
                     <div className="item group">
                       <Link to="/profile#order">
                         <div className="flex space-x-3 items-center text-qgray hover:text-qblack">
@@ -172,7 +170,7 @@ export default function Profile() {
                         </div>
                       </Link>
                     </div>
-                    <div className="item group">
+                    {/* <div className="item group">
                       <Link to="/profile#support">
                         <div className="flex space-x-3 items-center text-qgray hover:text-qblack">
                           <span>
@@ -183,7 +181,7 @@ export default function Profile() {
                           </span>
                         </div>
                       </Link>
-                    </div>
+                    </div> */}
                     <div className="item group">
                       <button onClick={handleLogout}>
                         <div className="flex space-x-3 items-center text-qgray hover:text-qblack">

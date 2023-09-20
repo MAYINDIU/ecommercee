@@ -1,3 +1,4 @@
+import axios from "axios";
 import React from "react";
 import { Link } from "react-router-dom";
 import Compair from "../icons/Compair";
@@ -5,17 +6,34 @@ import QuickViewIco from "../icons/QuickViewIco";
 import ThinLove from "../icons/ThinLove";
 
 export default function ProductCardStyleOneTwo({ datas }) {
-
   const single_data = [datas];
+  const userProfile = JSON.parse(localStorage.getItem("user"));
+  const userdata = userProfile?.user;
 
-
+  // Add Wish List
+  const handleWishList = async (product_id) => {
+    const data = {
+      product_id,
+      user_id: userdata?.id,
+    };
+    console.log(data);
+    try {
+      const response = await axios.post(
+        `https://habib.munihaelectronics.com/public/api/addWishList`,
+        data
+      );
+      console.log(response);
+    } catch (error) {
+      console.log(error);
+    }
+  };
 
   return (
     <div
       className="product-card-style-one-two w-full h-full bg-white relative group overflow-hidden"
       style={{ boxShadow: "0px 15px 64px 0px rgba(0, 0, 0, 0.05)" }}
     >
-      <Link to={'/single-product'} state={single_data}>
+      <Link to={"/single-product"} state={single_data}>
         <div
           className="product-card-img w-full h-[322px] mt-4"
           style={{
@@ -34,7 +52,7 @@ export default function ProductCardStyleOneTwo({ datas }) {
           </button>
         </div>
         <div>
-          <Link to={'/single-product'} state={single_data}>
+          <Link to={"/single-product"} state={single_data}>
             <p className="title mb-2.5 text-[20px] font-600 text-center text-qblack leading-[24px] line-clamp-2 hover:text-blue-600">
               {datas.name}
             </p>
@@ -53,16 +71,16 @@ export default function ProductCardStyleOneTwo({ datas }) {
       </div>
       {/* quick-access-btns */}
       <div className="quick-access-btns flex flex-col space-y-2 absolute group-hover:right-[50px] -right-[50px] top-20  transition-all duration-300 ease-in-out">
-        <Link to={'/single-product'} state={single_data}>
+        <Link to={"/single-product"} state={single_data}>
           <span className="w-10 h-10 flex justify-center items-center bg-[#CCECEB] rounded">
             <QuickViewIco />
           </span>
         </Link>
-        <a href="#">
+        <Link to="" onClick={() => handleWishList(datas?.id)}>
           <span className="w-10 h-10 flex justify-center items-center bg-[#CCECEB] rounded">
             <ThinLove />
           </span>
-        </a>
+        </Link>
         <a href="#">
           <span className="w-10 h-10 flex justify-center items-center bg-[#CCECEB] rounded">
             <Compair />

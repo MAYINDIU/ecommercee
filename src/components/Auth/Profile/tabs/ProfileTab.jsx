@@ -1,9 +1,26 @@
-import { useRef, useState } from "react";
-import InputCom from "../../../Helpers/InputCom";
+import axios from "axios";
+import { useEffect, useRef, useState } from "react";
+import swal from "sweetalert";
 
 export default function ProfileTab() {
   const [profileImg, setprofileImg] = useState(null);
   const profileImgInput = useRef(null);
+  const [userInfo, setUserInfo] = useState({});
+  const [name, setName] = useState("");
+
+  const userProfile = JSON.parse(localStorage.getItem("user"));
+  const userdata = userProfile?.user;
+  console.log(userdata);
+
+  // Fetch User Information
+  useEffect(() => {
+    fetch(
+      `https://habib.munihaelectronics.com/public/api/SingleUser/${userdata?.id}`
+    )
+      .then((res) => res.json())
+      .then((data) => setUserInfo(data));
+  }, []);
+
   const browseprofileImg = () => {
     profileImgInput.current.click();
   };
@@ -16,84 +33,111 @@ export default function ProfileTab() {
       imgReader.readAsDataURL(e.target.files[0]);
     }
   };
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    const data = {
+      name: name ? name : userInfo?.name,
+    };
+    console.log(name);
+    try {
+      const response = await axios.put(
+        `https://habib.munihaelectronics.com/public/api/update_user/${userInfo?.id}`,
+        data
+      );
+      swal({
+        title: "Successfully Updated",
+        text: "Success",
+        icon: "success",
+      });
+      console.log(response);
+    } catch (error) {
+      console.log(error);
+    }
+  };
   return (
     <>
       <div className="flex space-x-8">
         <div className="w-[570px] ">
-          <div className="input-item flex space-x-2.5 mb-8">
-            <div className="w-1/2 h-full">
-              <InputCom
-                label="First Name*"
-                placeholder="Demo Name"
-                type="text"
-                inputClasses="h-[50px]"
-              />
+          <form onSubmit={handleSubmit}>
+            <div className="input-item flex space-x-2.5 mb-8">
+              <div className="w-1/2 h-full">
+                <input
+                  className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+                  label="First Name*"
+                  placeholder="Demo Name"
+                  type="text"
+                  inputClasses="h-[50px]"
+                  defaultValue={userInfo?.name}
+                  onChange={(e) => setName(e.target.value)}
+                />
+              </div>
+              <div className="w-1/2 h-full">
+                <input
+                  className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+                  label="Last Name*"
+                  placeholder="Demo Name"
+                  type="text"
+                  inputClasses="h-[50px]"
+                />
+              </div>
             </div>
-            <div className="w-1/2 h-full">
-              <InputCom
-                label="Last Name*"
-                placeholder="Demo Name"
-                type="text"
-                inputClasses="h-[50px]"
-              />
+            <div className="input-item flex space-x-2.5 mb-8">
+              <div className="w-1/2 h-full">
+                <input
+                  className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+                  readOnly
+                  label="Email*"
+                  placeholder="demoemial@gmail.com"
+                  type="email"
+                  inputClasses="h-[50px]"
+                  defaultValue={userInfo?.email}
+                />
+              </div>
+              <div className="w-1/2 h-full">
+                <input
+                  className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+                  label="Phone Number*"
+                  placeholder="012 3  *****"
+                  type="text"
+                  inputClasses="h-[50px]"
+                />
+              </div>
             </div>
-          </div>
-          <div className="input-item flex space-x-2.5 mb-8">
-            <div className="w-1/2 h-full">
-              <InputCom
-                label="Email*"
-                placeholder="demoemial@gmail.com"
-                type="email"
-                inputClasses="h-[50px]"
-              />
+            <div className="input-item mb-8">
+              <div className="w-full">
+                <input
+                  className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+                  label="Country*"
+                  placeholder="country"
+                  type="text"
+                  inputClasses="h-[50px]"
+                />
+              </div>
             </div>
-            <div className="w-1/2 h-full">
-              <InputCom
-                label="Phone Number*"
-                placeholder="012 3  *******"
-                type="text"
-                inputClasses="h-[50px]"
-              />
+            <div className="input-item mb-8">
+              <div className="w-full">
+                <input
+                  className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+                  label="Address*"
+                  placeholder="your address here"
+                  type="text"
+                  inputClasses="h-[50px]"
+                />
+              </div>
             </div>
-          </div>
-          <div className="input-item mb-8">
-            <div className="w-full">
-              <InputCom
-                label="Country*"
-                placeholder="country"
-                type="text"
-                inputClasses="h-[50px]"
-              />
+            <div className="action-area flex space-x-4 items-center">
+              <button type="button" className="text-sm text-qred font-semibold">
+                Cancel
+              </button>
+              <button
+                type="submit"
+                className="w-[164px] h-[50px] bg-qblack text-white text-sm"
+              >
+                Update Profile
+              </button>
             </div>
-          </div>
-          <div className="input-item mb-8">
-            <div className="w-full">
-              <InputCom
-                label="Address*"
-                placeholder="your address here"
-                type="text"
-                inputClasses="h-[50px]"
-              />
-            </div>
-          </div>
-          <div className="input-item flex space-x-2.5 mb-8">
-            <div className="w-1/2 h-full">
-              <InputCom
-                label="Town / City*"
-                placeholder=""
-                type="text"
-                inputClasses="h-[50px]"
-              />
-            </div>
-            <div className="w-1/2 h-full">
-              <InputCom
-                label="Postcode / ZIP*"
-                placeholder=""
-                type="text"
-                inputClasses="h-[50px]"
-              />
-            </div>
-          </div>
+          </form>
         </div>
         <div className="flex-1">
           <div className="update-logo w-full mb-9">
@@ -163,17 +207,6 @@ export default function ProfileTab() {
             </div>
           </div>
         </div>
-      </div>
-      <div className="action-area flex space-x-4 items-center">
-        <button type="button" className="text-sm text-qred font-semibold">
-          Cancel
-        </button>
-        <button
-          type="button"
-          className="w-[164px] h-[50px] bg-qblack text-white text-sm"
-        >
-          Update Profile
-        </button>
       </div>
     </>
   );
