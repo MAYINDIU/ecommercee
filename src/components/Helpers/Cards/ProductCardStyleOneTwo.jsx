@@ -10,6 +10,26 @@ export default function ProductCardStyleOneTwo({ datas }) {
   const [selected, setSelected] = useState(false);
   const userProfile = JSON.parse(localStorage.getItem("user"));
   const userdata = userProfile?.user;
+  const customer_ip = JSON.parse(localStorage.getItem("user_ip"));
+  // Add To Cart
+  const handleAddToCart = async () => {
+    const data = {
+      customer_ip: customer_ip,
+      product_id: datas?.id,
+      quantity: "1",
+    };
+    console.log(data);
+    try {
+      const response = await axios.post(
+        `https://habib.munihaelectronics.com/public/api/addToCartProduct`,
+        data
+      );
+      console.log(response);
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
 
   // Add Wish List
 
@@ -48,7 +68,7 @@ export default function ProductCardStyleOneTwo({ datas }) {
       <div className="product-card-details flex justify-center h-[102px] items-center  relative">
         {/* add to card button */}
         <div className="absolute w-[204px] h-[54px] left-[80px] -bottom-20 group-hover:bottom-[65px] transition-all duration-300 ease-in-out">
-          <button type="button" className="yellow-btn">
+          <button onClick={handleAddToCart} type="button" className="yellow-btn">
             <div>
               <span>Add To Cart </span>
             </div>

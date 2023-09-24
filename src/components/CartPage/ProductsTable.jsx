@@ -1,6 +1,20 @@
+import { useEffect, useState } from "react";
 import InputQuantityCom from "../Helpers/InputQuantityCom";
 
 export default function ProductsTable({ className }) {
+  const [cartlist, setCartDetails] = useState([]);
+  console.log(cartlist);
+  const customer_ip = JSON.parse(localStorage.getItem("user_ip"));
+
+  //User IP
+  useEffect(() => {
+    fetch(
+      `https://habib.munihaelectronics.com/public/api/show_cartlist/${customer_ip}`)
+      .then((res) => res.json())
+      .then((data) => setCartDetails(data));
+  }, []);
+
+
   return (
     <div className={`w-full ${className || ""}`}>
       <div className="relative w-full overflow-x-auto border border-[#EDEDED]">
