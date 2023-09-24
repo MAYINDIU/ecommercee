@@ -1,5 +1,5 @@
 import axios from "axios";
-import React from "react";
+import React, { useState } from "react";
 import { Link } from "react-router-dom";
 import Compair from "../icons/Compair";
 import QuickViewIco from "../icons/QuickViewIco";
@@ -7,10 +7,12 @@ import ThinLove from "../icons/ThinLove";
 
 export default function ProductCardStyleOneTwo({ datas }) {
   const single_data = [datas];
+  const [selected, setSelected] = useState(false);
   const userProfile = JSON.parse(localStorage.getItem("user"));
   const userdata = userProfile?.user;
 
   // Add Wish List
+
   const handleWishList = async (product_id) => {
     const data = {
       product_id,
@@ -22,6 +24,7 @@ export default function ProductCardStyleOneTwo({ datas }) {
         `https://habib.munihaelectronics.com/public/api/addWishList`,
         data
       );
+      setSelected(!selected);
       console.log(response);
     } catch (error) {
       console.log(error);
@@ -77,11 +80,17 @@ export default function ProductCardStyleOneTwo({ datas }) {
           </span>
         </Link>
         <Link to="" onClick={() => handleWishList(datas?.id)}>
-          <span className="w-10 h-10 flex justify-center items-center bg-[#CCECEB] rounded">
+          <span
+            className={
+              selected
+                ? "w-10 h-10 flex justify-center items-center bg-[#fc3e3e] rounded"
+                : "w-10 h-10 flex justify-center items-center bg-[#CCECEB] rounded"
+            }
+          >
             <ThinLove />
           </span>
         </Link>
-        <a href="#">
+        <a href="">
           <span className="w-10 h-10 flex justify-center items-center bg-[#CCECEB] rounded">
             <Compair />
           </span>

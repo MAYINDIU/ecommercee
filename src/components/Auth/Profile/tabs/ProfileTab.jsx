@@ -98,7 +98,7 @@ export default function ProfileTab() {
                 <input
                   className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
                   label="Phone Number*"
-                  placeholder="012 3  *****"
+                  placeholder="012 3  ***"
                   type="text"
                   inputClasses="h-[50px]"
                 />

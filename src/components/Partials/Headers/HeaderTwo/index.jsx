@@ -1,8 +1,8 @@
 import ThinBag from "../../../Helpers/icons/ThinBag";
+import ThinPeople from "../../../Helpers/icons/ThinPeople";
 import Middlebar from "./Middlebar";
 import Navbar from "./Navbar";
 import TopBar from "./TopBar";
-
 export default function HeaderTwo({ className, drawerAction }) {
   return (
     <header className={` ${className || ""} header-section-wrapper relative`}>
@@ -46,6 +46,18 @@ export default function HeaderTwo({ className, drawerAction }) {
               15
             </span>
           </div>
+
+
+          <div className="relative cursor-pointer">
+            <a href="/profile">
+              <span>
+                <ThinPeople />
+              </span>
+            </a>
+          </div>
+
+
+
         </div>
       </div>
       <Navbar className="quomodo-shop-nav-bar lg:block hidden" />

@@ -18,6 +18,20 @@ export default function HomeTwo() {
   const [popular, setPopular] = useState([]);
   const [new_arrival, setNewArrival] = useState([]);
   const [top_sell, setTopSell] = useState([]);
+  const [user_ip, setUserIp] = useState({});
+  console.log(user_ip);
+
+
+
+  //User IP
+  useEffect(() => {
+    fetch(
+      "https://habib.munihaelectronics.com/public/api/user-ip")
+      .then((res) => res.json())
+      .then((data) => setUserIp(data));
+  }, []);
+
+
 
   //All category
   useEffect(() => {
