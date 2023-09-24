@@ -19,8 +19,9 @@ export default function HomeTwo() {
   const [new_arrival, setNewArrival] = useState([]);
   const [top_sell, setTopSell] = useState([]);
   const [user_ip, setUserIp] = useState({});
-  console.log(user_ip);
 
+  localStorage.setItem("user_ip", JSON.stringify(user_ip));
+  console.log(user_ip);
 
 
   //User IP
