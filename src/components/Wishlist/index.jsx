@@ -33,22 +33,7 @@ export default function Wishlist({ wishlist = true }) {
           <div className="w-full mt-[23px]">
             <div className="container-x mx-auto">
               <ProductsTable className="mb-[30px]" />
-              <div className="w-full mt-[30px] flex sm:justify-end justify-start">
-                <div className="sm:flex sm:space-x-[30px] items-center">
-                  <button type="button">
-                    <div className="w-full text-sm font-semibold text-qred mb-5 sm:mb-0">
-                      Clean Wishlist
-                    </div>
-                  </button>
-                  <div className="w-[180px] h-[50px]">
-                    <button type="button" className="yellow-btn">
-                      <div className="w-full text-sm font-semibold">
-                        Add to Cart All
-                      </div>
-                    </button>
-                  </div>
-                </div>
-              </div>
+
             </div>
           </div>
         </div>
