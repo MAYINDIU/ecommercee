@@ -1,56 +1,31 @@
+import axios from "axios";
 import { useState } from "react";
-import { useLocation } from "react-router-dom";
+import { Link, useLocation } from "react-router-dom";
 import Selectbox from "../Helpers/Selectbox";
 import Star from "../Helpers/icons/Star";
 
 export default function ProductView({ className, reportHandler }) {
-
-
   const location = useLocation();
-  const details = location?.state
-  const productsImg = (details[0]?.productImages);
+  const customer_ip = JSON.parse(localStorage.getItem("user_ip"));
+  const details = location?.state;
+  const productDetailsByFind = details.find((d) => d?.id !== customer_ip);
+  console.log(productDetailsByFind);
+  const productsImg = details[0]?.productImages;
 
-  const [selectedSize, setSelectedSize] = useState('');
+  const [selectedSize, setSelectedSize] = useState("");
   console.log(selectedSize);
   const handleSizeChange = (current) => {
+    console.log(current);
     setSelectedSize(current);
   };
 
-  const colors = details[0]?.color.split(',');
-  const sizes = details[0]?.size.split(',');
-  const [selectColor, setSelectColor] = useState('');
+  const colors = details[0]?.color.split(",");
+  const sizes = details[0]?.size.split(",");
+  const [selectColor, setSelectColor] = useState("");
   console.log(selectColor);
   const changeColorHandler = (current) => {
     setSelectColor(current);
   };
-
-  // const productsImg = [
-  //   {
-  //     id: 1,
-  //     src: "product-details-1.png",
-  //     color: "#FFBC63",
-  //   },
-  //   {
-  //     id: 2,
-  //     src: "product-details-2.png",
-  //     color: "#649EFF",
-  //   },
-  //   {
-  //     id: 3,
-  //     src: "product-details-3.png",
-  //     color: "#FFFFFF",
-  //   },
-  //   {
-  //     id: 4,
-  //     src: "product-details-4.png",
-  //     color: "#FF7173",
-  //   },
-  //   {
-  //     id: 6,
-  //     src: "product-details-5.png",
-  //     color: "",
-  //   },
-  // ];
 
   const [src, setSrc] = useState(details[0]?.image_path);
   console.log(src);
@@ -67,6 +42,25 @@ export default function ProductView({ className, reportHandler }) {
     }
   };
 
+  // Add To Cart
+  const handleAddToCart = async () => {
+    const data = {
+      customer_ip: customer_ip?.user_ip,
+      product_id: productDetailsByFind?.id,
+      quantity: "1",
+    };
+    console.log(data);
+    try {
+      const response = await axios.post(
+        `https://habib.munihaelectronics.com/public/api/addToCartProduct`,
+        data
+      );
+      console.log(response);
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
   return (
     <div
       className={`product-view w-full lg:flex justify-between ${className || ""
@@ -75,7 +69,6 @@ export default function ProductView({ className, reportHandler }) {
       <div data-aos="fade-right" className="lg:w-1/2 xl:mr-[70px] lg:mr-[50px]">
         <div className="w-full">
           <div className="w-full h-[600px] border border-qgray-border flex justify-center items-center overflow-hidden relative mb-3">
-
             <img
               src={`https://habib.munihaelectronics.com/public/${src}`}
               alt=""
@@ -89,7 +82,6 @@ export default function ProductView({ className, reportHandler }) {
           <div className="flex gap-2 flex-wrap">
             <div
               onClick={() => changeImgHandler(details[0]?.image_path)}
-
               className="w-[110px] h-[110px] p-[15px] border border-qgray-border cursor-pointer"
             >
               <img
@@ -107,7 +99,6 @@ export default function ProductView({ className, reportHandler }) {
                   key={img.id}
                   className="w-[110px] h-[110px] p-[15px] border border-qgray-border cursor-pointer"
                 >
-
                   <img
                     // src={`${process.env.PUBLIC_URL}/assets/images/${img.src}`}
                     src={`https://habib.munihaelectronics.com/public/${img}`}
@@ -115,7 +106,6 @@ export default function ProductView({ className, reportHandler }) {
                     className={`w-full h-full object-contain ${src !== img ? "opacity-50" : ""
                       } `}
                   />
-
                 </div>
               ))}
           </div>
@@ -157,7 +147,8 @@ export default function ProductView({ className, reportHandler }) {
               {details[0]?.current_purchase_cost}
             </span>
             <span className="text-2xl font-500 text-qred">
-              {details[0]?.current_sale_price}</span>
+              {details[0]?.current_sale_price}
+            </span>
           </div>
 
           <p
@@ -203,13 +194,11 @@ export default function ProductView({ className, reportHandler }) {
                 <button onClick={() => changeColorHandler(color)}>
                   <span
                     key={index}
-                    style={{ background: color, marginRight: '5px' }}
+                    style={{ background: color, marginRight: "5px" }}
                     className="w-[20px] h-[20px] block rounded-full border"
-
                   ></span>
                 </button>
               ))}
-
             </div>
           </div>
 
@@ -219,16 +208,18 @@ export default function ProductView({ className, reportHandler }) {
             </span>
             <div className="w-full">
               <div className=" border border-qgray-border h-[50px] flex justify-between items-center px-6 cursor-pointer">
-                <Selectbox className="w-full" datas={sizes} onClick={() => handleSizeChange(item)} >
+                <Selectbox
+                  className="w-full"
+                  datas={sizes}
+                  onClick={() => handleSizeChange(item)}
+                >
                   {({ item }) => (
                     <>
-                      <div >
+                      <div>
                         <span className="text-[13px] text-qblack">{item}</span>
                       </div>
                       <div className="flex space-x-10 items-center">
-                        <span className="text-[13px] text-qblack">
-
-                        </span>
+                        <span className="text-[13px] text-qblack"></span>
                         <span>
                           <svg
                             width="11"
@@ -296,12 +287,15 @@ export default function ProductView({ className, reportHandler }) {
               </button>
             </div>
             <div className="flex-1 h-full">
-              <button
-                type="button"
-                className="black-btn text-sm font-semibold w-full h-full"
-              >
-                Add To Cart
-              </button>
+              <Link to="/">
+                <button
+                  type="button"
+                  className="black-btn text-sm font-semibold w-full h-full"
+                  onClick={handleAddToCart}
+                >
+                  Add To Cart
+                </button>
+              </Link>
             </div>
           </div>
 
