@@ -412,7 +412,7 @@ export default function CheakoutPage() {
                   <div className="mt-[30px]">
                     <div className=" flex justify-between mb-5">
                       <p className="text-2xl font-medium text-qblack">Total</p>
-                      <p className="text-2xl font-medium text-qred">${subTotal}</p>
+                      <p className="text-2xl font-medium text-qred">€{subTotal}</p>
                     </div>
                   </div>
                   <div className="shipping mt-[30px]">

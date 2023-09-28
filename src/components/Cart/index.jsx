@@ -1,4 +1,5 @@
 import { useEffect, useState } from "react";
+import { Link } from "react-router-dom";
 
 export default function Cart({ className, type }) {
 
@@ -7,6 +8,9 @@ export default function Cart({ className, type }) {
 
   const cart_details = JSON.parse(localStorage.getItem("cartList"));
   const user_ip = JSON.parse(localStorage.getItem("user_ip"));
+
+  const subTotal = cartList?.reduce((sum, cart) => sum + cart?.quantity * +cart?.current_sale_price, 0)
+
   //User IP
   useEffect(() => {
     fetch(
@@ -16,6 +20,26 @@ export default function Cart({ className, type }) {
       .then((data) => setCartDetails(data));
   }, []);
 
+  // Delete single Cart List
+  const handleDeleteCartList = (pId) => {
+
+    const confirm = window.confirm("Are you want do delete?");
+    if (confirm) {
+      const url = ` https://habib.munihaelectronics.com/public/api/cartlist_delete/${pId}`;
+      fetch(url, {
+        method: "DELETE",
+      }).then((res) => res.json());
+
+      const remaining = cartList.filter((p) => p.id !== pId);
+      setCartDetails(remaining);
+
+      swal({
+        title: "Successfully Deleted",
+        text: "Success",
+        icon: "success",
+      });
+    }
+  };
 
 
   return (
@@ -27,7 +51,7 @@ export default function Cart({ className, type }) {
       >
         <div className="w-full h-full">
           <div className="product-items h-[310px] overflow-y-scroll">
-            {cart_details?.map((wl, i) => (
+            {cartList?.map((wl, i) => (
               <ul key={i}>
 
                 <li className="w-full h-full flex">
@@ -41,17 +65,20 @@ export default function Cart({ className, type }) {
                     </div>
                     <div className="flex-1 h-full flex flex-col justify-center ">
                       <p className="title mb-2 text-[13px] font-600 text-qblack leading-4 line-clamp-2 hover:text-blue-600">
-                        iPhone 12 Pro Max 128GB Golen colour
+                        {wl?.name}
                       </p>
 
                       <p className="price">
                         <span className="offer-price text-qred font-600 text-[15px] ml-2">
-                          $38
+                          €{wl?.current_sale_price}
                         </span>
                       </p>
                     </div>
                   </div>
-                  <span className="mt-[20px] mr-[15px] inline-flex cursor-pointer">
+                  <span className="mt-[50px] ml-10 mr-[10px] inline-flex cursor-pointer"
+                    onClick={() => handleDeleteCartList(wl?.id)}
+                    style={{ cursor: "pointer" }}
+                  >
                     <svg
                       width="8"
                       height="8"
@@ -74,21 +101,22 @@ export default function Cart({ className, type }) {
           <div className="product-actions px-4 mb-[30px]">
             <div className="total-equation flex justify-between items-center mb-[28px]">
               <span className="text-[15px] font-500 text-qblack">Subtotal</span>
-              <span className="text-[15px] font-500 text-qred ">$365</span>
+              <span className="text-[15px] font-500 text-qred ">€{subTotal}</span>
             </div>
             <div className="product-action-btn">
-              <a href="#">
+              <Link to="/cart">
+
                 <div className="gray-btn w-full h-[50px] mb-[10px] ">
                   <span>View Cart</span>
                 </div>
-              </a>
-              <a href="#">
+              </Link>
+              <Link to="/checkout">
                 <div className="w-full h-[50px]">
                   <div className={type === 3 ? 'blue-btn' : 'yellow-btn'}>
                     <span className="text-sm">Checkout Now</span>
                   </div>
                 </div>
-              </a>
+              </Link>
             </div>
           </div>
           <div className="w-full px-4 mt-[20px]">

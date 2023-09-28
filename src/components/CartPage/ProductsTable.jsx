@@ -7,8 +7,6 @@ export default function ProductsTable({ className }) {
   const [cartList, setCartDetails] = useState([]);
   const customer_ip = JSON.parse(localStorage.getItem("user_ip"));
 
-
-
   //handle quantity and total
   const handleQuantityChange = (qty, index) => {
     const updatedData = [...cartList];
@@ -305,7 +303,7 @@ export default function ProductsTable({ className }) {
               <p className="text-[18px] font-medium text-qblack">
                 Total
               </p>
-              <p className="text-[18px] font-medium text-qred">{subTotal}</p>
+              <p className="text-[18px] font-medium text-qred">€{subTotal}</p>
             </div>
           </div>
           <Link to="/checkout">

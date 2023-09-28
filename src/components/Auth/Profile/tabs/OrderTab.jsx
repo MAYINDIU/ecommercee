@@ -2,9 +2,14 @@ import React, { useEffect, useState } from "react";
 
 export default function OrderTab() {
   const [orderList, setOrderList] = useState([])
+  const userProfile = JSON.parse(localStorage.getItem("user"));
+  const userId = (userProfile?.user?.id);
+
+
+
   useEffect(() => {
     fetch(
-      `https://habib.munihaelectronics.com/public/api/SingleOrderlist/5`
+      `https://habib.munihaelectronics.com/public/api/SingleOrderlist/${userId}`
     )
       .then((res) => res.json())
       .then((data) => setOrderList(data));
@@ -34,7 +39,7 @@ export default function OrderTab() {
                   </td>
                   <td className="text-center py-4 px-2">
                     <span className="text-base text-qgray  whitespace-nowrap">
-                      Fub 05,2021
+                      {l?.created_at}
                     </span>
                   </td>
                   <td className="text-center py-4 px-2">

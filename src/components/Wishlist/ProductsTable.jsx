@@ -1,5 +1,4 @@
 import { useEffect, useState } from "react";
-import InputQuantityCom from "../Helpers/InputQuantityCom";
 
 export default function ProductsTable({ className }) {
 
@@ -8,7 +7,17 @@ export default function ProductsTable({ className }) {
   const uId = userInfo?.id;
   console.log(uId);
   const [wlist, setwList] = useState([]);
-  console.log(wlist);
+  // console.log(wlist);
+
+  //handle quantity and total
+  const handleQuantityChange = (qty, index) => {
+    const updatedData = [...wlist];
+    updatedData[index].quantity = qty;
+    updatedData[index].total = qty * updatedData[index].current_sale_price
+    setwList(updatedData);
+
+  };
+
   // Fetch wishlist All Information
   useEffect(() => {
     fetch(`https://habib.munihaelectronics.com/public/api/show_wishlist/${uId}`)
@@ -26,7 +35,7 @@ export default function ProductsTable({ className }) {
         method: "DELETE",
       }).then((res) => res.json());
       const remaining = wlist.filter((p) => p.id !== pId);
-      setList(remaining);
+      // setList(remaining);
 
       swal({
         title: "Successfully Deleted",
@@ -105,8 +114,6 @@ export default function ProductsTable({ className }) {
 
 
 
-
-
                 <td className="text-center py-4 px-2">
                   <div className="flex space-x-1 items-center justify-center">
                     <span className="text-[15px] font-normal">{wl?.current_sale_price}</span>
@@ -114,12 +121,20 @@ export default function ProductsTable({ className }) {
                 </td>
                 <td className=" py-4">
                   <div className="flex justify-center items-center">
-                    <InputQuantityCom />
+                    <input
+                      type="number"
+                      className="border text-center w-16"
+                      defaultValue={1}
+                      min={1}
+                      onChange={(e) => handleQuantityChange(+e.target.value, i)}
+
+                    />
                   </div>
                 </td>
                 <td className="text-right py-4">
                   <div className="flex space-x-1 items-center justify-center">
-                    <span className="text-[15px] font-normal">$38</span>
+                    <span className="text-[15px] font-normal">{+wl?.current_sale_price * wl?.quantity}</span>
+
                   </div>
                 </td>
                 <td className="text-right py-4">
