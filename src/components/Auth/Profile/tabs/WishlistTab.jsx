@@ -9,7 +9,14 @@ export default function WishlistTab({ className }) {
   console.log(list);
 
 
+  //handle quantity and total
+  const handleQuantityChange = (qty, index) => {
+    const updatedData = [...list];
+    updatedData[index].quantity = qty;
+    updatedData[index].total = qty * updatedData[index].current_sale_price
+    setList(updatedData);
 
+  };
 
   // Fetch wishlist Information
   useEffect(() => {
@@ -67,70 +74,76 @@ export default function WishlistTab({ className }) {
             <tbody>
               {/* table heading */}
               <tr className="text-[13px] font-medium text-black bg-[#F6F6F6] whitespace-nowrap px-2 border-b default-border-bottom uppercase">
-                <td className="py-4 pl-10 block whitespace-nowrap w-[380px] ">
-                  Product
+                <td className="py-4 pl-10 block whitespace-nowrap  w-[380px]">
+                  product
                 </td>
-                <td className="py-4 whitespace-nowrap text-center">Color</td>
-                <td className="py-4 whitespace-nowrap text-center">Size</td>
-
-                <td className="py-4 whitespace-nowrap text-center">Price</td>
-                {/* <td className="py-4 whitespace-nowrap  text-center">
-                  Quantity
-                </td> */}
-                <td className="py-4 whitespace-nowrap  text-center">Action</td>
-                <td className="py-4 whitespace-nowrap text-right w-[114px] block"></td>
+                <td className="py-4 whitespace-nowrap text-center">price</td>
+                <td className="py-4 whitespace-nowrap  text-center">quantity</td>
+                <td className="py-4 whitespace-nowrap  text-center">total</td>
+                <td className="py-4 whitespace-nowrap text-right w-[114px] block">Action</td>
               </tr>
               {/* table heading end */}
-
-              {list?.map((l, i) => (
-                <tr className="bg-white border-b hover:bg-gray-50">
-                  <td className="pl-10  py-4 ">
+              {list?.map((wl, i) => (
+                <tr key={i} className="bg-white border-b hover:bg-gray-50">
+                  <td className="pl-10  py-4  w-[380px]">
                     <div className="flex space-x-6 items-center">
                       <div className="w-[80px] h-[80px] overflow-hidden flex justify-center items-center border border-[#EDEDED]">
                         <img
-                          src={`https://habib.munihaelectronics.com/public/${l?.image_path}`}
+                          src={`https://habib.munihaelectronics.com/public/${wl?.image_path}`}
                           alt="product"
                           className="w-full h-full object-contain"
                         />
                       </div>
                       <div className="flex-1 flex flex-col">
-                        <p className="font-medium text-center text-[15px] text-qblack">
-                          {l?.name}
+                        <p className="font-medium text-[15px]  text-qblack">
+                          {wl?.name}
+
+
+                        </p>
+
+                        <p className="flex">
+                          <span className="text-[12px] font-normal"> Size: {wl?.size}   </span>
+                          <span className="ml-2 text-[12px] font-normal">  Color:</span>
+                          <span
+                            style={{ background: wl?.color }}
+                            className="ml-1 text-[12px] mt-1 font-normal w-[15px] h-[15px]  block rounded-full border"
+                          ></span>
                         </p>
                       </div>
+
+
                     </div>
                   </td>
-                  <td className="text-center py-4 px-2">
-                    <div className=" flex justify-center items-center">
-                      <span className="w-[20px] h-[20px] bg-[#E4BC87] block rounded-full"></span>
-                    </div>
-                  </td>
-                  <td className="text-center py-4 px-2">
-                    <span className="text-[15px] font-normal">{l?.size}</span>
-                  </td>
-                  {/* <td className="text-center py-4 px-2">
-                    <span className="text-[15px] font-normal">
-                      In Stock(23)
-                    </span>
-                  </td> */}
+
+
+
                   <td className="text-center py-4 px-2">
                     <div className="flex space-x-1 items-center justify-center">
-                      <span className="text-[15px] font-normal">
-                        {l?.current_sale_price}
-                      </span>
+                      <span className="text-[15px] font-normal">{wl?.current_sale_price}</span>
                     </div>
                   </td>
-                  {/* Quantity  */}
-                  {/* <td className=" py-4">
+                  <td className=" py-4">
                     <div className="flex justify-center items-center">
-                      <InputQuantityCom />
-                    </div>
-                  </td> */}
+                      <input
+                        type="number"
+                        className="border text-center w-16"
+                        defaultValue={1}
+                        min={1}
+                        onChange={(e) => handleQuantityChange(+e.target.value, i)}
 
+                      />
+                    </div>
+                  </td>
+                  <td className="text-right py-4">
+                    <div className="flex space-x-1 items-center justify-center">
+                      <span className="text-[15px] font-normal">{+wl?.current_sale_price * wl?.quantity}</span>
+
+                    </div>
+                  </td>
                   <td className="text-right py-4">
                     <div className="flex space-x-1 items-center justify-center">
                       <span
-                        onClick={() => handleDeleteWishList(l?.id)}
+                        onClick={() => handleDeleteWishList(wl?.id)}
                         style={{ cursor: "pointer" }}
                       >
                         <svg
@@ -149,6 +162,7 @@ export default function WishlistTab({ className }) {
                     </div>
                   </td>
                 </tr>
+
               ))}
             </tbody>
           </table>

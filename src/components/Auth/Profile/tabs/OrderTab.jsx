@@ -1,11 +1,10 @@
 import React, { useEffect, useState } from "react";
+import { Link } from "react-router-dom";
 
 export default function OrderTab() {
   const [orderList, setOrderList] = useState([])
   const userProfile = JSON.parse(localStorage.getItem("user"));
   const userId = (userProfile?.user?.id);
-
-
 
   useEffect(() => {
     fetch(
@@ -53,12 +52,15 @@ export default function OrderTab() {
                     </span>
                   </td>
                   <td className="text-center py-4">
-                    <button
-                      type="button"
-                      className="w-[116px] h-[46px] bg-qyellow text-qblack font-bold"
-                    >
-                      View Details
-                    </button>
+                    <Link to="/profile#orderdetails">
+
+                      <button
+                        type="button"
+                        className="w-[116px] h-[46px] bg-qyellow text-qblack font-bold"
+                      >
+                        View Details
+                      </button>
+                    </Link>
                   </td>
                 </tr>
               ))

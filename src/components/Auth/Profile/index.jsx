@@ -20,6 +20,8 @@ import ReviewTab from "./tabs/ReviewTab";
 import SupportTab from "./tabs/SupportTab";
 import WishlistTab from "./tabs/WishlistTab";
 
+
+
 export default function Profile() {
   const [switchDashboard, setSwitchDashboard] = useState(false);
   const location = useLocation();
@@ -121,6 +123,17 @@ export default function Profile() {
                         </div>
                       </Link>
                     </div>
+                    <div className="item group">
+                      <Link to="/profile#orderdetails">
+                        <div className="flex space-x-3 items-center text-qgray hover:text-qblack">
+                          <span>
+                            <IcoCart />
+                          </span>
+                          <span className=" font-normal text-base">Order details</span>
+                        </div>
+                      </Link>
+                    </div>
+
                     <div className="item group">
                       <Link to="/profile#wishlist">
                         <div className="flex space-x-3 items-center text-qgray hover:text-qblack">

@@ -5,6 +5,8 @@ import InputCom from "../Helpers/InputCom";
 
 export default function ProductsTable({ className }) {
   const [cartList, setCartDetails] = useState([]);
+
+
   const customer_ip = JSON.parse(localStorage.getItem("user_ip"));
 
   //handle quantity and total

@@ -11,10 +11,24 @@ export default function Middlebar({ className }) {
   // const cartHandler = () => {
   //   setToggle(!toggleCart);
   // };
-
+  // https://habib.munihaelectronics.com/public/api/cartlist_count/103.209.20.178
   const userProfile = JSON.parse(localStorage.getItem("user"));
   const userdata = userProfile?.user;
+  const userIP = JSON.parse(localStorage.getItem("user_ip"));
+  const uIP = userIP?.user_ip;
+  console.log(uIP);
 
+
+  // Count For Cartlisgt
+  const [cartlist, setCartCount] = useState(null);
+
+  useEffect(() => {
+    fetch(
+      `https://habib.munihaelectronics.com/public/api/cartlist_count/${uIP}`
+    )
+      .then((res) => res.json())
+      .then((data) => setCartCount(data));
+  }, []);
   // Count For WishList
   const [wishListCount, setWishListCount] = useState(null);
   useEffect(() => {
@@ -73,7 +87,7 @@ export default function Middlebar({ className }) {
                     </span>
                   </a>
                   <span className="w-[18px] h-[18px] rounded-full bg-qh2-green absolute -top-2.5 -right-2.5 flex justify-center items-center text-[9px] text-white">
-                    16
+                    {cartlist?.total_cart}
                   </span>
                 </div>
                 {/* <div className="fixed left-0 top-0 w-full h-full z-40"></div> */}

@@ -1,14 +1,15 @@
 import axios from "axios";
 import { useState } from "react";
 import { Link } from "react-router-dom";
-import swal from "sweetalert";
 import PageTitle from "../Helpers/PageTitle";
 import Layout from "../Partials/LayoutHomeTwo";
 
 export default function CheakoutPage() {
   const userProfile = JSON.parse(localStorage.getItem("user"));
   const cartDetailsFromAddtoCart = JSON.parse(localStorage.getItem("checkout"));
-  console.log(cartDetailsFromAddtoCart)
+  // console.log(cartDetailsFromAddtoCart)
+
+
   const userdata = userProfile?.user;
   const [checked, setChecked] = useState(false)
   const [checkedPaymentMethod, setCheckedPaymentMethod] = useState(false)
@@ -23,6 +24,8 @@ export default function CheakoutPage() {
   //Place Order
   const handlePlaceOrder = async () => {
 
+
+
     const data = {
       user_id: userdata?.id,
       total_amount: subTotal,
@@ -35,8 +38,15 @@ export default function CheakoutPage() {
       coupon_discount: '3066',
       payment_method_id: '2',
 
+      // product_id: product_id,
+      // price: price,
+      // color: color,
+      // quantity: quantity,
+      products: cartDetailsFromAddtoCart
+
     };
     console.log(data);
+
     try {
       const response = await axios.post(
         `https://habib.munihaelectronics.com/public/api/addOrder`,
