@@ -11,12 +11,17 @@ export default function ProductCardStyleOneTwo({ datas }) {
   const userProfile = JSON.parse(localStorage.getItem("user"));
   const userdata = userProfile?.user;
   const customer_ip = JSON.parse(localStorage.getItem("user_ip"));
+
+
+  const productDetailsByFind = single_data.find((d) => d?.id !== customer_ip);
+  console.log(productDetailsByFind);
+
   // Add To Cart
   const handleAddToCart = async () => {
     const data = {
-      customer_ip: customer_ip,
+      customer_ip: customer_ip?.user_ip,
       product_id: datas?.id,
-      quantity: "1",
+      quantity: 1,
     };
     console.log(data);
     try {

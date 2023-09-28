@@ -47,7 +47,7 @@ export default function ProductView({ className, reportHandler }) {
     const data = {
       customer_ip: customer_ip?.user_ip,
       product_id: productDetailsByFind?.id,
-      quantity: "1",
+      quantity: 1,
     };
     console.log(data);
     try {

@@ -1,8 +1,58 @@
-import InputCom from "../Helpers/InputCom";
+import axios from "axios";
+import { useState } from "react";
+import { Link } from "react-router-dom";
+import swal from "sweetalert";
 import PageTitle from "../Helpers/PageTitle";
 import Layout from "../Partials/LayoutHomeTwo";
 
 export default function CheakoutPage() {
+  const userProfile = JSON.parse(localStorage.getItem("user"));
+  const cartDetailsFromAddtoCart = JSON.parse(localStorage.getItem("checkout"));
+  console.log(cartDetailsFromAddtoCart)
+  const userdata = userProfile?.user;
+  const [checked, setChecked] = useState(false)
+  const [checkedPaymentMethod, setCheckedPaymentMethod] = useState(false)
+  const [shippingAddress, setShippingAddress] = useState('');
+  const [billingCity, setBillingCity] = useState('');
+  const [shippingCity, setShippingCity] = useState('');
+  const [billingPostalCode, setBillingPostalCode] = useState('');
+  const [shippingPostalCode, setShippingPostalCode] = useState('');
+
+  const subTotal = cartDetailsFromAddtoCart?.reduce((sum, cart) => sum + cart?.quantity * +cart?.current_sale_price, 0)
+
+  //Place Order
+  const handlePlaceOrder = async () => {
+
+    const data = {
+      user_id: userdata?.id,
+      total_amount: subTotal,
+      billing_address: userdata?.address,
+      shipping_address: shippingAddress ? shippingAddress : userdata?.address,
+      billing_city: billingCity,
+      shipping_city: shippingCity ? shippingCity : billingCity,
+      billing_postal_code: billingPostalCode,
+      shipping_postal_code: shippingPostalCode ? shippingPostalCode : billingPostalCode,
+      coupon_discount: '3066',
+      payment_method_id: '2',
+
+    };
+    console.log(data);
+    try {
+      const response = await axios.post(
+        `https://habib.munihaelectronics.com/public/api/addOrder`,
+        data
+      );
+      console.log(response);
+
+      swal({
+        title: "Successfully Orderd",
+        text: "Success",
+        icon: "success",
+      });
+    } catch (error) {
+      console.log(error);
+    }
+  };
   return (
     <Layout childrenClasses="pt-0 pb-0">
       <div className="checkout-page-wrapper w-full bg-white pb-[60px]">
@@ -48,37 +98,45 @@ export default function CheakoutPage() {
                   <form>
                     <div className="sm:flex sm:space-x-5 items-center mb-6">
                       <div className="sm:w-1/2  mb-5 sm:mb-0">
-                        <InputCom
+                        <input
+                          className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
                           label="First Name*"
                           placeholder="Demo Name"
                           inputClasses="w-full h-[50px]"
+                          value={userdata?.name}
+
                         />
                       </div>
                       <div className="flex-1">
-                        <InputCom
+                        <input
+                          className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
                           label="Last Name*"
-                          placeholder="Demo Name"
+                          placeholder="Last Name"
                           inputClasses="w-full h-[50px]"
                         />
                       </div>
                     </div>
                     <div className="flex space-x-5 items-center mb-6">
                       <div className="w-1/2">
-                        <InputCom
+                        <input
+                          className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
                           label="Email Address*"
                           placeholder="demoemial@gmail.com"
                           inputClasses="w-full h-[50px]"
+                          value={userdata?.email}
                         />
                       </div>
                       <div className="flex-1">
-                        <InputCom
+                        <input
+                          className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
                           label="Phone Number*"
-                          placeholder="012 3  *******"
+                          placeholder="012 3  ***"
                           inputClasses="w-full h-[50px]"
+                          defaultValue={userdata?.phone}
                         />
                       </div>
                     </div>
-                    <div className="mb-6">
+                    {/* <div className="mb-6">
                       <h1 className="input-label capitalize block  mb-2 text-qgray text-[13px] font-normal">
                         Country*
                       </h1>
@@ -101,67 +159,52 @@ export default function CheakoutPage() {
                           </svg>
                         </span>
                       </div>
-                    </div>
+                    </div> */}
                     <div className=" mb-6">
                       <div className="w-full">
-                        <InputCom
+                        <input
+                          className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
                           label="Address*"
                           placeholder="your address here"
                           inputClasses="w-full h-[50px]"
+                          defaultValue={userdata?.address}
+
                         />
                       </div>
                     </div>
                     <div className="flex space-x-5 items-center mb-6">
-                      <div className="w-1/2">
-                        <h1 className="input-label capitalize block  mb-2 text-qgray text-[13px] font-normal">
-                          Town / City*
-                        </h1>
-                        <div className="w-full h-[50px] border border-[#EDEDED] px-5 flex justify-between items-center">
-                          <span className="text-[13px] text-qgraytwo">
-                            Miyami Town
-                          </span>
-                          <span>
-                            <svg
-                              width="11"
-                              height="7"
-                              viewBox="0 0 11 7"
-                              fill="none"
-                              xmlns="http://www.w3.org/2000/svg"
-                            >
-                              <path
-                                d="M5.4 6.8L0 1.4L1.4 0L5.4 4L9.4 0L10.8 1.4L5.4 6.8Z"
-                                fill="#222222"
-                              ></path>
-                            </svg>
-                          </span>
-                        </div>
-                      </div>
+
+                      <select
+                        onChange={(e) => setBillingCity(e.target.value)}
+                        className="border h-8 rounded-none focus:border-none w-full max-w-xs mx-auto"
+                        required
+                      >
+                        <option>Dhaka</option>
+                        <option>Comilla</option>
+                        <option>Rangpur</option>
+                        <option>Mymensing</option>
+                        <option>Rajshahi</option>
+                        <option>Sylhet</option>
+                      </select>
                       <div className="flex-1">
-                        <InputCom
+                        <input
+                          className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
                           label="Postcode / ZIP*"
-                          placeholder=""
+                          placeholder="Postal code"
                           inputClasses="w-full h-[50px]"
+                          onChange={(e) => setBillingPostalCode(e.target.value)}
+                          required
                         />
                       </div>
                     </div>
-                    <div className="flex space-x-2 items-center mb-10">
-                      <div>
-                        <input type="checkbox" name="" id="create" />
-                      </div>
-                      <label
-                        htmlFor="create"
-                        className="text-qblack text-[15px] select-none"
-                      >
-                        Create an account?
-                      </label>
-                    </div>
+
                     <div>
                       <h1 className="text-2xl text-qblack font-medium mb-3">
-                        Billing Details
+                        Shipping Details
                       </h1>
                       <div className="flex space-x-2 items-center mb-10">
-                        <div>
-                          <input type="checkbox" name="" id="address" />
+                        <div >
+                          <input type="checkbox" name="" id="address" onClick={() => setChecked(!checked)} />
                         </div>
                         <label
                           htmlFor="address"
@@ -173,6 +216,119 @@ export default function CheakoutPage() {
                     </div>
                   </form>
                 </div>
+
+                {/* -----------------SHipping Part------------  */}
+                {
+                  checked ? <div className="form-area">
+                    <form>
+                      <div className="sm:flex sm:space-x-5 items-center mb-6">
+                        <div className="sm:w-1/2  mb-5 sm:mb-0">
+                          <input
+                            className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+                            label="First Name*"
+                            placeholder="Demo Name"
+                            inputClasses="w-full h-[50px]"
+                            value={userdata?.name}
+
+                          />
+                        </div>
+                        <div className="flex-1">
+                          <input
+                            className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+                            label="Last Name*"
+                            placeholder="Last Name"
+                            inputClasses="w-full h-[50px]"
+                          />
+                        </div>
+                      </div>
+                      <div className="flex space-x-5 items-center mb-6">
+                        <div className="w-1/2">
+                          <input
+                            className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+                            label="Email Address*"
+                            placeholder="demoemial@gmail.com"
+                            inputClasses="w-full h-[50px]"
+                            value={userdata?.email}
+                          />
+                        </div>
+                        <div className="flex-1">
+                          <input
+                            className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+                            label="Phone Number*"
+                            placeholder="012 3  ***"
+                            inputClasses="w-full h-[50px]"
+                            defaultValue={userdata?.phone}
+                          />
+                        </div>
+                      </div>
+                      {/* <div className="mb-6">
+                      <h1 className="input-label capitalize block  mb-2 text-qgray text-[13px] font-normal">
+                        Country*
+                      </h1>
+                      <div className="w-full h-[50px] border border-[#EDEDED] px-5 flex justify-between items-center mb-2">
+                        <span className="text-[13px] text-qgraytwo">
+                          Select Country
+                        </span>
+                        <span>
+                          <svg
+                            width="11"
+                            height="7"
+                            viewBox="0 0 11 7"
+                            fill="none"
+                            xmlns="http://www.w3.org/2000/svg"
+                          >
+                            <path
+                              d="M5.4 6.8L0 1.4L1.4 0L5.4 4L9.4 0L10.8 1.4L5.4 6.8Z"
+                              fill="#222222"
+                            ></path>
+                          </svg>
+                        </span>
+                      </div>
+                    </div> */}
+                      <div className=" mb-6">
+                        <div className="w-full">
+                          <input
+                            className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+                            label="Address*"
+                            placeholder="your address here"
+                            inputClasses="w-full h-[50px]"
+                            defaultValue={userdata?.address}
+                            onChange={(e) => setShippingAddress(e.target.value)}
+                          />
+                        </div>
+                      </div>
+                      <div className="flex space-x-5 items-center mb-6">
+
+                        <select
+                          onChange={(e) => setShippingCity(e.target.value)}
+                          className="border h-8 rounded-none focus:border-none w-full max-w-xs mx-auto"
+                          required
+                        >
+                          <option>Dhaka</option>
+                          <option>Comilla</option>
+                          <option>Rangpur</option>
+                          <option>Mymensing</option>
+                          <option>Rajshahi</option>
+                          <option>Sylhet</option>
+                        </select>
+                        <div className="flex-1">
+                          <input
+                            className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+                            label="Postcode / ZIP*"
+                            placeholder="Postal code"
+                            inputClasses="w-full h-[50px]"
+                            onChange={(e) => setShippingPostalCode(e.target.value)}
+                            required
+                          />
+                        </div>
+                      </div>
+
+
+                    </form>
+                  </div>
+                    :
+                    ''
+                }
               </div>
               <div className="flex-1">
                 <h1 className="sm:text-2xl text-xl text-qblack font-medium mb-5">
@@ -192,68 +348,34 @@ export default function CheakoutPage() {
                     <div className="w-full h-[1px] bg-[#EDEDED]"></div>
                   </div>
                   <div className="product-list w-full mb-[30px]">
-                    <ul className="flex flex-col space-y-5">
-                      <li>
-                        <div className="flex justify-between items-center">
-                          <div>
-                            <h4 className="text-[15px] text-qblack mb-2.5">
-                              Apple Watch
-                              <sup className="text-[13px] text-qgray ml-2 mt-2">
-                                x1
-                              </sup>
-                            </h4>
-                            <p className="text-[13px] text-qgray">
+                    {
+                      cartDetailsFromAddtoCart.map(l => (
+                        <ul className="flex flex-col space-y-5">
+                          <li>
+                            <div className="flex justify-between items-center">
+                              <div>
+                                <h4 className="text-[15px] text-qblack mb-2.5">
+                                  {l?.name}
+                                  <sup className="text-[13px] text-qgray ml-2 mt-2">
+                                    x1
+                                  </sup>
+                                </h4>
+                                {/* <p className="text-[13px] text-qgray">
                               64GB, Black, 44mm, Chain Belt
-                            </p>
-                          </div>
-                          <div>
-                            <span className="text-[15px] text-qblack font-medium">
-                              $38
-                            </span>
-                          </div>
-                        </div>
-                      </li>
-                      <li>
-                        <div className="flex justify-between items-center">
-                          <div>
-                            <h4 className="text-[15px] text-qblack mb-2.5">
-                              Apple Watch
-                              <sup className="text-[13px] text-qgray ml-2 mt-2">
-                                x1
-                              </sup>
-                            </h4>
-                            <p className="text-[13px] text-qgray">
-                              64GB, Black, 44mm, Chain Belt
-                            </p>
-                          </div>
-                          <div>
-                            <span className="text-[15px] text-qblack font-medium">
-                              $38
-                            </span>
-                          </div>
-                        </div>
-                      </li>
-                      <li>
-                        <div className="flex justify-between items-center">
-                          <div>
-                            <h4 className="text-[15px] text-qblack mb-2.5">
-                              Apple Watch
-                              <sup className="text-[13px] text-qgray ml-2 mt-2">
-                                x1
-                              </sup>
-                            </h4>
-                            <p className="text-[13px] text-qgray">
-                              64GB, Black, 44mm, Chain Belt
-                            </p>
-                          </div>
-                          <div>
-                            <span className="text-[15px] text-qblack font-medium">
-                              $38
-                            </span>
-                          </div>
-                        </div>
-                      </li>
-                    </ul>
+                            </p> */}
+                              </div>
+                              <div>
+                                <span className="text-[15px] text-qblack font-medium">
+                                  {l?.current_sale_price}
+                                </span>
+                              </div>
+                            </div>
+                          </li>
+
+
+                        </ul>
+                      ))
+                    }
                   </div>
                   <div className="w-full h-[1px] bg-[#EDEDED]"></div>
 
@@ -263,7 +385,7 @@ export default function CheakoutPage() {
                         SUBTOTAL
                       </p>
                       <p className="text-[15px] font-medium text-qblack uppercase">
-                        $365
+                        {subTotal}
                       </p>
                     </div>
                   </div>
@@ -290,10 +412,11 @@ export default function CheakoutPage() {
                   <div className="mt-[30px]">
                     <div className=" flex justify-between mb-5">
                       <p className="text-2xl font-medium text-qblack">Total</p>
-                      <p className="text-2xl font-medium text-qred">$365</p>
+                      <p className="text-2xl font-medium text-qred">${subTotal}</p>
                     </div>
                   </div>
                   <div className="shipping mt-[30px]">
+                    <p className="text-center mb-4 ">Selet a payment Method<span className="text-qred">*</span></p>
                     <ul className="flex flex-col space-y-1">
                       <li className=" mb-5">
                         <div className="flex space-x-2.5 items-center mb-4">
@@ -303,6 +426,7 @@ export default function CheakoutPage() {
                               name="price"
                               className="accent-pink-500"
                               id="transfer"
+                            // onClick={()=>setCheckedPaymentMethod(!checkedPaymentMethod)}
                             />
                           </div>
                           <label
@@ -325,11 +449,13 @@ export default function CheakoutPage() {
                               name="price"
                               className="accent-pink-500"
                               id="delivery"
+                            // onClick={()=>setCheckedPaymentMethod(!checkedPaymentMethod)}
                             />
                           </div>
                           <label
                             htmlFor="delivery"
                             className="text-[18px] text-normal text-qblack"
+
                           >
                             Cash on Delivery
                           </label>
@@ -343,6 +469,7 @@ export default function CheakoutPage() {
                               name="price"
                               className="accent-pink-500"
                               id="bank"
+                            // onClick={()=>setCheckedPaymentMethod(!checkedPaymentMethod)}
                             />
                           </div>
                           <label
@@ -355,13 +482,13 @@ export default function CheakoutPage() {
                       </li>
                     </ul>
                   </div>
-                  <a href="#">
-                    <div className="w-full h-[50px] black-btn flex justify-center items-center">
-                      <span className="text-sm font-semibold">
+                  <Link to="#" onClick={handlePlaceOrder}>
+                    <button className="w-full h-[50px] black-btn flex justify-center items-center" >
+                      <span className="text-sm font-semibold " >
                         Place Order Now
                       </span>
-                    </div>
-                  </a>
+                    </button>
+                  </Link>
                 </div>
               </div>
             </div>
