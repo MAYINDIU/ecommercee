@@ -12,11 +12,11 @@ import IcoPassword from "./icons/IcoPassword";
 import IcoPeople from "./icons/IcoPeople";
 import AddressesTab from "./tabs/AddressesTab";
 import Dashboard from "./tabs/Dashboard";
+import ReviewTab from "./tabs/OrderDetailsTab";
 import OrderTab from "./tabs/OrderTab";
 import PasswordTab from "./tabs/PasswordTab";
 import Payment from "./tabs/Payment";
 import ProfileTab from "./tabs/ProfileTab";
-import ReviewTab from "./tabs/ReviewTab";
 import SupportTab from "./tabs/SupportTab";
 import WishlistTab from "./tabs/WishlistTab";
 
@@ -123,8 +123,8 @@ export default function Profile() {
                         </div>
                       </Link>
                     </div>
-                    <div className="item group">
-                      <Link to="/profile#orderdetails">
+                    {/* <div className="item group">
+                      <Link to="/profile#review">
                         <div className="flex space-x-3 items-center text-qgray hover:text-qblack">
                           <span>
                             <IcoCart />
@@ -132,7 +132,7 @@ export default function Profile() {
                           <span className=" font-normal text-base">Order details</span>
                         </div>
                       </Link>
-                    </div>
+                    </div> */}
 
                     <div className="item group">
                       <Link to="/profile#wishlist">

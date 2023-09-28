@@ -6,6 +6,9 @@ export default function OrderTab() {
   const userProfile = JSON.parse(localStorage.getItem("user"));
   const userId = (userProfile?.user?.id);
 
+  const [orderDetails, setOrderDetails] = useState([])
+  console.log(orderDetails);
+
   useEffect(() => {
     fetch(
       `https://habib.munihaelectronics.com/public/api/SingleOrderlist/${userId}`
@@ -13,6 +16,12 @@ export default function OrderTab() {
       .then((res) => res.json())
       .then((data) => setOrderList(data));
   }, []);
+
+  const handleorderdetails = async (id) => {
+    fetch(`https://habib.munihaelectronics.com/public/api/orderDetails/${id}`)
+      .then((res) => res.json())
+      .then((data) => console.log(data));
+  }
 
   return (
     <>
@@ -49,15 +58,14 @@ export default function OrderTab() {
                   <td className="text-center py-4 px-2">
                     <span className="text-base text-qblack whitespace-nowrap px-2 ">
                       {l?.total_amount}
+
                     </span>
                   </td>
                   <td className="text-center py-4">
-                    <Link to="/profile#orderdetails">
-
+                    <Link to="/profile#review" onClick={() => handleorderdetails(l?.id)} >
                       <button
                         type="button"
-                        className="w-[116px] h-[46px] bg-qyellow text-qblack font-bold"
-                      >
+                        className="w-[116px] h-[46px] bg-qyellow text-qblack font-bold">
                         View Details
                       </button>
                     </Link>
