@@ -1,278 +1,148 @@
-import React, { useState } from "react";
-import PasswordSvg from "./PasswordSvg";
+import React, { useEffect, useState } from "react";
+import { useLocation } from "react-router-dom";
 
 export default function OrderDetailsTab() {
-  const [oldPass, setOldPass] = useState("hide-password");
-  const [newPass, setNewPass] = useState("hide-password");
-  const [confirmPass, setConfirmPass] = useState("hide-password");
-  const showPassword = (value) => {
-    const password = document.getElementById(`${value}`);
-    if (value && value === "old_password") {
-      if (password.type === "password") {
-        password.type = "text";
-        setOldPass("show-password");
-      } else {
-        password.type = "password";
-        setOldPass("hide-password");
-      }
-    }
-    if (value && value === "new_password") {
-      if (password.type === "password") {
-        password.type = "text";
-        setNewPass("show-password");
-      } else {
-        password.type = "password";
-        setNewPass("hide-password");
-      }
-    }
-    if (value && value === "confirm_password") {
-      if (password.type === "password") {
-        password.type = "text";
-        setConfirmPass("show-password");
-      } else {
-        password.type = "password";
-        setConfirmPass("hide-password");
-      }
-    }
-  };
+  const location = useLocation();
+  const pId = location?.state
+
+  const [orderDetails, setOrderDetails] = useState({})
+  // const { user_name, user_phone, user_email } = orderDetails?.user_details;
+  // console.log(orderDetails?.order_details);
+  const O_details = orderDetails?.order_details;
+  console.log(O_details);
+
+  const ud = orderDetails?.user_details;
+  const username = ud?.user_name;
+  const userphone = ud?.user_phone;
+  const useremail = ud?.user_email;
+
+
+  useEffect(() => {
+    fetch(
+      `https://habib.munihaelectronics.com/public/api/orderDetails/${pId}`
+    )
+      .then((res) => res.json())
+      .then((data) => setOrderDetails(data));
+  }, []);
+
+
+
   return (
     <div className="changePasswordTab w-full">
-      <div className="w-full flex xl:flex-row flex-col-reverse space-x-5 xl:items-center">
-        <div className="w-[397px] mb-10">
-          <div className="input-field mb-6">
-            <label
-              className="input-label text-qgray text-sm block mb-2.5"
-              htmlFor="old_password"
-            >
-              Old Password*
-            </label>
-            <div className="input-wrapper border border-[#E8E8E8] w-full  h-[58px] overflow-hidden relative ">
-              <input
-                placeholder="● ● ● ● ● ●"
-                className="input-field placeholder:text-base text-bese px-4 text-dark-gray w-full h-full bg-[#FAFAFA] focus:ring-0 focus:outline-none"
-                type="password"
-                id="old_password"
-              />
-              <div
-                className="absolute right-6 bottom-[17px] z-10 cursor-pointer"
-                onClick={() => showPassword("old_password")}
-              >
-                {oldPass === "show-password" ? (
-                  <svg
-                    xmlns="http://www.w3.org/2000/svg"
-                    className="h-6 w-6"
-                    fill="none"
-                    viewBox="0 0 24 24"
-                    stroke="currentColor"
-                    strokeWidth="2"
-                  >
-                    <path
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                      d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"
-                    />
-                    <path
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                      d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"
-                    />
-                  </svg>
-                ) : (
-                  <svg
-                    width="25"
-                    height="21"
-                    viewBox="0 0 25 21"
-                    fill="none"
-                    xmlns="http://www.w3.org/2000/svg"
-                  >
-                    <path
-                      d="M20.5483 16.3524C20.156 15.9557 19.7696 15.5605 19.3802 15.1683C18.7802 14.5653 18.1787 13.9638 17.5728 13.3667C17.4972 13.2911 17.4871 13.2388 17.5379 13.1415C19.3482 9.66037 17.2125 5.46008 13.3332 4.87747C12.1143 4.69441 10.9534 4.89636 9.85791 5.46299C9.78672 5.49931 9.73587 5.53563 9.65596 5.45572C8.88157 4.67262 8.10136 3.89678 7.32261 3.11803C7.30082 3.09624 7.28338 3.07154 7.24561 3.0265C7.5667 2.90591 7.8689 2.78387 8.17837 2.67926C10.0758 2.03563 12.0242 1.83513 14.0132 2.05161C18.879 2.58337 23.1752 5.85381 24.9768 10.3926C25 10.4522 25.0073 10.5379 24.9826 10.596C24.0484 12.8916 22.5955 14.792 20.6282 16.2986C20.6137 16.3117 20.5963 16.3219 20.5483 16.3524Z"
-                      fill="#797979"
-                    />
-                    <path
-                      d="M4.44163 4.65918C4.91528 5.13573 5.3773 5.6021 5.84222 6.06703C6.36962 6.59442 6.89703 7.12327 7.42733 7.64776C7.49853 7.7175 7.51015 7.7669 7.4622 7.85989C5.81462 11.0228 7.40118 14.873 10.801 15.9336C12.2829 16.3956 13.7271 16.2576 15.1161 15.5573C15.1626 15.534 15.2076 15.5093 15.2468 15.489C16.0735 16.3186 16.893 17.1424 17.724 17.9778C17.6862 17.9952 17.6383 18.0199 17.5874 18.0403C15.5069 18.8844 13.3493 19.1909 11.1162 18.9657C6.18511 18.4674 1.87 15.2275 0.02773 10.6364C0.000124928 10.5666 -0.0114982 10.4693 0.0146539 10.4039C0.941602 8.12286 2.38433 6.23411 4.33557 4.73328C4.36317 4.71003 4.39514 4.69114 4.44163 4.65918Z"
-                      fill="#797979"
-                    />
-                    <path
-                      d="M2.04297 1.0577C2.36406 0.732254 2.72292 0.370486 3.09051 0C9.71717 6.64695 16.3482 13.2968 22.9749 19.9438C22.645 20.2721 22.2833 20.631 21.9128 21C15.2905 14.3531 8.66237 7.70174 2.04297 1.0577Z"
-                      fill="#797979"
-                    />
-                    <path
-                      d="M13.5471 13.7324C12.655 14.071 11.1164 14.0158 10.0093 12.8433C9.16664 11.9512 8.80197 10.3283 9.27125 9.46387C10.698 10.8877 12.116 12.3028 13.5471 13.7324Z"
-                      fill="#797979"
-                    />
-                    <path
-                      d="M11.519 7.24656C12.3123 6.80779 13.9425 7.17247 14.8389 8.01369C16.0172 9.11933 16.071 10.6638 15.7528 11.4933C14.342 10.0797 12.9269 8.66022 11.519 7.24656Z"
-                      fill="#797979"
-                    />
-                  </svg>
-                )}
-              </div>
-            </div>
-          </div>
-          <div className="input-field mb-6">
-            <label
-              className="input-label text-qgray text-sm block mb-2.5"
-              htmlFor="old_password"
-            >
-              Password*
-            </label>
-            <div className="input-wrapper border border-[#E8E8E8] w-full  h-[58px] overflow-hidden relative ">
-              <input
-                placeholder="● ● ● ● ● ●"
-                className="input-field placeholder:text-base text-bese px-4 text-dark-gray w-full h-full bg-[#FAFAFA] focus:ring-0 focus:outline-none"
-                type="password"
-                id="new_password"
-              />
-              <div
-                className="absolute right-6 bottom-[17px] z-10 cursor-pointer"
-                onClick={() => showPassword("new_password")}
-              >
-                {newPass === "show-password" ? (
-                  <svg
-                    xmlns="http://www.w3.org/2000/svg"
-                    className="h-6 w-6"
-                    fill="none"
-                    viewBox="0 0 24 24"
-                    stroke="currentColor"
-                    strokeWidth="2"
-                  >
-                    <path
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                      d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"
-                    />
-                    <path
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                      d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"
-                    />
-                  </svg>
-                ) : (
-                  <svg
-                    width="25"
-                    height="21"
-                    viewBox="0 0 25 21"
-                    fill="none"
-                    xmlns="http://www.w3.org/2000/svg"
-                  >
-                    <path
-                      d="M20.5483 16.3524C20.156 15.9557 19.7696 15.5605 19.3802 15.1683C18.7802 14.5653 18.1787 13.9638 17.5728 13.3667C17.4972 13.2911 17.4871 13.2388 17.5379 13.1415C19.3482 9.66037 17.2125 5.46008 13.3332 4.87747C12.1143 4.69441 10.9534 4.89636 9.85791 5.46299C9.78672 5.49931 9.73587 5.53563 9.65596 5.45572C8.88157 4.67262 8.10136 3.89678 7.32261 3.11803C7.30082 3.09624 7.28338 3.07154 7.24561 3.0265C7.5667 2.90591 7.8689 2.78387 8.17837 2.67926C10.0758 2.03563 12.0242 1.83513 14.0132 2.05161C18.879 2.58337 23.1752 5.85381 24.9768 10.3926C25 10.4522 25.0073 10.5379 24.9826 10.596C24.0484 12.8916 22.5955 14.792 20.6282 16.2986C20.6137 16.3117 20.5963 16.3219 20.5483 16.3524Z"
-                      fill="#797979"
-                    />
-                    <path
-                      d="M4.44163 4.65918C4.91528 5.13573 5.3773 5.6021 5.84222 6.06703C6.36962 6.59442 6.89703 7.12327 7.42733 7.64776C7.49853 7.7175 7.51015 7.7669 7.4622 7.85989C5.81462 11.0228 7.40118 14.873 10.801 15.9336C12.2829 16.3956 13.7271 16.2576 15.1161 15.5573C15.1626 15.534 15.2076 15.5093 15.2468 15.489C16.0735 16.3186 16.893 17.1424 17.724 17.9778C17.6862 17.9952 17.6383 18.0199 17.5874 18.0403C15.5069 18.8844 13.3493 19.1909 11.1162 18.9657C6.18511 18.4674 1.87 15.2275 0.02773 10.6364C0.000124928 10.5666 -0.0114982 10.4693 0.0146539 10.4039C0.941602 8.12286 2.38433 6.23411 4.33557 4.73328C4.36317 4.71003 4.39514 4.69114 4.44163 4.65918Z"
-                      fill="#797979"
-                    />
-                    <path
-                      d="M2.04297 1.0577C2.36406 0.732254 2.72292 0.370486 3.09051 0C9.71717 6.64695 16.3482 13.2968 22.9749 19.9438C22.645 20.2721 22.2833 20.631 21.9128 21C15.2905 14.3531 8.66237 7.70174 2.04297 1.0577Z"
-                      fill="#797979"
-                    />
-                    <path
-                      d="M13.5471 13.7324C12.655 14.071 11.1164 14.0158 10.0093 12.8433C9.16664 11.9512 8.80197 10.3283 9.27125 9.46387C10.698 10.8877 12.116 12.3028 13.5471 13.7324Z"
-                      fill="#797979"
-                    />
-                    <path
-                      d="M11.519 7.24656C12.3123 6.80779 13.9425 7.17247 14.8389 8.01369C16.0172 9.11933 16.071 10.6638 15.7528 11.4933C14.342 10.0797 12.9269 8.66022 11.519 7.24656Z"
-                      fill="#797979"
-                    />
-                  </svg>
-                )}
-              </div>
-            </div>
-          </div>
-          <div className="input-field mb-6">
-            <label
-              className="input-label text-qgray text-sm block mb-2.5"
-              htmlFor="old_password"
-            >
-              Re-enter Password*
-            </label>
-            <div className="input-wrapper border border-[#E8E8E8] w-full  h-[58px] overflow-hidden relative ">
-              <input
-                placeholder="● ● ● ● ● ●"
-                className="input-field placeholder:text-base text-bese px-4 text-dark-gray w-full h-full bg-[#FAFAFA] focus:ring-0 focus:outline-none"
-                type="password"
-                id="confirm_password"
-              />
-              <div
-                className="absolute right-6 bottom-[17px] z-10 cursor-pointer"
-                onClick={() => showPassword("confirm_password")}
-              >
-                {confirmPass === "show-password" ? (
-                  <svg
-                    xmlns="http://www.w3.org/2000/svg"
-                    className="h-6 w-6"
-                    fill="none"
-                    viewBox="0 0 24 24"
-                    stroke="currentColor"
-                    strokeWidth="2"
-                  >
-                    <path
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                      d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"
-                    />
-                    <path
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                      d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"
-                    />
-                  </svg>
-                ) : (
-                  <svg
-                    width="25"
-                    height="21"
-                    viewBox="0 0 25 21"
-                    fill="none"
-                    xmlns="http://www.w3.org/2000/svg"
-                  >
-                    <path
-                      d="M20.5483 16.3524C20.156 15.9557 19.7696 15.5605 19.3802 15.1683C18.7802 14.5653 18.1787 13.9638 17.5728 13.3667C17.4972 13.2911 17.4871 13.2388 17.5379 13.1415C19.3482 9.66037 17.2125 5.46008 13.3332 4.87747C12.1143 4.69441 10.9534 4.89636 9.85791 5.46299C9.78672 5.49931 9.73587 5.53563 9.65596 5.45572C8.88157 4.67262 8.10136 3.89678 7.32261 3.11803C7.30082 3.09624 7.28338 3.07154 7.24561 3.0265C7.5667 2.90591 7.8689 2.78387 8.17837 2.67926C10.0758 2.03563 12.0242 1.83513 14.0132 2.05161C18.879 2.58337 23.1752 5.85381 24.9768 10.3926C25 10.4522 25.0073 10.5379 24.9826 10.596C24.0484 12.8916 22.5955 14.792 20.6282 16.2986C20.6137 16.3117 20.5963 16.3219 20.5483 16.3524Z"
-                      fill="#797979"
-                    />
-                    <path
-                      d="M4.44163 4.65918C4.91528 5.13573 5.3773 5.6021 5.84222 6.06703C6.36962 6.59442 6.89703 7.12327 7.42733 7.64776C7.49853 7.7175 7.51015 7.7669 7.4622 7.85989C5.81462 11.0228 7.40118 14.873 10.801 15.9336C12.2829 16.3956 13.7271 16.2576 15.1161 15.5573C15.1626 15.534 15.2076 15.5093 15.2468 15.489C16.0735 16.3186 16.893 17.1424 17.724 17.9778C17.6862 17.9952 17.6383 18.0199 17.5874 18.0403C15.5069 18.8844 13.3493 19.1909 11.1162 18.9657C6.18511 18.4674 1.87 15.2275 0.02773 10.6364C0.000124928 10.5666 -0.0114982 10.4693 0.0146539 10.4039C0.941602 8.12286 2.38433 6.23411 4.33557 4.73328C4.36317 4.71003 4.39514 4.69114 4.44163 4.65918Z"
-                      fill="#797979"
-                    />
-                    <path
-                      d="M2.04297 1.0577C2.36406 0.732254 2.72292 0.370486 3.09051 0C9.71717 6.64695 16.3482 13.2968 22.9749 19.9438C22.645 20.2721 22.2833 20.631 21.9128 21C15.2905 14.3531 8.66237 7.70174 2.04297 1.0577Z"
-                      fill="#797979"
-                    />
-                    <path
-                      d="M13.5471 13.7324C12.655 14.071 11.1164 14.0158 10.0093 12.8433C9.16664 11.9512 8.80197 10.3283 9.27125 9.46387C10.698 10.8877 12.116 12.3028 13.5471 13.7324Z"
-                      fill="#797979"
-                    />
-                    <path
-                      d="M11.519 7.24656C12.3123 6.80779 13.9425 7.17247 14.8389 8.01369C16.0172 9.11933 16.071 10.6638 15.7528 11.4933C14.342 10.0797 12.9269 8.66022 11.519 7.24656Z"
-                      fill="#797979"
-                    />
-                  </svg>
-                )}
-              </div>
-            </div>
-          </div>
-          <div className="w-full mt-[30px] flex justify-start">
-            <div className="sm:flex sm:space-x-[30px] items-center">
-              <div className="w-[180px] h-[50px]">
-                <button type="button" className="yellow-btn">
-                  <div className="w-full text-sm font-semibold">
-                    Upldate Password
-                  </div>
-                </button>
-              </div>
-              <button type="button">
-                <div className="w-full text-sm font-semibold text-qblack mb-5 sm:mb-0">
-                  Cancel
-                </div>
-              </button>
-            </div>
-          </div>
+
+      <h2 className="text-white text-center bg-success mb-3 font-semibold bg-[#00695C] rounded p-2">ORDER ID: {orderDetails?.order_number}</h2>
+
+      <div className="xl:flex xl:space-x-[30px] mt-5 mb-[30px]">
+        <div className="xl:w-1/2 w-full rounded  h-[240px] flex flex-col item justify-center bg-[#00796B] p-5">
+
+          <p className="text-[18px] text-white  text-start font-semibold">
+            Shipping Address
+          </p>
+          <p className="text-[15px] text-white leading-[30px] text-left">
+            Name: {username} <br />
+            Billing Address: {orderDetails?.billing_address}
+            <br />
+            Billing City        : {orderDetails?.billing_city}
+            <br />
+            Billing Post Code: {orderDetails?.billing_postal_code}
+            <br />
+            Total Amount: {orderDetails?.total_amount} <br />
+            Mobile: {userphone}
+          </p>
+
         </div>
-        <div className="flex-1 sm:flex hidden justify-end">
-          <PasswordSvg />
+        <div className="xl:w-1/2 w-full text-white rounded  h-[240px] flex flex-col item justify-center bg-[#00796B] p-5">
+          {/* <div className="flex justify-center mb-3 ">
+            <svg
+              width="44"
+              height="44"
+              viewBox="0 0 44 44"
+              fill="none"
+              xmlns="http://www.w3.org/2000/svg"
+            >
+              <path
+                fillRule="evenodd"
+                clipRule="evenodd"
+                d="M22 43C33.598 43 43 33.598 43 22C43 10.402 33.598 1 22 1C10.402 1 1 10.402 1 22C1 33.598 10.402 43 22 43ZM22 44C34.1503 44 44 34.1503 44 22C44 9.84974 34.1503 0 22 0C9.84974 0 0 9.84974 0 22C0 34.1503 9.84974 44 22 44Z"
+                fill="#FFBB38"
+              />
+              <path
+                d="M11.0183 18.6455C11.2024 18.761 11.3464 18.8458 11.4851 18.9382C14.2825 20.8029 17.0792 22.6676 19.8759 24.5331C21.3894 25.5429 22.6125 25.5413 24.1329 24.5277C26.9304 22.663 29.7271 20.7975 32.5237 18.9328C32.6539 18.8465 32.7856 18.7634 32.9659 18.6478C32.9782 18.8042 32.9959 18.9212 32.9959 19.0391C32.9974 22.1169 32.9997 25.1939 32.9959 28.2718C32.9944 29.6582 32.1625 30.4854 30.773 30.4862C24.9186 30.4877 19.0641 30.4877 13.2096 30.4862C11.8456 30.4854 11.0037 29.6543 11.0022 28.3003C10.9983 25.2086 11.0006 22.1169 11.0014 19.0245C11.0022 18.9151 11.0114 18.8065 11.0183 18.6455Z"
+                fill="#FFBB38"
+              />
+              <path
+                fillRule="evenodd"
+                clipRule="evenodd"
+                d="M11.001 19.8174C11.001 19.7663 11.001 19.7152 11.001 19.6641C11.001 19.6641 11.001 19.664 11.001 19.664C11.0011 19.4508 11.0011 19.2376 11.0012 19.0245C11.0017 18.9566 11.0054 18.889 11.0098 18.8091C11.0126 18.7601 11.0155 18.7066 11.0181 18.6455C11.0841 18.6869 11.1449 18.7243 11.2021 18.7596C11.3047 18.8227 11.3959 18.8789 11.4849 18.9382M11.6145 19.0246C11.6167 19.026 11.6188 19.0274 11.6209 19.0288C11.7476 19.1133 11.8744 19.1978 12.0011 19.2823C12.001 19.6829 12.0009 20.0834 12.0008 20.4839C11.6675 20.2617 11.3342 20.0396 11.001 19.8174M19.3208 25.365C16.881 23.7376 14.4411 22.1107 12.0008 20.4839C12.0007 20.616 12.0007 20.7482 12.0006 20.8803C11.9998 23.3541 11.9989 25.8265 12.002 28.299L12.002 28.2991C12.0025 28.7664 12.1435 29.0368 12.2981 29.1898C12.4539 29.344 12.7318 29.4858 13.2097 29.4862L13.2094 30.4862L13.21 29.4862C13.2099 29.4862 13.2098 29.4862 13.2097 29.4862C19.064 29.4877 24.9183 29.4877 30.7726 29.4862L30.7728 30.4829L30.7723 29.4862C30.7724 29.4862 30.7725 29.4862 30.7726 29.4862C31.2688 29.4858 31.5467 29.3418 31.6992 29.1899C31.8512 29.0386 31.9952 28.7634 31.9957 28.2707L31.9957 28.2705C31.999 25.6758 31.9978 23.0816 31.9965 20.4862C32.3297 20.264 32.6629 20.0418 32.9961 19.8196C32.9961 19.7617 32.996 19.7037 32.996 19.6457C32.996 19.6443 32.996 19.6428 32.996 19.6414C32.9959 19.4406 32.9958 19.2399 32.9957 19.0391C32.9957 18.9617 32.9881 18.8846 32.9793 18.7965C32.9748 18.7505 32.9699 18.7014 32.9657 18.6478C32.9212 18.6763 32.8797 18.7029 32.8404 18.728C32.7205 18.8046 32.6216 18.8678 32.5236 18.9328C32.4704 18.9682 32.4173 19.0037 32.3641 19.0391C32.364 19.0392 32.3638 19.0393 32.3637 19.0394C32.2411 19.1212 32.1184 19.2029 31.9958 19.2847C31.996 19.545 31.9961 19.8053 31.9962 20.0655C31.9963 20.2057 31.9964 20.346 31.9965 20.4862C31.3081 20.9452 30.6197 21.4042 29.9313 21.8633C28.1836 23.0288 26.4356 24.1945 24.6874 25.3598L24.1327 24.5277L24.6874 25.3598C24.6874 25.3598 24.6874 25.3598 24.6874 25.3598C23.8278 25.9329 22.9502 26.288 22.0029 26.2892C21.055 26.2904 20.1783 25.9371 19.3208 25.365ZM19.3208 25.365L19.8742 24.5353L19.3207 25.365C19.3207 25.365 19.3208 25.365 19.3208 25.365ZM11.4849 18.9382C11.5281 18.967 11.5713 18.9958 11.6145 19.0246L11.4849 18.9382Z"
+                fill="#FFBB38"
+              />
+              <path
+                d="M22.0007 14.0029C24.963 14.0029 27.9261 13.9983 30.8883 14.0052C32.1292 14.0083 33.0427 14.9295 32.9934 16.1149C32.9633 16.8296 32.5944 17.3418 32.0082 17.7308C29.4226 19.4476 26.8424 21.1722 24.2598 22.8944C23.8793 23.1485 23.5042 23.4112 23.1145 23.6515C22.3766 24.1075 21.6133 24.1275 20.8901 23.6492C17.8839 21.6605 14.8862 19.6594 11.8915 17.6538C11.1213 17.1377 10.8333 16.2889 11.0936 15.4378C11.3547 14.5837 12.1288 14.0068 13.07 14.0045C15.889 13.9968 18.7088 14.0014 21.5278 14.0014C21.6857 14.0029 21.8436 14.0029 22.0007 14.0029Z"
+                fill="#FFBB38"
+              />
+              <path
+                fillRule="evenodd"
+                clipRule="evenodd"
+                d="M32.0082 17.7308C32.5944 17.3418 32.9633 16.8296 32.9934 16.1149C33.0427 14.9295 32.1292 14.0083 30.8883 14.0052C28.7724 14.0003 26.6561 14.0012 24.5399 14.0022C23.6935 14.0025 22.8471 14.0029 22.0007 14.0029C21.8436 14.0029 21.6857 14.0029 21.5278 14.0014C20.759 14.0014 19.9902 14.001 19.2213 14.0007C17.1709 13.9998 15.1202 13.9989 13.07 14.0045C12.1288 14.0068 11.3547 14.5837 11.0936 15.4378C10.8333 16.2889 11.1213 17.1377 11.8915 17.6538C14.8862 19.6594 17.8839 21.6605 20.8901 23.6492C21.6133 24.1275 22.3766 24.1075 23.1145 23.6515C23.3977 23.4769 23.6732 23.2904 23.9487 23.104C24.0523 23.0339 24.1558 22.9638 24.2598 22.8944C24.9163 22.4566 25.5726 22.0186 26.229 21.5807C28.1545 20.2959 30.0799 19.0112 32.0082 17.7308ZM21.4417 22.8151C21.6574 22.9577 21.8376 23.0016 21.9909 23.0007C22.1486 22.9998 22.3464 22.9506 22.5888 22.8008L22.5896 22.8003C22.8536 22.6375 23.1029 22.4688 23.3716 22.287C23.4787 22.2145 23.5889 22.1399 23.7043 22.0628L23.705 22.0624C24.3607 21.6251 25.0165 21.1875 25.6725 20.7499C27.5985 19.4647 29.5255 18.179 31.4551 16.8977L31.4553 16.8976C31.8444 16.6394 31.9808 16.3923 31.9942 16.0729C32.0181 15.4929 31.5978 15.0071 30.886 15.0052M21.4417 22.8151C18.4378 20.8279 15.4419 18.8281 12.4482 16.823L21.4417 22.8151ZM12.0499 15.7302L12.0499 15.7303C11.9179 16.1618 12.0459 16.5534 12.448 16.8229M13.0727 15.0045L13.0724 15.0045C12.5581 15.0057 12.1793 15.3069 12.0499 15.7302M24.5417 15.0022C23.695 15.0025 22.848 15.0029 22.0007 15.0029H21.9984C21.8444 15.0029 21.6841 15.0029 21.523 15.0014C20.7548 15.0014 19.987 15.001 19.2194 15.0007C17.1695 14.9998 15.1212 14.9989 13.0727 15.0045M24.5417 15.0022C26.6573 15.0012 28.7714 15.0003 30.8859 15.0052L24.5417 15.0022Z"
+                fill="#FFBB38"
+              />
+            </svg>
+          </div> */}
+          <p className="text-[18px] text-white   text-start font-semibold">
+            Billing Address
+          </p>
+          <p className="text-[15px] text-white leading-[30px] text-left">
+            Name: {username} <br />
+            Shipping Address: {orderDetails?.shipping_address}
+            <br />
+            Shipping City        : {orderDetails?.shipping_city}
+            <br />
+            Shipping Post Code: {orderDetails?.shipping_postal_code}
+            <br />
+            Coupon Discount: {orderDetails?.coupon_discount}
+            <br />
+            Mobile: {userphone}
+          </p>
+
         </div>
       </div>
-    </div>
+
+      <div className="xl:flex xl:space-x-[30px] mt-5 mb-[30px]">
+        <div className="xl:w-1/2 w-full text-white rounded  h-[full] flex flex-col item justify-center bg-[#00796B] p-3">
+
+          <p className="text-[18px] text-white   text-start font-semibold">
+            Product Details
+          </p>
+          {O_details?.map((od, i) => (
+            <p className="">
+              <span className=" w-full mr-20">Name : {od?.product_name}</span>
+              <span className=" w-full ">Price : {od?.product_price}</span>
+            </p>
+
+
+          ))}
+          <p className="ml-52">Total: {orderDetails?.total_amount}</p>
+        </div>
+
+        <div className="xl:w-1/2 w-full text-white rounded  h-[full] flex flex-col item  bg-[#00796B] p-3">
+
+          <p className="text-[18px] text-white   text-start font-semibold">
+            Order History
+          </p>
+
+          <p className="text-start">Billing-> Confirm->Bill Paid->Pending</p>
+        </div>
+      </div>
+
+      <div className="text-center">
+        <button
+          type="submit"
+          className="w-[204px] justify-content-center h-[50px] bg-[#004D40] text-white text-sm rounded">
+          Continue->
+        </button>
+      </div>
+
+
+    </div >
   );
 }

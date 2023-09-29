@@ -50,6 +50,31 @@ export default function ProductsTable({ className }) {
     }
   };
 
+  const [ccode, setCouponCode] = useState('');
+  const handleChange = event => {
+    setCouponCode(event.target.value);
+  };
+
+  const [couponDetails, setCouponDetails] = useState({});
+
+
+
+
+
+  const handleCouponDetails = () => {
+    fetch(
+      `https://habib.munihaelectronics.com/public/api/couponCheck/${ccode}`)
+      .then((res) => res.json())
+      .then((data) => setCouponDetails(data));
+    if (couponDetails === "Invalid Coupon Code") {
+      swal({
+        title: "Invalid Coupon Code",
+        text: "Success",
+        icon: "success",
+      });
+    }
+  };
+
 
 
   return (
@@ -165,10 +190,17 @@ export default function ProductsTable({ className }) {
       </div >
       <div className="w-full sm:flex justify-between mt-4">
         <div className="discount-code sm:w-[270px] w-full mb-5 sm:mb-0 h-[50px] flex">
-          <div className="flex-1 h-full">
-            <InputCom type="text" placeholder="Discount Code" />
+          <div className="flex-1 w-48 h-full">
+            <input
+              className="bg-[#333] p-3 rounded text-white"
+              type="text"
+              id="message"
+              name="message"
+              onChange={handleChange}
+              placeholder="Enter Coupon Code"
+            />
           </div>
-          <button type="button" className="w-[90px] h-[50px] black-btn">
+          <button onClick={handleCouponDetails} type="button" className="rounded w-48 h-[50px] black-btn">
             <span className="text-sm font-semibold">Apply</span>
           </button>
         </div>

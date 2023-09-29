@@ -6,8 +6,7 @@ export default function OrderTab() {
   const userProfile = JSON.parse(localStorage.getItem("user"));
   const userId = (userProfile?.user?.id);
 
-  const [orderDetails, setOrderDetails] = useState([])
-  console.log(orderDetails);
+
 
   useEffect(() => {
     fetch(
@@ -17,11 +16,7 @@ export default function OrderTab() {
       .then((data) => setOrderList(data));
   }, []);
 
-  const handleorderdetails = async (id) => {
-    fetch(`https://habib.munihaelectronics.com/public/api/orderDetails/${id}`)
-      .then((res) => res.json())
-      .then((data) => console.log(data));
-  }
+
 
   return (
     <>
@@ -62,7 +57,7 @@ export default function OrderTab() {
                     </span>
                   </td>
                   <td className="text-center py-4">
-                    <Link to="/profile#review" onClick={() => handleorderdetails(l?.id)} >
+                    <Link to="/profile#review" state={l?.id} >
                       <button
                         type="button"
                         className="w-[116px] h-[46px] bg-qyellow text-qblack font-bold">

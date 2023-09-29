@@ -14,7 +14,7 @@ export default function ProductCardStyleOneTwo({ datas }) {
 
 
   const productDetailsByFind = single_data.find((d) => d?.id !== customer_ip);
-  console.log(productDetailsByFind);
+  // console.log(productDetailsByFind);
 
   // Add To Cart
   const handleAddToCart = async () => {
