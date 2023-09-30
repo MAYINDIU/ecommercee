@@ -28,10 +28,6 @@ export default function Routers() {
   return (
     <Routes>
       <Route exact path="/" element={<HomeTwo />} />
-      {/* <Route exact path="/home-two" element={<Home />} />
-      <Route exact path="/home-three" element={<HomeThree />} />
-      <Route exact path="/home-four" element={<HomeFour />} />
-      <Route exact path="/home-five" element={<HomeFive />} /> */}
       <Route exact path="/all-products" element={<AllProductPage />} />
       <Route exact path="/single-product" element={<SingleProductPage />} />
       <Route exact path="/cart" element={<CardPage />} />

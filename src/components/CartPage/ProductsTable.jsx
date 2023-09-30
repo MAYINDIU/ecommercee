@@ -5,7 +5,12 @@ import InputCom from "../Helpers/InputCom";
 
 export default function ProductsTable({ className }) {
   const [cartList, setCartDetails] = useState([]);
+  const [couponDetails, setCouponDetails] = useState({});
 
+  const removeCoupon = () => {
+    setCouponDetails({})
+  }
+  console.log(couponDetails)
 
   const customer_ip = JSON.parse(localStorage.getItem("user_ip"));
 
@@ -17,8 +22,26 @@ export default function ProductsTable({ className }) {
     setCartDetails(updatedData);
 
   };
-
   const subTotal = cartList?.reduce((sum, cart) => sum + cart?.quantity * +cart?.current_sale_price, 0)
+  //  const grandTotal = couponDetails?.type === 
+  const grandTotal = couponDetails?.type === 'percentage' ? subTotal - subTotal * +couponDetails?.value / 100 : couponDetails?.type === 'fixed_amount' ? subTotal - +couponDetails?.value : 0
+  const percentage = couponDetails?.type === 'percentage' ? subTotal * +couponDetails?.value / 100 : couponDetails?.type === 'fixed_amount' ? couponDetails?.value : 0
+  console.log(percentage)
+
+  const checkoutCoupon = {
+    percentage,
+    grandTotal,
+    subTotal,
+    couponDetails,
+  }
+  console.log(checkoutCoupon)
+
+  //  localStorage.setItem("coupon", JSON.stringify(couponDetails?.code));
+  //  const getCoupon = localStorage.getItem('coupon',JSON.stringify(couponDetails?.code))
+
+
+
+
   //User IP
   useEffect(() => {
     fetch(
@@ -31,7 +54,7 @@ export default function ProductsTable({ className }) {
 
   // Delete single Cart List
   const handleDeleteCartList = (pId) => {
-    console.log(pId);
+
     const confirm = window.confirm("Are you want do delete?");
     if (confirm) {
       const url = ` https://habib.munihaelectronics.com/public/api/cartlist_delete/${pId}`;
@@ -56,13 +79,14 @@ export default function ProductsTable({ className }) {
     setCouponCode(event.target.value);
   };
 
-  const [couponDetails, setCouponDetails] = useState({});
+
   const cType = couponDetails?.type;
   const cValue = couponDetails?.value;
   const cLimit = couponDetails?.usage_limit;
   const used = couponDetails?.used_count;
-  console.log(cType + cValue + "-" + cLimit + "-" + used);
-  console.log(couponDetails);
+  // console.log(cType + cValue + "-" + cLimit + "-" + used);
+  // console.log(couponDetails);
+
 
   const handleCouponDetails = () => {
     fetch(
@@ -97,7 +121,6 @@ export default function ProductsTable({ className }) {
             </tr>
             {/* table heading end */}
             {cartList?.map((l, i) => (
-
               <tr key={i} className="bg-white border-b hover:bg-gray-50">
                 <td className="pl-10  py-4  w-[380px]">
                   <div className="flex space-x-6 items-center">
@@ -201,7 +224,7 @@ export default function ProductsTable({ className }) {
               placeholder="Enter Coupon Code"
             />
           </div>
-          <button onClick={handleCouponDetails} type="button" className="rounded w-48 h-[50px] black-btn">
+          <button onClick={handleCouponDetails} type="button" className="rounded w-48 h-[48px] black-btn">
             <span className="text-sm font-semibold">Apply</span>
           </button>
         </div>
@@ -227,8 +250,14 @@ export default function ProductsTable({ className }) {
               <p className="text-[15px] font-medium text-qblack">
                 Subtotal
               </p>
-              <p className="text-[15px] font-medium text-qred">{subTotal}</p>
+              <p className="text-[15px] font-medium text-qred">€{subTotal}</p>
             </div>
+            {couponDetails?.code ? <div className=" flex justify-between mb-6">
+              <p className="text-[15px] font-medium text-qblack">
+                Coupon Code: <span className="font-bold">{couponDetails?.code}</span> <small className="uppercase">{`(${couponDetails?.type}) `}</small> <button onClick={removeCoupon} className="text-qred font-xs text-[12px]">remove</button>
+              </p>
+              <p className="text-[15px] font-medium text-qred">€{couponDetails?.type === 'percentage' ? percentage : couponDetails?.value}</p>
+            </div> : ''}
             <div className="w-full h-[1px] bg-[#EDEDED]"></div>
           </div>
           <div className="shipping mb-6">
@@ -251,7 +280,7 @@ export default function ProductsTable({ className }) {
                     </span>
                   </div>
                   <span className="text-[13px] text-normal text-qgraytwo">
-                    +$00.00
+                    +€00.00
                   </span>
                 </div>
               </li>
@@ -270,7 +299,7 @@ export default function ProductsTable({ className }) {
                     </span>
                   </div>
                   <span className="text-[13px] text-normal text-qgraytwo">
-                    +$00.00
+                    +€00.00
                   </span>
                 </div>
               </li>
@@ -289,7 +318,7 @@ export default function ProductsTable({ className }) {
                     </span>
                   </div>
                   <span className="text-[13px] text-normal text-qgraytwo">
-                    +$00.00
+                    +€00.00
                   </span>
                 </div>
               </li>
@@ -338,10 +367,11 @@ export default function ProductsTable({ className }) {
               <p className="text-[18px] font-medium text-qblack">
                 Total
               </p>
-              <p className="text-[18px] font-medium text-qred">€{subTotal}</p>
+              <p className="text-[18px] font-medium text-qred">€{grandTotal ? grandTotal : subTotal}
+              </p>
             </div>
           </div>
-          <Link to="/checkout">
+          <Link to="/checkout" state={checkoutCoupon}>
             <div className="w-full h-[50px] black-btn flex justify-center items-center">
               <span className="text-sm font-semibold">
                 Proceed to Checkout

@@ -15,7 +15,7 @@ export default function SearchBox({ className, type }) {
           </form>
         </div>
         <div className="w-[1px] h-[22px] bg-qgray-border"></div>
-        <div className="flex-1 flex items-center px-4">
+        {/* <div className="flex-1 flex items-center px-4">
           <button
             type="button"
             className="w-full text-xs font-500 text-qgray flex justify-between items-center"
@@ -48,7 +48,7 @@ export default function SearchBox({ className, type }) {
               </svg>
             </span>
           </button>
-        </div>
+        </div> */}
         <button
           // className={` w-[93px] h-full text-sm font-600   ${type === 3 ? 'bg-qh2-green text-white' : 'search-btn'}`}
           className={` w-[93px] h-full text-sm font-600 bg-qh2-green text-white  'search-btn'}`}

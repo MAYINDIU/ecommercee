@@ -1,4 +1,5 @@
 import React from "react";
+import { Link } from "react-router-dom";
 export default function CategoriesSection({ category }) {
   return (
     <>
@@ -10,26 +11,25 @@ export default function CategoriesSection({ category }) {
               {category.map(function (cat) {
                 return (
                   <div key={cat.id}>
-                    <div className="item w-full group cursor-pointer">
-                      <div className="w-full flex justify-center">
-                        <div className="w-[110px] h-[110px] rounded-full bg-[#EEF1F1] group-hover:bg-qh2-green mb-2.5 flex justify-center items-center">
+                    <Link to="/all-products" state={cat?.id}>
+                      <div className="item w-full group cursor-pointer">
+                        <div className="w-full flex justify-center">
+                          <div className="w-[110px] h-[110px] rounded-full bg-[#EEF1F1] group-hover:bg-qh2-green mb-2.5 flex justify-center items-center">
 
-                          <img className="rounded-full p-2" src={`https://habib.munihaelectronics.com/public/${cat?.image}`} alt="" />
+                            <img className="rounded-full p-2" src={`https://habib.munihaelectronics.com/public/${cat?.image}`} alt="" />
 
+                          </div>
+                        </div>
+                        <div className="w-full flex justify-center">
+                          <p className="text-base text-qblack whitespace-nowrap ">
+                            {cat?.name}
+                          </p>
                         </div>
                       </div>
-                      <div className="w-full flex justify-center">
-                        <p className="text-base text-qblack whitespace-nowrap ">
-                          {cat?.name}
-                        </p>
-                      </div>
-                    </div>
-
+                    </Link>
                   </div>
                 )
               })}
-
-
 
             </div>
           </div>

@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 import "react-input-range/lib/css/index.css";
+import { useLocation } from "react-router-dom";
 import productDatas from "../../data/products.json";
 import BreadcrumbCom from "../BreadcrumbCom";
 import ProductCardStyleOne from "../Helpers/Cards/ProductCardStyleOne";
@@ -51,16 +52,36 @@ export default function AllProductPage() {
   };
   const [filterToggle, setToggle] = useState(false);
 
+  const location = useLocation();
+  const cat_id = location?.state;
+
   const { products } = productDatas;
   const [Habib, setHabib] = useState([]);
 
-  //All products 
-  useEffect(() => {
-    fetch(
-      "http://habib.munihaelectronics.com/public/api/home/all-product")
-      .then((res) => res.json())
-      .then((data) => setHabib(data));
-  }, []);
+  const catwiseproduct = `http://habib.munihaelectronics.com/public/api/home/single-category-all-products/${cat_id}`
+  const allproducts = `http://habib.munihaelectronics.com/public/api/home/all-product`
+
+  if (cat_id === null) {
+    //All products 
+    useEffect(() => {
+      fetch(allproducts)
+        .then((res) => res.json())
+        .then((data) => setHabib(data));
+    }, []);
+  } else {
+    //All products 
+    useEffect(() => {
+      fetch(catwiseproduct)
+        .then((res) => res.json())
+        .then((data) => setHabib(data));
+    }, []);
+  }
+
+
+
+
+
+
 
 
   const habibDatas = Habib?.products;

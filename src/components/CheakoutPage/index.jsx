@@ -1,13 +1,15 @@
 import axios from "axios";
 import { useState } from "react";
-import { Link } from "react-router-dom";
+import { Link, useLocation } from "react-router-dom";
 import PageTitle from "../Helpers/PageTitle";
 import Layout from "../Partials/LayoutHomeTwo";
 
 export default function CheakoutPage() {
   const userProfile = JSON.parse(localStorage.getItem("user"));
   const cartDetailsFromAddtoCart = JSON.parse(localStorage.getItem("checkout"));
-  // console.log(cartDetailsFromAddtoCart)
+  const location = useLocation()
+  console.log(location)
+
 
 
   const userdata = userProfile?.user;
@@ -18,8 +20,12 @@ export default function CheakoutPage() {
   const [shippingCity, setShippingCity] = useState('');
   const [billingPostalCode, setBillingPostalCode] = useState('');
   const [shippingPostalCode, setShippingPostalCode] = useState('');
+  const [shippingName, setShippingName] = useState('');
+  const [shippingNumber, setShippingNumber] = useState('');
+  const [shippingMail, setShippingMail] = useState('');
 
   const subTotal = cartDetailsFromAddtoCart?.reduce((sum, cart) => sum + cart?.quantity * +cart?.current_sale_price, 0)
+
 
   //Place Order
   const handlePlaceOrder = async () => {
@@ -35,8 +41,10 @@ export default function CheakoutPage() {
       shipping_city: shippingCity ? shippingCity : billingCity,
       billing_postal_code: billingPostalCode,
       shipping_postal_code: shippingPostalCode ? shippingPostalCode : billingPostalCode,
-      coupon_discount: '3066',
+      // coupon_discount: '3066',
       payment_method_id: '2',
+      coupon_discount: location?.state?.percentage ? location?.state?.percentage : '',
+
 
       // product_id: product_id,
       // price: price,
@@ -53,7 +61,6 @@ export default function CheakoutPage() {
         data
       );
       console.log(response);
-
       swal({
         title: "Successfully Orderd",
         text: "Success",
@@ -114,7 +121,6 @@ export default function CheakoutPage() {
                           placeholder="Demo Name"
                           inputClasses="w-full h-[50px]"
                           value={userdata?.name}
-
                         />
                       </div>
                       <div className="flex-1">
@@ -140,7 +146,7 @@ export default function CheakoutPage() {
                         <input
                           className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
                           label="Phone Number*"
-                          placeholder="012 3  ***"
+                          placeholder="012 3  *"
                           inputClasses="w-full h-[50px]"
                           defaultValue={userdata?.phone}
                         />
@@ -178,7 +184,6 @@ export default function CheakoutPage() {
                           placeholder="your address here"
                           inputClasses="w-full h-[50px]"
                           defaultValue={userdata?.address}
-
                         />
                       </div>
                     </div>
@@ -207,7 +212,6 @@ export default function CheakoutPage() {
                         />
                       </div>
                     </div>
-
                     <div>
                       <h1 className="text-2xl text-qblack font-medium mb-3">
                         Shipping Details
@@ -238,7 +242,8 @@ export default function CheakoutPage() {
                             label="First Name*"
                             placeholder="Demo Name"
                             inputClasses="w-full h-[50px]"
-                            value={userdata?.name}
+                            defaultValue={userdata?.name}
+                            onChange={(e) => setShippingName(e.target.value)}
 
                           />
                         </div>
@@ -258,16 +263,19 @@ export default function CheakoutPage() {
                             label="Email Address*"
                             placeholder="demoemial@gmail.com"
                             inputClasses="w-full h-[50px]"
-                            value={userdata?.email}
+                            defaultValue={userdata?.email}
+                            onChange={(e) => setShippingMail(e.target.value)}
                           />
                         </div>
                         <div className="flex-1">
                           <input
                             className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
                             label="Phone Number*"
-                            placeholder="012 3  ***"
+                            placeholder="012 3  *"
                             inputClasses="w-full h-[50px]"
                             defaultValue={userdata?.phone}
+                            onChange={(e) => setShippingNumber(e.target.value)}
+
                           />
                         </div>
                       </div>
@@ -395,7 +403,15 @@ export default function CheakoutPage() {
                         SUBTOTAL
                       </p>
                       <p className="text-[15px] font-medium text-qblack uppercase">
-                        {subTotal}
+                        €{subTotal}
+                      </p>
+                    </div>
+                    <div className=" flex justify-between mb-5">
+                      <p className="text-[13px] font-medium text-qblack uppercase">
+                        Discount Coupon
+                      </p>
+                      <p className="text-[15px] font-medium text-qblack uppercase">
+                        -€{location?.state?.percentage}
                       </p>
                     </div>
                   </div>
@@ -412,7 +428,7 @@ export default function CheakoutPage() {
                           </p>
                         </div>
                         <p className="text-[15px] font-medium text-qblack">
-                          +$0
+                          +€0
                         </p>
                       </div>
                       <div className="w-full h-[1px] bg-[#EDEDED]"></div>
@@ -422,7 +438,7 @@ export default function CheakoutPage() {
                   <div className="mt-[30px]">
                     <div className=" flex justify-between mb-5">
                       <p className="text-2xl font-medium text-qblack">Total</p>
-                      <p className="text-2xl font-medium text-qred">€{subTotal}</p>
+                      <p className="text-2xl font-medium text-qred">€{location?.state?.grandTotal}</p>
                     </div>
                   </div>
                   <div className="shipping mt-[30px]">
@@ -465,7 +481,6 @@ export default function CheakoutPage() {
                           <label
                             htmlFor="delivery"
                             className="text-[18px] text-normal text-qblack"
-
                           >
                             Cash on Delivery
                           </label>

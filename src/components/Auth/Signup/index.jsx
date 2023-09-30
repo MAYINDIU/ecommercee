@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import Layout from "../../Partials/Layout";
+import Layout from "../../Partials/LayoutHomeTwo";
 import Thumbnail from "./Thumbnail";
 
 export default function Signup() {
