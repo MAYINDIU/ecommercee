@@ -50,16 +50,19 @@ export default function ProductsTable({ className }) {
     }
   };
 
+  //Coupon Code 
   const [ccode, setCouponCode] = useState('');
   const handleChange = event => {
     setCouponCode(event.target.value);
   };
 
   const [couponDetails, setCouponDetails] = useState({});
-
-
-
-
+  const cType = couponDetails?.type;
+  const cValue = couponDetails?.value;
+  const cLimit = couponDetails?.usage_limit;
+  const used = couponDetails?.used_count;
+  console.log(cType + cValue + "-" + cLimit + "-" + used);
+  console.log(couponDetails);
 
   const handleCouponDetails = () => {
     fetch(
@@ -68,14 +71,12 @@ export default function ProductsTable({ className }) {
       .then((data) => setCouponDetails(data));
     if (couponDetails === "Invalid Coupon Code") {
       swal({
-        title: "Invalid Coupon Code",
+        title: "Invalid coupon code",
         text: "Success",
         icon: "success",
       });
     }
   };
-
-
 
   return (
     <div className={`w-full ${className || ""}`}>
