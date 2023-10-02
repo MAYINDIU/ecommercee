@@ -1,5 +1,9 @@
 import { useEffect, useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
+import { ToastContainer, toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
+
+import swal from "sweetalert";
 import Layout from "../../Partials/LayoutHomeTwo";
 import Thumbnail from "./Thumbnail";
 
@@ -13,10 +17,11 @@ export default function Login() {
 
   localStorage.setItem("user", JSON.stringify(userData));
 
-  const from = location.state?.from?.pathname || '/profile'
-
+  const from = location.state?.from?.pathname || "/profile";
 
   const navigate = useNavigate();
+  const passOrMailError = userData?.msg;
+
   const handleSubmit = (event) => {
     event.preventDefault();
     const email = event.target.email.value;
@@ -36,7 +41,6 @@ export default function Login() {
       .then((data) => setUserData(data));
   };
 
-
   useEffect(() => {
     if (status === 200) {
       // navigate(`/profile`);
@@ -48,8 +52,15 @@ export default function Login() {
     //     //  toast.error(`Opps!Please type proper emp code & password`);
     // }
   });
-
-
+  if (userData?.status === 422) {
+    toast(passOrMailError);
+  } else if (userData?.status === 200) {
+    swal({
+      title: "Successfully Login",
+      text: "Success",
+      icon: "success",
+    });
+  }
   const rememberMe = () => {
     setValue(!checked);
   };
@@ -83,8 +94,9 @@ export default function Login() {
                   <form onSubmit={handleSubmit}>
                     <div className="input-item mb-5">
                       <input
-                        className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
-                        placeholder="Demo@gmail.com"
+                        required
+                        className="shadow appearance-none border rounded w-full py-2 md:py-4 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+                        placeholder="Enter Your Email Address"
                         label="Email Address*"
                         name="email"
                         type="email"
@@ -93,7 +105,8 @@ export default function Login() {
                     </div>
                     <div className="input-item mb-5">
                       <input
-                        className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+                        required
+                        className="shadow appearance-none border rounded w-full py-2 md:py-4 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
                         placeholder="Password"
                         // label="Email Address*"
                         name="password"
@@ -130,18 +143,18 @@ export default function Login() {
                           Remember Me
                         </span>
                       </div>
-                      <a
-                        href="/forgot-password"
+                      <Link
+                        href="/login"
                         className="text-base text-qyellow"
                       >
                         Forgot Password
-                      </a>
+                      </Link>
                     </div>
                     <div className="signin-area mb-3.5">
                       <div className="flex justify-center">
                         <button
                           type="submit"
-                          className="black-btn mb-6 text-sm text-white w-full h-[50px] font-semibold flex justify-center bg-purple items-center"
+                          className="bg-qh2-green rounded mb-6 text-sm text-white w-full h-[50px] font-semibold flex justify-center bg-purple items-center"
                         >
                           <span>Log In</span>
                         </button>
@@ -205,9 +218,9 @@ export default function Login() {
                   <div className="signup-area flex justify-center">
                     <p className="text-base text-qgraytwo font-normal">
                       Dont’t have an aceount ?
-                      <a href="/signup" className="ml-2 text-qblack">
+                      <Link to="/signup" className="ml-2 text-qblack">
                         Sign up free
-                      </a>
+                      </Link>
                     </p>
                   </div>
                 </div>
@@ -224,6 +237,19 @@ export default function Login() {
           </div>
         </div>
       </div>
+      <ToastContainer
+        position="top-right"
+        autoClose={5000}
+        hideProgressBar={false}
+        newestOnTop={false}
+        closeOnClick
+        rtl={false}
+        pauseOnFocusLoss
+        draggable
+        pauseOnHover
+        theme="light"
+        type="warning"
+      />
     </Layout>
   );
 }

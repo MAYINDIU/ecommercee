@@ -1,3 +1,4 @@
+import icon from "../../.././assets/logo/logo.png";
 import ThinBag from "../../../Helpers/icons/ThinBag";
 import ThinPeople from "../../../Helpers/icons/ThinPeople";
 import Middlebar from "./Middlebar";
@@ -30,7 +31,7 @@ export default function HeaderTwo({ className, drawerAction }) {
               <img
                 width="152"
                 height="36"
-                src={`${process.env.PUBLIC_URL}/assets/images/logo-2.svg`}
+                src={icon}
                 alt="logo"
               />
             </a>

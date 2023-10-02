@@ -1,11 +1,11 @@
 import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
+import icon from "../../.././assets/logo/logo.png";
 import Cart from "../../../Cart";
 import SearchBox from "../../../Helpers/SearchBox";
 import ThinBag from "../../../Helpers/icons/ThinBag";
 import ThinLove from "../../../Helpers/icons/ThinLove";
 import ThinPeople from "../../../Helpers/icons/ThinPeople";
-
 export default function Middlebar({ className }) {
   // const [toggleCart, setToggle] = useState(false);
   // const cartHandler = () => {
@@ -50,7 +50,7 @@ export default function Middlebar({ className }) {
                 <img
                   width="152"
                   height="36"
-                  src={`${process.env.PUBLIC_URL}/assets/images/logo-2.svg`}
+                  src={icon}
                   alt="logo"
                 />
               </a>

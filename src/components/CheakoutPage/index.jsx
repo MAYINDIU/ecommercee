@@ -1,75 +1,92 @@
 import axios from "axios";
 import { useState } from "react";
 import { Link, useLocation } from "react-router-dom";
+import { ToastContainer, toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 import PageTitle from "../Helpers/PageTitle";
 import Layout from "../Partials/LayoutHomeTwo";
 
 export default function CheakoutPage() {
   const userProfile = JSON.parse(localStorage.getItem("user"));
   const cartDetailsFromAddtoCart = JSON.parse(localStorage.getItem("checkout"));
-  const location = useLocation()
-  console.log(location)
-
-
-
+  const location = useLocation();
+  const user_ip = JSON.parse(localStorage.getItem("user_ip"));
+  // console.log("Cehout user ip", user_ip);
   const userdata = userProfile?.user;
-  const [checked, setChecked] = useState(false)
-  const [checkedPaymentMethod, setCheckedPaymentMethod] = useState(false)
-  const [shippingAddress, setShippingAddress] = useState('');
-  const [billingCity, setBillingCity] = useState('');
-  const [shippingCity, setShippingCity] = useState('');
-  const [billingPostalCode, setBillingPostalCode] = useState('');
-  const [shippingPostalCode, setShippingPostalCode] = useState('');
-  const [shippingName, setShippingName] = useState('');
-  const [shippingNumber, setShippingNumber] = useState('');
-  const [shippingMail, setShippingMail] = useState('');
+  console.log(userdata);
+  const [checked, setChecked] = useState(false);
+  const [checkedPaymentMethod, setCheckedPaymentMethod] = useState(false);
+  const [shippingAddress, setShippingAddress] = useState("");
+  const [billingCity, setBillingCity] = useState("");
+  const [shippingCity, setShippingCity] = useState("");
+  const [billingPostalCode, setBillingPostalCode] = useState("");
+  const [shippingPostalCode, setShippingPostalCode] = useState("");
+  const [shippingName, setShippingName] = useState("");
+  const [shippingNumber, setShippingNumber] = useState("");
+  const [shippingMail, setShippingMail] = useState("");
+  const [paymentMethod, setPaymentMethod] = useState("");
 
-  const subTotal = cartDetailsFromAddtoCart?.reduce((sum, cart) => sum + cart?.quantity * +cart?.current_sale_price, 0)
-
+  const subTotal = cartDetailsFromAddtoCart?.reduce(
+    (sum, cart) => sum + cart?.quantity * +cart?.current_sale_price,
+    0
+  );
 
   //Place Order
-  const handlePlaceOrder = async () => {
+  const handlePlaceOrder = async (e) => {
+    e.preventDefault();
+    if (billingCity === "") {
+      toast("Billing city is required !!");
+    } else if (billingPostalCode === "") {
+      toast("Billing postal code is required !!");
+    } else if (paymentMethod === "") {
+      toast("Payment method is required !!");
+    } else {
+      const data = {
+        user_id: userdata?.id,
+        total_amount: location?.state?.grandTotal,
+        billing_address: userdata?.address,
+        shipping_address: shippingAddress ? shippingAddress : userdata?.address,
+        billing_city: billingCity,
+        shipping_city: shippingCity ? shippingCity : billingCity,
+        billing_postal_code: billingPostalCode,
+        shipping_postal_code: shippingPostalCode
+          ? shippingPostalCode
+          : billingPostalCode,
+        payment_method_id: paymentMethod,
+        coupon_discount: location?.state?.diccountCouponAount
+          ? location?.state?.diccountCouponAount
+          : "",
+        products: cartDetailsFromAddtoCart,
+      };
+      console.log(data);
 
+      try {
+        const response = await axios.post(
+          `https://habib.munihaelectronics.com/public/api/addOrder`,
+          data
+        );
+        console.log(response);
+        swal({
+          title: "Successfully Orderd",
+          text: "Success",
+          icon: "success",
+        });
+      } catch (error) {
+        console.log(error);
+      }
+    }
 
-
-    const data = {
-      user_id: userdata?.id,
-      total_amount: subTotal,
-      billing_address: userdata?.address,
-      shipping_address: shippingAddress ? shippingAddress : userdata?.address,
-      billing_city: billingCity,
-      shipping_city: shippingCity ? shippingCity : billingCity,
-      billing_postal_code: billingPostalCode,
-      shipping_postal_code: shippingPostalCode ? shippingPostalCode : billingPostalCode,
-      // coupon_discount: '3066',
-      payment_method_id: '2',
-      coupon_discount: location?.state?.percentage ? location?.state?.percentage : '',
-
-
-      // product_id: product_id,
-      // price: price,
-      // color: color,
-      // quantity: quantity,
-      products: cartDetailsFromAddtoCart
-
-    };
-    console.log(data);
-
+    // Delete all carList from Cart page
     try {
-      const response = await axios.post(
-        `https://habib.munihaelectronics.com/public/api/addOrder`,
-        data
+      const response = await axios.delete(
+        `http://habib.munihaelectronics.com/public/api/all_cartlist_delete/${user_ip?.user_ip}`
       );
       console.log(response);
-      swal({
-        title: "Successfully Orderd",
-        text: "Success",
-        icon: "success",
-      });
     } catch (error) {
       console.log(error);
     }
   };
+
   return (
     <Layout childrenClasses="pt-0 pb-0">
       <div className="checkout-page-wrapper w-full bg-white pb-[60px]">
@@ -188,12 +205,12 @@ export default function CheakoutPage() {
                       </div>
                     </div>
                     <div className="flex space-x-5 items-center mb-6">
-
                       <select
                         onChange={(e) => setBillingCity(e.target.value)}
                         className="border h-8 rounded-none focus:border-none w-full max-w-xs mx-auto"
                         required
                       >
+                        <option>----Select----</option>
                         <option>Dhaka</option>
                         <option>Comilla</option>
                         <option>Rangpur</option>
@@ -217,8 +234,13 @@ export default function CheakoutPage() {
                         Shipping Details
                       </h1>
                       <div className="flex space-x-2 items-center mb-10">
-                        <div >
-                          <input type="checkbox" name="" id="address" onClick={() => setChecked(!checked)} />
+                        <div>
+                          <input
+                            type="checkbox"
+                            name=""
+                            id="address"
+                            onClick={() => setChecked(!checked)}
+                          />
                         </div>
                         <label
                           htmlFor="address"
@@ -232,8 +254,8 @@ export default function CheakoutPage() {
                 </div>
 
                 {/* -----------------SHipping Part------------  */}
-                {
-                  checked ? <div className="form-area">
+                {checked ? (
+                  <div className="form-area">
                     <form>
                       <div className="sm:flex sm:space-x-5 items-center mb-6">
                         <div className="sm:w-1/2  mb-5 sm:mb-0">
@@ -244,7 +266,6 @@ export default function CheakoutPage() {
                             inputClasses="w-full h-[50px]"
                             defaultValue={userdata?.name}
                             onChange={(e) => setShippingName(e.target.value)}
-
                           />
                         </div>
                         <div className="flex-1">
@@ -275,7 +296,6 @@ export default function CheakoutPage() {
                             inputClasses="w-full h-[50px]"
                             defaultValue={userdata?.phone}
                             onChange={(e) => setShippingNumber(e.target.value)}
-
                           />
                         </div>
                       </div>
@@ -316,12 +336,12 @@ export default function CheakoutPage() {
                         </div>
                       </div>
                       <div className="flex space-x-5 items-center mb-6">
-
                         <select
                           onChange={(e) => setShippingCity(e.target.value)}
                           className="border h-8 rounded-none focus:border-none w-full max-w-xs mx-auto"
                           required
                         >
+                          <option>----Select----</option>
                           <option>Dhaka</option>
                           <option>Comilla</option>
                           <option>Rangpur</option>
@@ -335,18 +355,18 @@ export default function CheakoutPage() {
                             label="Postcode / ZIP*"
                             placeholder="Postal code"
                             inputClasses="w-full h-[50px]"
-                            onChange={(e) => setShippingPostalCode(e.target.value)}
+                            onChange={(e) =>
+                              setShippingPostalCode(e.target.value)
+                            }
                             required
                           />
                         </div>
                       </div>
-
-
                     </form>
                   </div>
-                    :
-                    ''
-                }
+                ) : (
+                  ""
+                )}
               </div>
               <div className="flex-1">
                 <h1 className="sm:text-2xl text-xl text-qblack font-medium mb-5">
@@ -366,34 +386,30 @@ export default function CheakoutPage() {
                     <div className="w-full h-[1px] bg-[#EDEDED]"></div>
                   </div>
                   <div className="product-list w-full mb-[30px]">
-                    {
-                      cartDetailsFromAddtoCart.map(l => (
-                        <ul className="flex flex-col space-y-5">
-                          <li>
-                            <div className="flex justify-between items-center">
-                              <div>
-                                <h4 className="text-[15px] text-qblack mb-2.5">
-                                  {l?.name}
-                                  <sup className="text-[13px] text-qgray ml-2 mt-2">
-                                    x1
-                                  </sup>
-                                </h4>
-                                {/* <p className="text-[13px] text-qgray">
+                    {cartDetailsFromAddtoCart.map((l) => (
+                      <ul className="flex flex-col space-y-5">
+                        <li>
+                          <div className="flex justify-between items-center">
+                            <div>
+                              <h4 className="text-[15px] text-qblack mb-2.5">
+                                {l?.name}
+                                <sup className="text-[13px] text-qgray ml-2 mt-2">
+                                  x1
+                                </sup>
+                              </h4>
+                              {/* <p className="text-[13px] text-qgray">
                               64GB, Black, 44mm, Chain Belt
                             </p> */}
-                              </div>
-                              <div>
-                                <span className="text-[15px] text-qblack font-medium">
-                                  {l?.current_sale_price}
-                                </span>
-                              </div>
                             </div>
-                          </li>
-
-
-                        </ul>
-                      ))
-                    }
+                            <div>
+                              <span className="text-[15px] text-qblack font-medium">
+                                {l?.current_sale_price}
+                              </span>
+                            </div>
+                          </div>
+                        </li>
+                      </ul>
+                    ))}
                   </div>
                   <div className="w-full h-[1px] bg-[#EDEDED]"></div>
 
@@ -411,7 +427,7 @@ export default function CheakoutPage() {
                         Discount Coupon
                       </p>
                       <p className="text-[15px] font-medium text-qblack uppercase">
-                        -€{location?.state?.percentage}
+                        -€{location?.state?.diccountCouponAount}
                       </p>
                     </div>
                   </div>
@@ -438,11 +454,15 @@ export default function CheakoutPage() {
                   <div className="mt-[30px]">
                     <div className=" flex justify-between mb-5">
                       <p className="text-2xl font-medium text-qblack">Total</p>
-                      <p className="text-2xl font-medium text-qred">€{location?.state?.grandTotal}</p>
+                      <p className="text-2xl font-medium text-qred">
+                        €{location?.state?.grandTotal}
+                      </p>
                     </div>
                   </div>
                   <div className="shipping mt-[30px]">
-                    <p className="text-center mb-4 ">Selet a payment Method<span className="text-qred">*</span></p>
+                    <p className="text-center mb-4 ">
+                      Selet a payment Method<span className="text-qred">*</span>
+                    </p>
                     <ul className="flex flex-col space-y-1">
                       <li className=" mb-5">
                         <div className="flex space-x-2.5 items-center mb-4">
@@ -452,7 +472,9 @@ export default function CheakoutPage() {
                               name="price"
                               className="accent-pink-500"
                               id="transfer"
-                            // onClick={()=>setCheckedPaymentMethod(!checkedPaymentMethod)}
+                              // onClick={()=>setCheckedPaymentMethod(!checkedPaymentMethod)}
+                              value={3}
+                              onChange={(e) => setPaymentMethod(e.target.value)}
                             />
                           </div>
                           <label
@@ -475,7 +497,8 @@ export default function CheakoutPage() {
                               name="price"
                               className="accent-pink-500"
                               id="delivery"
-                            // onClick={()=>setCheckedPaymentMethod(!checkedPaymentMethod)}
+                              value={1}
+                              onChange={(e) => setPaymentMethod(e.target.value)}
                             />
                           </div>
                           <label
@@ -494,7 +517,9 @@ export default function CheakoutPage() {
                               name="price"
                               className="accent-pink-500"
                               id="bank"
-                            // onClick={()=>setCheckedPaymentMethod(!checkedPaymentMethod)}
+                              // onClick={()=>setCheckedPaymentMethod(!checkedPaymentMethod)}
+                              value={2}
+                              onChange={(e) => setPaymentMethod(e.target.value)}
                             />
                           </div>
                           <label
@@ -508,8 +533,8 @@ export default function CheakoutPage() {
                     </ul>
                   </div>
                   <Link to="#" onClick={handlePlaceOrder}>
-                    <button className="w-full h-[50px] black-btn flex justify-center items-center" >
-                      <span className="text-sm font-semibold " >
+                    <button className="w-full h-[50px] bg-qh2-green text-white flex justify-center items-center">
+                      <span className="text-sm font-semibold ">
                         Place Order Now
                       </span>
                     </button>
@@ -520,6 +545,19 @@ export default function CheakoutPage() {
           </div>
         </div>
       </div>
+      <ToastContainer
+        position="top-right"
+        autoClose={5000}
+        hideProgressBar={false}
+        newestOnTop={false}
+        closeOnClick
+        rtl={false}
+        pauseOnFocusLoss
+        draggable
+        pauseOnHover
+        theme="light"
+        type="warning"
+      />
     </Layout>
   );
 }

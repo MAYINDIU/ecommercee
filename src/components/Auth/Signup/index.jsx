@@ -1,5 +1,8 @@
-import { useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { useEffect, useState } from "react";
+import { Link, useNavigate } from "react-router-dom";
+import { ToastContainer, toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
+import swal from "sweetalert";
 import Layout from "../../Partials/LayoutHomeTwo";
 import Thumbnail from "./Thumbnail";
 
@@ -7,17 +10,21 @@ export default function Signup() {
   const [checked, setValue] = useState(false);
   const [userData, setUserData] = useState("");
   console.log(userData);
+  const [agree, setAgree] = useState(false);
+
   const navigate = useNavigate();
+  const from = location.state?.from?.pathname || "/profile";
   const rememberMe = () => {
     setValue(!checked);
   };
-
+  const userError = userData?.msg;
   //Handle Submit
   const handleSubmit = async (e) => {
     event.preventDefault();
     const email = event.target.email.value;
     const password = event.target.password.value;
     const name = event.target.name.value;
+    // const phone = event.target.phone.value;
     const addItem = { email, password, name };
     // console.log(addItem);
 
@@ -32,6 +39,26 @@ export default function Signup() {
       .then((Response) => Response.json())
       .then((data) => setUserData(data));
   };
+  useEffect(() => {
+    if (status === 200) {
+      // navigate(`/profile`);
+      navigate(from, { replace: true });
+    }
+    // else if(status?.message === 'User not found') {
+    //     alert('Please type proper user id & pass');
+    //     setSpinner(false);
+    //     //  toast.error(`Opps!Please type proper emp code & password`);
+    // }
+  });
+  if (userData.msg === "This email already exists") {
+    toast(userError);
+  } else if (userData.msg === "Registered Successfully") {
+    swal({
+      title: "Successfully Registered",
+      text: "Success",
+      icon: "success",
+    });
+  }
   return (
     <Layout childrenClasses="pt-0 pb-0">
       <div className="login-page-wrapper w-full py-10">
@@ -64,26 +91,20 @@ export default function Signup() {
                   <form role="form" onSubmit={handleSubmit}>
                     <div className="flex sm:flex-row flex-col space-y-5 sm:space-y-0 sm:space-x-5 mb-5">
                       <input
-                        placeholder="First Name"
-                        label="Frist Name*"
+                        required
+                        placeholder="User Name*"
+                        label="User Name*"
                         name="name"
                         type="text"
-                        className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+                        className="shadow appearance-none border rounded w-full py-2 md:py-4 md:py-4 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
                       // onChange={(e) => setName(e.target.value)}
-                      />
-
-                      <input
-                        className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
-                        placeholder="Last Name"
-                        label="Last Name*"
-                        name="lname"
-                        type="text"
                       />
                     </div>
                     <div className="flex sm:flex-row flex-col space-y-5 sm:space-y-0 sm:space-x-5 mb-5">
                       <input
-                        className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
-                        placeholder="Demo@gmail.com"
+                        required
+                        className="shadow appearance-none border rounded w-full py-2 md:py-4 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+                        placeholder="Email Address*"
                         label="Email Address*"
                         name="email"
                         type="email"
@@ -91,8 +112,9 @@ export default function Signup() {
                       />
 
                       <input
-                        className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
-                        placeholder="0213 *******"
+                        // required
+                        className="shadow appearance-none border rounded w-full py-2 md:py-4 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+                        placeholder="0213 ***"
                         label="Phone*"
                         name="phone"
                         type="text"
@@ -100,7 +122,8 @@ export default function Signup() {
                     </div>
                     <div className="flex sm:flex-row flex-col space-y-5 sm:space-y-0 sm:space-x-5 mb-5">
                       <input
-                        className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+                        required
+                        className="shadow appearance-none border rounded w-full py-2 md:py-4 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
                         placeholder="Password"
                         // label="Email Address*"
                         name="password"
@@ -109,7 +132,7 @@ export default function Signup() {
                       />
 
                       <input
-                        className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+                        className="shadow appearance-none border rounded w-full py-2 md:py-4 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
                         placeholder="Confirm Password"
                         // label="Phone*"
                         name="cpassword"
@@ -117,115 +140,28 @@ export default function Signup() {
                       />
                     </div>
 
-                    <div className="input-item mb-5">
-                      <h6 className="input-label text-qgray capitalize text-[13px] font-normal block mb-2 ">
-                        Country*
-                      </h6>
-                      <div className="w-full h-[50px] border border-[#EDEDED] px-5 flex justify-between items-center mb-2">
-                        <span className="text-[13px] text-qgraytwo">
-                          Select Country
-                        </span>
-                        <span>
-                          <svg
-                            width="11"
-                            height="7"
-                            viewBox="0 0 11 7"
-                            fill="none"
-                            xmlns="http://www.w3.org/2000/svg"
-                          >
-                            <path
-                              d="M5.4 6.8L0 1.4L1.4 0L5.4 4L9.4 0L10.8 1.4L5.4 6.8Z"
-                              fill="#222222"
-                            />
-                          </svg>
-                        </span>
+                    <div className="flex space-x-2 items-center mb-3">
+                      <div>
+                        <input
+                          type="checkbox"
+                          name=""
+                          id="address"
+                          onClick={() => setAgree(!agree)}
+                        />
                       </div>
-                    </div>
-
-                    <div className="input-item mb-5">
-                      <input
-                        className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
-                        placeholder="Your address Here"
-                        label="Address*"
-                        name="address"
-                        type="text"
-                      />
-                    </div>
-                    <div className="flex sm:flex-row flex-col space-y-5 sm:space-y-0 sm:space-x-5 mb-5">
-                      <div className="w-1/2">
-                        <h6 className="input-label text-qgray capitalize text-[13px] font-normal block mb-2 ">
-                          Town / City*
-                        </h6>
-                        <div className="w-full h-[50px] border border-[#EDEDED] px-5 flex justify-between items-center mb-2">
-                          <span className="text-[13px] text-qgraytwo">
-                            Maiyami
-                          </span>
-                          <span>
-                            <svg
-                              width="11"
-                              height="7"
-                              viewBox="0 0 11 7"
-                              fill="none"
-                              xmlns="http://www.w3.org/2000/svg"
-                            >
-                              <path
-                                d="M5.4 6.8L0 1.4L1.4 0L5.4 4L9.4 0L10.8 1.4L5.4 6.8Z"
-                                fill="#222222"
-                              />
-                            </svg>
-                          </span>
-                        </div>
-                      </div>
-                      <div className="flex-1">
-                        <div className="w-full h-[50px] mb-5 sm:mb-0">
-                          <input
-                            className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
-                            label="Postcode / ZIP*"
-                            type="text"
-                            placeholder="00000"
-                          />
-                        </div>
-                      </div>
-                    </div>
-                    <div className="forgot-password-area mb-7">
-                      <div className="remember-checkbox flex items-center space-x-2.5">
-                        <button
-                          onClick={rememberMe}
-                          type="button"
-                          className="w-5 h-5 text-qblack flex justify-center items-center border border-light-gray"
-                        >
-                          {checked && (
-                            <svg
-                              xmlns="http://www.w3.org/2000/svg"
-                              className="h-5 w-5"
-                              viewBox="0 0 20 20"
-                              fill="currentColor"
-                            >
-                              <path
-                                fillRule="evenodd"
-                                d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z"
-                                clipRule="evenodd"
-                              />
-                            </svg>
-                          )}
-                        </button>
-                        <span
-                          onClick={rememberMe}
-                          className="text-base text-black"
-                        >
-                          I agree all
-                          <span className="text-qblack">
-                            tarm and condition
-                          </span>
-                          in BigShop.
-                        </span>
-                      </div>
+                      <label
+                        htmlFor="address"
+                        className="text-qblack text-[15px] select-none"
+                      >
+                        I agree with all terms and conditions
+                      </label>
                     </div>
                     <div className="signin-area mb-3">
                       <div className="flex justify-center">
                         <button
+                          disabled={!agree}
                           type="submit"
-                          className="black-btn text-sm text-white w-full h-[50px] font-semibold flex justify-center bg-purple items-center"
+                          className="bg-qh2-green rounded text-sm text-white w-full h-[50px] font-semibold flex justify-center bg-purple items-center"
                         >
                           <span>Create Account</span>
                         </button>
@@ -234,10 +170,10 @@ export default function Signup() {
                   </form>
                   <div className="signup-area flex justify-center">
                     <p className="text-base text-qgraytwo font-normal">
-                      Alrady have an Account?
-                      <a href="/login" className="ml-2 text-qblack">
+                      Already have an Account?
+                      <Link to="/login" className="ml-2 text-qblack">
                         Log In
-                      </a>
+                      </Link>
                     </p>
                   </div>
                 </div>
@@ -254,6 +190,19 @@ export default function Signup() {
           </div>
         </div>
       </div>
+      <ToastContainer
+        position="top-right"
+        autoClose={5000}
+        hideProgressBar={false}
+        newestOnTop={false}
+        closeOnClick
+        rtl={false}
+        pauseOnFocusLoss
+        draggable
+        pauseOnHover
+        theme="light"
+        type="warning"
+      />
     </Layout>
   );
 }

@@ -7,6 +7,8 @@ export default function ProfileTab() {
   const profileImgInput = useRef(null);
   const [userInfo, setUserInfo] = useState({});
   const [name, setName] = useState("");
+  const [address, setAddress] = useState("");
+  const [phone, setPhone] = useState("");
 
   const userProfile = JSON.parse(localStorage.getItem("user"));
   const userdata = userProfile?.user;
@@ -38,6 +40,8 @@ export default function ProfileTab() {
     e.preventDefault();
     const data = {
       name: name ? name : userInfo?.name,
+      address: address ? address : userInfo?.address,
+      phone: phone ? phone : userInfo?.phone,
     };
     console.log(name);
     try {
@@ -98,9 +102,11 @@ export default function ProfileTab() {
                 <input
                   className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
                   label="Phone Number*"
-                  placeholder="012 3  ***"
+                  placeholder="012 3  *"
                   type="text"
                   inputClasses="h-[50px]"
+                  defaultValue={userdata?.phone}
+                  onChange={(e) => setPhone(e.target.value)}
                 />
               </div>
             </div>
@@ -120,9 +126,11 @@ export default function ProfileTab() {
                 <input
                   className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
                   label="Address*"
-                  placeholder="your address here"
+                  placeholder="Enter your address here"
                   type="text"
                   inputClasses="h-[50px]"
+                  defaultValue={userdata?.address}
+                  onChange={(e) => setAddress(e.target.value)}
                 />
               </div>
             </div>

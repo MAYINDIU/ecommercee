@@ -55,21 +55,27 @@ export default function AllProductPage() {
   const location = useLocation();
   const cat_id = location?.state;
 
+  // Get Daa from search field
+  const searchLocation = useLocation();
+  console.log("State product", searchLocation);
+  const searchOutput = searchLocation?.state;
+  console.log(searchOutput);
+
   const { products } = productDatas;
   const [Habib, setHabib] = useState([]);
 
-  const catwiseproduct = `http://habib.munihaelectronics.com/public/api/home/single-category-all-products/${cat_id}`
-  const allproducts = `http://habib.munihaelectronics.com/public/api/home/all-product`
+  const catwiseproduct = `http://habib.munihaelectronics.com/public/api/home/single-category-all-products/${cat_id}`;
+  const allproducts = `http://habib.munihaelectronics.com/public/api/home/all-product`;
 
   if (cat_id === null) {
-    //All products 
+    //All products
     useEffect(() => {
       fetch(allproducts)
         .then((res) => res.json())
         .then((data) => setHabib(data));
     }, []);
   } else {
-    //All products 
+    //All products
     useEffect(() => {
       fetch(catwiseproduct)
         .then((res) => res.json())
@@ -77,15 +83,7 @@ export default function AllProductPage() {
     }, []);
   }
 
-
-
-
-
-
-
-
   const habibDatas = Habib?.products;
-
 
   return (
     <>
@@ -165,7 +163,12 @@ export default function AllProductPage() {
                   </button>
                 </div>
                 <div className="grid xl:grid-cols-3 sm:grid-cols-2 grid-cols-1  xl:gap-[30px] gap-5 mb-[40px]">
-                  <DataIteration datas={habibDatas} startLength={0} endLength={6}>
+                  <DataIteration
+                    // datas={searchOutput ? searchOutput : habibDatas}
+                    datas={habibDatas}
+                    startLength={0}
+                    endLength={6}
+                  >
                     {({ datas }) => (
                       <div data-aos="fade-up" key={datas.id}>
                         <ProductCardStyleOne datas={datas} />
@@ -183,6 +186,7 @@ export default function AllProductPage() {
                 </div>
                 <div className="grid xl:grid-cols-3 sm:grid-cols-2 grid-cols-1 xl:gap-[30px] gap-5 mb-[40px]">
                   <DataIteration
+                    // datas={searchOutput ? searchOutput : habibDatas}
                     datas={habibDatas}
                     startLength={6}
                     endLength={15}

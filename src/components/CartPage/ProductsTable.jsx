@@ -1,5 +1,7 @@
 import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
+import { ToastContainer, toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 import swal from "sweetalert";
 import InputCom from "../Helpers/InputCom";
 
@@ -7,10 +9,12 @@ export default function ProductsTable({ className }) {
   const [cartList, setCartDetails] = useState([]);
   const [couponDetails, setCouponDetails] = useState({});
 
-  const removeCoupon = () => {
-    setCouponDetails({})
-  }
-  console.log(couponDetails)
+  const [newArray, setNewArray] = useState([]);
+
+  const removeCoupon = (cId) => {
+    const remaining = newArray.filter((c) => c.id !== cId);
+    setNewArray(remaining);
+  };
 
   const customer_ip = JSON.parse(localStorage.getItem("user_ip"));
 
@@ -18,29 +22,56 @@ export default function ProductsTable({ className }) {
   const handleQuantityChange = (qty, index) => {
     const updatedData = [...cartList];
     updatedData[index].quantity = qty;
-    updatedData[index].total = qty * updatedData[index].current_sale_price
+    updatedData[index].total = qty * updatedData[index].current_sale_price;
     setCartDetails(updatedData);
-
   };
-  const subTotal = cartList?.reduce((sum, cart) => sum + cart?.quantity * +cart?.current_sale_price, 0)
-  //  const grandTotal = couponDetails?.type === 
-  const grandTotal = couponDetails?.type === 'percentage' ? subTotal - subTotal * +couponDetails?.value / 100 : couponDetails?.type === 'fixed_amount' ? subTotal - +couponDetails?.value : 0
-  const percentage = couponDetails?.type === 'percentage' ? subTotal * +couponDetails?.value / 100 : couponDetails?.type === 'fixed_amount' ? couponDetails?.value : 0
-  console.log(percentage)
+
+  // ---------------Start Calculation Part--------------
+
+  const subTotal = cartList?.reduce(
+    (sum, cart) => sum + cart?.quantity * +cart?.current_sale_price,
+    0
+  );
+
+  const findPercentageByfilter = newArray.filter(
+    (p) => p?.type === "percentage"
+  );
+  const percentageTotal = findPercentageByfilter.reduce(
+    (sum, p) => sum + +p?.value,
+    0
+  );
+
+  const findFixedAmountByfilter = newArray.filter(
+    (f) => f?.type === "fixed_amount"
+  );
+  const fixedAmountTotal = findFixedAmountByfilter.reduce(
+    (sum, f) => sum + +f?.value,
+    0
+  );
+
+  const grandTotal =
+    subTotal - (fixedAmountTotal + (subTotal * percentageTotal) / 100);
+
+  const percentage =
+    couponDetails?.type === "percentage"
+      ? (subTotal * +couponDetails?.value) / 100
+      : couponDetails?.type === "fixed_amount"
+        ? couponDetails?.value
+        : 0;
+  const diccountCouponAount =
+    fixedAmountTotal + (subTotal * percentageTotal) / 100;
+
+  // ------------------End Calculation Part ----------------------
+
+  // for state
 
   const checkoutCoupon = {
     percentage,
     grandTotal,
     subTotal,
     couponDetails,
-  }
-  console.log(checkoutCoupon)
-
-  //  localStorage.setItem("coupon", JSON.stringify(couponDetails?.code));
-  //  const getCoupon = localStorage.getItem('coupon',JSON.stringify(couponDetails?.code))
-
-
-
+    diccountCouponAount,
+  };
 
   //User IP
   useEffect(() => {
@@ -54,7 +85,6 @@ export default function ProductsTable({ className }) {
 
   // Delete single Cart List
   const handleDeleteCartList = (pId) => {
-
     const confirm = window.confirm("Are you want do delete?");
     if (confirm) {
       const url = ` https://habib.munihaelectronics.com/public/api/cartlist_delete/${pId}`;
@@ -73,32 +103,35 @@ export default function ProductsTable({ className }) {
     }
   };
 
-  //Coupon Code 
-  const [ccode, setCouponCode] = useState('');
-  const handleChange = event => {
+  //Coupon Code
+  const [ccode, setCouponCode] = useState("");
+
+  const handleChange = (event) => {
     setCouponCode(event.target.value);
   };
 
+  const duplicateCouponCode = newArray.some((d) => d?.code === ccode);
 
-  const cType = couponDetails?.type;
-  const cValue = couponDetails?.value;
-  const cLimit = couponDetails?.usage_limit;
-  const used = couponDetails?.used_count;
-  // console.log(cType + cValue + "-" + cLimit + "-" + used);
-  // console.log(couponDetails);
+  const handleCouponDetails = (e) => {
+    if (duplicateCouponCode) {
+      toast("This coupon is already used");
+    } else {
+      fetch(
+        `https://habib.munihaelectronics.com/public/api/couponCheck/${ccode}`
+      )
+        .then((res) => res.json())
+        .then((data) => {
+          setCouponDetails(data);
+          setNewArray([...newArray, data]);
+        });
 
-
-  const handleCouponDetails = () => {
-    fetch(
-      `https://habib.munihaelectronics.com/public/api/couponCheck/${ccode}`)
-      .then((res) => res.json())
-      .then((data) => setCouponDetails(data));
-    if (couponDetails === "Invalid Coupon Code") {
-      swal({
-        title: "Invalid coupon code",
-        text: "Success",
-        icon: "success",
-      });
+      if (couponDetails === "Invalid Coupon Code") {
+        swal({
+          title: "Invalid coupon code",
+          text: "Warning",
+          icon: "Warning",
+        });
+      }
     }
   };
 
@@ -134,21 +167,23 @@ export default function ProductsTable({ className }) {
                     <div className="flex-1 flex flex-col">
                       <p className="font-medium text-[15px]  text-qblack">
                         {l?.name}
-
-
                       </p>
 
                       <p className="flex">
-                        <span className="text-[12px] font-normal"> Size: {l?.size}   </span>
-                        <span className="ml-2 text-[12px] font-normal">  Color:</span>
+                        <span className="text-[12px] font-normal">
+                          {" "}
+                          Size: {l?.size}{" "}
+                        </span>
+                        <span className="ml-2 text-[12px] font-normal">
+                          {" "}
+                          Color:
+                        </span>
                         <span
                           style={{ background: l?.color }}
                           className="ml-1 text-[12px] mt-1 font-normal w-[15px] h-[15px]  block rounded-full border"
                         ></span>
                       </p>
                     </div>
-
-
                   </div>
                 </td>
                 {/* <td className="text-center py-4 px-2">
@@ -161,11 +196,10 @@ export default function ProductsTable({ className }) {
                     <span className="text-[15px] font-normal">{l?.size}</span>
                   </div>
                 </td> */}
-                < td className="text-center py-4 px-2" >
+                <td className="text-center py-4 px-2">
                   <div className="flex space-x-1 items-center justify-center">
                     <span className="text-[15px] font-normal">
                       {l?.current_sale_price}
-
                     </span>
                   </div>
                 </td>
@@ -177,13 +211,14 @@ export default function ProductsTable({ className }) {
                       defaultValue={l?.quantity}
                       min={1}
                       onChange={(e) => handleQuantityChange(+e.target.value, i)}
-
                     />
                   </div>
                 </td>
                 <td className="text-right py-4">
                   <div className="flex space-x-1 items-center justify-center">
-                    <span className="text-[15px] font-normal">{+l?.current_sale_price * l?.quantity}</span>
+                    <span className="text-[15px] font-normal">
+                      {+l?.current_sale_price * l?.quantity}
+                    </span>
                   </div>
                 </td>
                 <td className="text-right py-4">
@@ -211,29 +246,30 @@ export default function ProductsTable({ className }) {
             ))}
           </tbody>
         </table>
-      </div >
+      </div>
       <div className="w-full sm:flex justify-between mt-4">
         <div className="discount-code sm:w-[270px] w-full mb-5 sm:mb-0 h-[50px] flex">
-          <div className="flex-1 w-48 h-full">
+          <div className="flex-1 w-32  h-full">
             <input
-              className="bg-[#333] p-3 rounded text-white"
-              type="text"
-              id="message"
-              name="message"
               onChange={handleChange}
-              placeholder="Enter Coupon Code"
+              type="text"
+              className="bg-white p-3 rounded border hover:only:"
+              placeholder="Write Coupon Code"
             />
           </div>
-          <button onClick={handleCouponDetails} type="button" className="rounded w-48 h-[48px] black-btn">
-            <span className="text-sm font-semibold">Apply</span>
+
+          <button
+            onClick={handleCouponDetails}
+            className={` w-[90px] h-full text-sm font-600 bg-qh2-green text-white  'search-btn'}`}
+            type="button"
+          >
+            Apply
           </button>
         </div>
         <div className="flex space-x-2.5 items-center">
           <a href="#">
             <div className="w-[220px] h-[50px] bg-[#F6F6F6] flex justify-center items-center">
-              <span className="text-sm font-semibold">
-                Continue Shopping
-              </span>
+              <span className="text-sm font-semibold">Continue Shopping</span>
             </div>
           </a>
           <a href="#">
@@ -247,17 +283,30 @@ export default function ProductsTable({ className }) {
         <div className="sm:w-[370px] w-full border border-[#EDEDED] px-[30px] py-[26px]">
           <div className="sub-total mb-6">
             <div className=" flex justify-between mb-6">
-              <p className="text-[15px] font-medium text-qblack">
-                Subtotal
-              </p>
+              <p className="text-[15px] font-medium text-qblack">Subtotal</p>
               <p className="text-[15px] font-medium text-qred">€{subTotal}</p>
             </div>
-            {couponDetails?.code ? <div className=" flex justify-between mb-6">
-              <p className="text-[15px] font-medium text-qblack">
-                Coupon Code: <span className="font-bold">{couponDetails?.code}</span> <small className="uppercase">{`(${couponDetails?.type}) `}</small> <button onClick={removeCoupon} className="text-qred font-xs text-[12px]">remove</button>
-              </p>
-              <p className="text-[15px] font-medium text-qred">€{couponDetails?.type === 'percentage' ? percentage : couponDetails?.value}</p>
-            </div> : ''}
+
+            {newArray.map((c) => {
+              return (
+                <div className=" flex justify-between mb-6">
+                  <p className="text-[15px] font-medium text-qblack">
+                    Coupon Code: <span className="font-bold">{c?.code}</span>{" "}
+                    <small className="uppercase">{`(${c?.type}) `}</small>{" "}
+                    <button
+                      onClick={() => removeCoupon(c?.id)}
+                      className="text-qred font-xs text-[12px]"
+                    >
+                      remove
+                    </button>
+                  </p>
+                  <p className="text-[15px] font-medium text-qred">
+                    €{c?.type === "percentage" ? percentage : c?.value}
+                  </p>
+                </div>
+              );
+            })}
+
             <div className="w-full h-[1px] bg-[#EDEDED]"></div>
           </div>
           <div className="shipping mb-6">
@@ -326,14 +375,10 @@ export default function ProductsTable({ className }) {
           </div>
           <div className="shipping-calculation w-full mb-3">
             <div className="title mb-[17px]">
-              <h1 className="text-[15px] font-medium">
-                Calculate Shipping
-              </h1>
+              <h1 className="text-[15px] font-medium">Calculate Shipping</h1>
             </div>
             <div className="w-full h-[50px] border border-[#EDEDED] px-5 flex justify-between items-center mb-2">
-              <span className="text-[13px] text-qgraytwo">
-                Select Country
-              </span>
+              <span className="text-[13px] text-qgraytwo">Select Country</span>
               <span>
                 <svg
                   width="11"
@@ -364,22 +409,34 @@ export default function ProductsTable({ className }) {
           </button>
           <div className="total mb-6">
             <div className=" flex justify-between">
-              <p className="text-[18px] font-medium text-qblack">
-                Total
-              </p>
-              <p className="text-[18px] font-medium text-qred">€{grandTotal ? grandTotal : subTotal}
+              <p className="text-[18px] font-medium text-qblack">Total</p>
+              <p className="text-[18px] font-medium text-qred">
+                €{grandTotal ? grandTotal : subTotal}
               </p>
             </div>
           </div>
           <Link to="/checkout" state={checkoutCoupon}>
-            <div className="w-full h-[50px] black-btn flex justify-center items-center">
-              <span className="text-sm font-semibold">
+            <div className="w-full h-[50px] bg-qh2-green flex justify-center items-center">
+              <span className="text-sm font-semibold text-white">
                 Proceed to Checkout
               </span>
             </div>
           </Link>
         </div>
       </div>
-    </div >
+      <ToastContainer
+        position="top-right"
+        autoClose={5000}
+        hideProgressBar={false}
+        newestOnTop={false}
+        closeOnClick
+        rtl={false}
+        pauseOnFocusLoss
+        draggable
+        pauseOnHover
+        theme="light"
+        type="warning"
+      />
+    </div>
   );
 }

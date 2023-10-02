@@ -1,4 +1,28 @@
+import { useEffect, useState } from "react";
+import { Link } from "react-router-dom";
+
 export default function SearchBox({ className, type }) {
+  const [Habib, setHabib] = useState([]);
+  console.log(Habib);
+
+  const [output, setOutput] = useState([]);
+  const [inputField, setInput] = useState("");
+  console.log(output);
+
+  const handleSearch = (e) => {
+    const searchProduct = Habib.filter((p) =>
+      p?.name.toLowerCase().includes(e.target.value.toLowerCase())
+    );
+    setOutput(searchProduct);
+  };
+
+  //All products
+  useEffect(() => {
+    fetch("http://habib.munihaelectronics.com/public/api/home/all-product")
+      .then((res) => res.json())
+      .then((data) => setHabib(data?.products));
+  }, []);
+  // console.log("Products", Habib);
   return (
     <>
       <div
@@ -11,6 +35,7 @@ export default function SearchBox({ className, type }) {
               type="text"
               className="search-input"
               placeholder="Search Product..."
+              onChange={(e) => handleSearch(e)}
             />
           </form>
         </div>
@@ -49,13 +74,15 @@ export default function SearchBox({ className, type }) {
             </span>
           </button>
         </div> */}
-        <button
-          // className={` w-[93px] h-full text-sm font-600   ${type === 3 ? 'bg-qh2-green text-white' : 'search-btn'}`}
-          className={` w-[93px] h-full text-sm font-600 bg-qh2-green text-white  'search-btn'}`}
-          type="button"
-        >
-          Search
-        </button>
+        <Link to="/all-products" state={output}>
+          <button
+            // className={` w-[93px] h-full text-sm font-600   ${type === 3 ? 'bg-qh2-green text-white' : 'search-btn'}`}
+            className={` w-[93px] h-full text-sm font-600 bg-qh2-green text-white  'search-btn'}`}
+            type="button"
+          >
+            Search
+          </button>
+        </Link>
       </div>
     </>
   );
