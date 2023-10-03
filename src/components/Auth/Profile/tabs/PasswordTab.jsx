@@ -1,38 +1,71 @@
+import axios from "axios";
 import React, { useState } from "react";
 import PasswordSvg from "./PasswordSvg";
 
 export default function PasswordTab() {
-  const [oldPass, setOldPass] = useState("hide-password");
-  const [newPass, setNewPass] = useState("hide-password");
-  const [confirmPass, setConfirmPass] = useState("hide-password");
-  const showPassword = (value) => {
-    const password = document.getElementById(`${value}`);
-    if (value && value === "old_password") {
-      if (password.type === "password") {
-        password.type = "text";
-        setOldPass("show-password");
-      } else {
-        password.type = "password";
-        setOldPass("hide-password");
-      }
-    }
-    if (value && value === "new_password") {
-      if (password.type === "password") {
-        password.type = "text";
-        setNewPass("show-password");
-      } else {
-        password.type = "password";
-        setNewPass("hide-password");
-      }
-    }
-    if (value && value === "confirm_password") {
-      if (password.type === "password") {
-        password.type = "text";
-        setConfirmPass("show-password");
-      } else {
-        password.type = "password";
-        setConfirmPass("hide-password");
-      }
+  const [oldPass, setOldPass] = useState("");
+  const [newPass, setNewPass] = useState("");
+  const userProfile = JSON.parse(localStorage.getItem("user"));
+
+  console.log(userProfile?.token);
+  // const [confirmPass, setConfirmPass] = useState("hide-password");
+  // const showPassword = (value) => {
+  //   const password = document.getElementById(`${value}`);
+  //   if (value && value === "old_password") {
+  //     if (password.type === "password") {
+  //       password.type = "text";
+  //       setOldPass("show-password");
+  //     } else {
+  //       password.type = "password";
+  //       setOldPass("hide-password");
+  //     }
+  //   }
+  //   if (value && value === "new_password") {
+  //     if (password.type === "password") {
+  //       password.type = "text";
+  //       setNewPass("show-password");
+  //     } else {
+  //       password.type = "password";
+  //       setNewPass("hide-password");
+  //     }
+  //   }
+  //   if (value && value === "confirm_password") {
+  //     if (password.type === "password") {
+  //       password.type = "text";
+  //       setConfirmPass("show-password");
+  //     } else {
+  //       password.type = "password";
+  //       setConfirmPass("hide-password");
+  //     }
+  //   }
+  // };
+  const handleChangePass = async (e) => {
+    e.preventDefault();
+
+    const data = {
+      currentPass: oldPass,
+      newPass: newPass,
+    };
+    console.log(data);
+
+    try {
+      const response = await axios.post(
+        `https://habib.munihaelectronics.com/public/api/user/changePassword`,
+        data,
+        {
+          headers: {
+            Authorization: `Bearer ${userProfile?.token}`,
+          },
+        }
+      );
+      console.log(response);
+      swal({
+        title: "Successfully Changed",
+        text: "Success",
+        icon: "success",
+      });
+    } catch (error) {
+      console.log(error);
     }
   };
   return (
@@ -52,10 +85,11 @@ export default function PasswordTab() {
                 className="input-field placeholder:text-base text-bese px-4 text-dark-gray w-full h-full bg-[#FAFAFA] focus:ring-0 focus:outline-none"
                 type="password"
                 id="old_password"
+                onChange={(e) => setOldPass(e.target.value)}
               />
               <div
                 className="absolute right-6 bottom-[17px] z-10 cursor-pointer"
-                onClick={() => showPassword("old_password")}
+              // onClick={() => showPassword("old_password")}
               >
                 {oldPass === "show-password" ? (
                   <svg
@@ -115,7 +149,7 @@ export default function PasswordTab() {
               className="input-label text-qgray text-sm block mb-2.5"
               htmlFor="old_password"
             >
-              Password*
+              New Password*
             </label>
             <div className="input-wrapper border border-[#E8E8E8] w-full  h-[58px] overflow-hidden relative ">
               <input
@@ -123,10 +157,11 @@ export default function PasswordTab() {
                 className="input-field placeholder:text-base text-bese px-4 text-dark-gray w-full h-full bg-[#FAFAFA] focus:ring-0 focus:outline-none"
                 type="password"
                 id="new_password"
+                onChange={(e) => setNewPass(e.target.value)}
               />
               <div
                 className="absolute right-6 bottom-[17px] z-10 cursor-pointer"
-                onClick={() => showPassword("new_password")}
+              // onClick={() => showPassword("new_password")}
               >
                 {newPass === "show-password" ? (
                   <svg
@@ -181,7 +216,7 @@ export default function PasswordTab() {
               </div>
             </div>
           </div>
-          <div className="input-field mb-6">
+          {/* <div className="input-field mb-6">
             <label
               className="input-label text-qgray text-sm block mb-2.5"
               htmlFor="old_password"
@@ -251,18 +286,22 @@ export default function PasswordTab() {
                 )}
               </div>
             </div>
-          </div>
+          </div> */}
           <div className="w-full mt-[30px] flex justify-start">
             <div className="sm:flex sm:space-x-[30px] items-center">
               <div className="w-[180px] h-[50px]">
-                <button type="button" className="yellow-btn">
+                <button
+                  type="submit"
+                  className="bg-qh2-green rounded h-[50px] w-48 text-white"
+                  onClick={handleChangePass}
+                >
                   <div className="w-full text-sm font-semibold">
-                    Upldate Password
+                    Update Password
                   </div>
                 </button>
               </div>
               <button type="button">
-                <div className="w-full text-sm font-semibold text-qblack mb-5 sm:mb-0">
+                <div className="w-full text-sm font-semibold text-qred mb-5 sm:mb-0">
                   Cancel
                 </div>
               </button>
