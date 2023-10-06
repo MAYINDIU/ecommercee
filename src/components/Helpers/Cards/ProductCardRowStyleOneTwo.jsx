@@ -1,3 +1,5 @@
+import axios from "axios";
+import { useState } from "react";
 import { Link } from "react-router-dom";
 import Compair from "../icons/Compair";
 import QuickViewIco from "../icons/QuickViewIco";
@@ -6,6 +8,49 @@ import ThinLove from "../icons/ThinLove";
 export default function ProductCardRowStyleOneTwo({ className, datas }) {
 
   const single_data = [datas];
+  const [selected, setSelected] = useState(false);
+  const userProfile = JSON.parse(localStorage.getItem("user"));
+  const userdata = userProfile?.user;
+  const customer_ip = JSON.parse(localStorage.getItem("user_ip"));
+
+  // Add To Cart
+  const handleAddToCart = async () => {
+    const data = {
+      customer_ip: customer_ip?.user_ip,
+      product_id: datas?.id,
+      quantity: 1,
+    };
+    console.log(data);
+    try {
+      const response = await axios.post(
+        `https://habib.munihaelectronics.com/public/api/addToCartProduct`,
+        data
+      );
+      console.log(response);
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  // Add Wish List
+  const handleWishList = async (product_id) => {
+    const data = {
+      product_id,
+      user_id: userdata?.id,
+    };
+    console.log(data);
+    try {
+      const response = await axios.post(
+        `https://habib.munihaelectronics.com/public/api/addWishList`,
+        data
+      );
+      setSelected(!selected);
+      console.log(response);
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
   return (
     <div
       data-aos="fade-left"
@@ -37,7 +82,7 @@ export default function ProductCardRowStyleOneTwo({ className, datas }) {
                 €{datas.current_sale_price}
               </span>
             </p>
-            <button type="button" className="w-[116px] h-[40px]">
+            <button onClick={handleAddToCart} type="button" className="w-[116px] h-[40px]">
               <span className="yellow-btn rounded"> Add To Cart</span>
             </button>
           </div>
@@ -50,11 +95,17 @@ export default function ProductCardRowStyleOneTwo({ className, datas }) {
             <QuickViewIco />
           </span>
         </Link>
-        <a href="#">
-          <span className="w-10 h-10 flex justify-center items-center bg-primarygray rounded">
+        <Link to="" onClick={() => handleWishList(datas?.id)}>
+          <span
+            className={
+              selected
+                ? "w-10 h-10 flex justify-center items-center bg-[#021AEE] text-white rounded"
+                : "w-10 h-10 flex justify-center items-center bg-[#CCECEB] rounded"
+            }
+          >
             <ThinLove />
           </span>
-        </a>
+        </Link>
         <a href="#">
           <span className="w-10 h-10 flex justify-center items-center bg-primarygray rounded">
             <Compair />

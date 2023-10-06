@@ -37,7 +37,6 @@ export default function ProductCardStyleOneTwo({ datas }) {
 
 
   // Add Wish List
-
   const handleWishList = async (product_id) => {
     const data = {
       product_id,

@@ -107,7 +107,7 @@ export default function Reviews({
         <div className="w-full flex justify-center">
           <button
             type="button"
-            className="black-btn w-[300px] h-[50px] text-sm font-semibold"
+            className="bg-qh2-green  text-white rounded w-[300px] h-[50px] text-sm font-semibold"
           >
             Load More
           </button>
@@ -185,10 +185,10 @@ export default function Reviews({
             <button
               onClick={reviewAction}
               type="button"
-              className="black-btn bg-qh2-green rounded w-[300px] h-[50px]  flex justify-center"
+              className="bg-qh2-green  text-white rounded w-[300px] h-[50px]  flex justify-center"
             >
               <span className="flex space-x-1 items-center h-full">
-                <span className="text-sm font-semibold">Submit Review</span>
+                <span className="text-sm  font-semibold">Submit Review</span>
                 {reviewLoading && (
                   <span className="w-5 " style={{ transform: "scale(0.3)" }}>
                     <LoaderStyleOne />

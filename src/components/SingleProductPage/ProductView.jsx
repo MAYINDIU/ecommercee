@@ -291,7 +291,7 @@ export default function ProductView({ className, reportHandler }) {
               <Link to="/">
                 <button
                   type="button"
-                  className="black-btn text-sm font-semibold w-full h-full"
+                  className="text-white rounded text-sm bg-qh2-green font-semibold w-full h-full"
                   onClick={handleAddToCart}
                 >
                   Add To Cart

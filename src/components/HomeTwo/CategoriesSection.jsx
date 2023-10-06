@@ -1,6 +1,7 @@
 import React from "react";
 import { Link } from "react-router-dom";
 export default function CategoriesSection({ category }) {
+
   return (
     <>
       <div className="categories-section-wrapper w-full">

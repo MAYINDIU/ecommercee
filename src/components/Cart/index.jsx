@@ -8,7 +8,6 @@ export default function Cart({ className, type }) {
 
   const cart_details = JSON.parse(localStorage.getItem("cartList"));
   const user_ip = JSON.parse(localStorage.getItem("user_ip"));
-
   const subTotal = cartList?.reduce((sum, cart) => sum + cart?.quantity * +cart?.current_sale_price, 0)
 
   //User IP

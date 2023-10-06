@@ -1,0 +1,23 @@
+{
+  "files": {
+    "main.css": "/static/css/main.563eb30f.css",
+    "main.js": "/static/js/main.23b8644b.js",
+    "static/media/Inter-ExtraBold.ttf": "/static/media/Inter-ExtraBold.ff90249a320fd94ec508.ttf",
+    "static/media/Inter-Black.ttf": "/static/media/Inter-Black.cebeacf9cf3be04078de.ttf",
+    "static/media/Inter-Bold.ttf": "/static/media/Inter-Bold.1eca2d329458b92342aa.ttf",
+    "static/media/Inter-SemiBold.ttf": "/static/media/Inter-SemiBold.a41b925faf940d267b62.ttf",
+    "static/media/Inter-Medium.ttf": "/static/media/Inter-Medium.4ebf1acf62f447ea2f0d.ttf",
+    "static/media/Inter-ExtraLight.ttf": "/static/media/Inter-ExtraLight.60dd7fa9ebb547b20238.ttf",
+    "static/media/Inter-Thin.ttf": "/static/media/Inter-Thin.32a2156a01dfb1834cac.ttf",
+    "static/media/Inter-Light.ttf": "/static/media/Inter-Light.a6cdc9ac687f817dbfb5.ttf",
+    "static/media/Inter-Regular.ttf": "/static/media/Inter-Regular.a3e5baa244e35d0f891d.ttf",
+    "static/media/logo.png": "/static/media/logo.5f9873bc60e7817884e4.png",
+    "index.html": "/index.html",
+    "main.563eb30f.css.map": "/static/css/main.563eb30f.css.map",
+    "main.23b8644b.js.map": "/static/js/main.23b8644b.js.map"
+  },
+  "entrypoints": [
+    "static/css/main.563eb30f.css",
+    "static/js/main.23b8644b.js"
+  ]
+}

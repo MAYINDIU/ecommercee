@@ -14,7 +14,7 @@ export default function SingleProductPage() {
   const details = location?.state
   console.log(details);
 
-  const [tab, setTab] = useState("des");
+  const [tab, setTab] = useState("review");
   const [rating, setRating] = useState(0);
   const [hover, setHover] = useState(0);
   const [name, setName] = useState("");
@@ -156,6 +156,34 @@ export default function SingleProductPage() {
             </div>
             <div className="tab-contents w-full min-h-[400px] ">
               <div className="container-x mx-auto">
+
+                {tab === "review" && (
+                  <div data-aos="fade-up" className="w-full tab-content-item">
+                    <h6 className="text-[18px] font-medium text-qblack mb-2">
+                      Reviews
+                    </h6>
+                    {/* review-comments */}
+                    <div className="w-full">
+                      <Reviews
+                        reviewLoading={reviewLoading}
+                        reviewAction={reviewAction}
+                        comments={commnets.slice(0, 2)}
+                        name={name}
+                        nameHandler={(e) => setName(e.target.value)}
+                        email={email}
+                        emailHandler={(e) => setEmail(e.target.value)}
+                        phone={phone}
+                        phoneHandler={(e) => setPhone(e.target.value)}
+                        message={message}
+                        messageHandler={(e) => setMessage(e.target.value)}
+                        rating={rating}
+                        ratingHandler={setRating}
+                        hoverRating={hover}
+                        hoverHandler={setHover}
+                      />
+                    </div>
+                  </div>
+                )}
                 {tab === "des" && (
                   <div data-aos="fade-up" className="w-full tab-content-item">
                     <h6 className="text-[18px] font-medium text-qblack mb-2">
@@ -195,33 +223,6 @@ export default function SingleProductPage() {
                           keyboard, touchpad with gesture support
                         </li>
                       </ul>
-                    </div>
-                  </div>
-                )}
-                {tab === "review" && (
-                  <div data-aos="fade-up" className="w-full tab-content-item">
-                    <h6 className="text-[18px] font-medium text-qblack mb-2">
-                      Reviews
-                    </h6>
-                    {/* review-comments */}
-                    <div className="w-full">
-                      <Reviews
-                        reviewLoading={reviewLoading}
-                        reviewAction={reviewAction}
-                        comments={commnets.slice(0, 2)}
-                        name={name}
-                        nameHandler={(e) => setName(e.target.value)}
-                        email={email}
-                        emailHandler={(e) => setEmail(e.target.value)}
-                        phone={phone}
-                        phoneHandler={(e) => setPhone(e.target.value)}
-                        message={message}
-                        messageHandler={(e) => setMessage(e.target.value)}
-                        rating={rating}
-                        ratingHandler={setRating}
-                        hoverRating={hover}
-                        hoverHandler={setHover}
-                      />
                     </div>
                   </div>
                 )}
@@ -304,7 +305,7 @@ export default function SingleProductPage() {
                   />
                 </div>
                 <div className="w-full mb-[40px]">
-                  <h6 className="input-label  capitalize text-[13px] font-600 leading-[24px] text-qblack block mb-2 ">
+                  <h6 className="input-label border  capitalize text-[13px] font-600 leading-[24px] text-qblack block mb-2 ">
                     Enter Report Note*
                   </h6>
                   <textarea
@@ -317,9 +318,10 @@ export default function SingleProductPage() {
                   ></textarea>
                 </div>
 
-                <button type="button" className="w-full h-[50px] black-btn">
+                <button type="button" className="w-full btn text-white rounded text-sm bg-qh2-green  h-[50px] ">
                   Submit Report
                 </button>
+
               </div>
             </div>
           </div>
