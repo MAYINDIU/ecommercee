@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import LayoutHomeTwo from "../Partials/LayoutHomeTwo";
 
+import { ThreeCircles } from "react-loader-spinner";
 import datas from "../../data/productsTwo.json";
 import SectionStylePopular from "../Helpers/SectionStylePopular";
 import SectionStyleThreeHomeTwo from "../Helpers/SectionStyleThreeHomeTwo";
@@ -19,9 +20,12 @@ export default function HomeTwo() {
   const [new_arrival, setNewArrival] = useState([]);
   const [top_sell, setTopSell] = useState([]);
   const [user_ip, setUserIp] = useState({});
+  const [spinner, setSpinner] = useState(false);
 
   localStorage.setItem("user_ip", JSON.stringify(user_ip));
   // console.log(user_ip);
+
+
 
   //User IP
   useEffect(() => {
@@ -31,15 +35,19 @@ export default function HomeTwo() {
       .then((data) => setUserIp(data));
   }, []);
 
-
-
-
   //All category
   useEffect(() => {
+    setSpinner(true);
     fetch(
       "https://habib.munihaelectronics.com/public/api/product/category")
       .then((res) => res.json())
-      .then((data) => setCategory(data));
+      .then((data) => {
+        setCategory(data)
+        setSpinner(false)  // Hide loading screen 
+      });
+
+
+
   }, []);
 
   //All product 
@@ -84,10 +92,22 @@ export default function HomeTwo() {
       <ViewMoreTitle
         className="my-categories mb-[60px]"
         seeMoreUrl="/all-products"
-        categoryTitle="My Market Category"
+        categoryTitle="Choose Category"
       >
+        <div className="flex justify-center mb-2 ">
+          <ThreeCircles
+            height="80"
+            width="80"
+            color="#004D40"
+            ariaLabel="circles-loading"
+            wrapperStyle={{}}
+            wrapperClass=""
+            visible={spinner}
+          />
+        </div>
         <CategoriesSection category={category} />
       </ViewMoreTitle>
+
       <SectionStyleThreeHomeTwo
         products={products}
         habib={Habib}
@@ -132,11 +152,11 @@ export default function HomeTwo() {
         seeMoreUrl="/all-products"
         className="new-arrivals mb-[60px]"
       />
-      <ProductsAds
+      {/* <ProductsAds
         sectionHeight="164"
         ads={[`${process.env.PUBLIC_URL}/assets/images/ads-2.4.png`]}
         className="products-ads-section mb-[60px]"
-      />
+      /> */}
       {/* <SectionStyleFour
         products={products}
         sectionTitle="Popular Sales"

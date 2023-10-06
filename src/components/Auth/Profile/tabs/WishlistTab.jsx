@@ -176,9 +176,13 @@ export default function WishlistTab({ className }) {
             </div>
           </button>
           <div className="w-[180px] h-[50px]">
-            <button type="button" className="yellow-btn">
+            <button
+              type="submit"
+              className="bg-qh2-green rounded h-[50px] w-44 text-white"
+
+            >
               <div className="w-full text-sm font-semibold">
-                Add to Cart All
+                Add to Cart
               </div>
             </button>
           </div>

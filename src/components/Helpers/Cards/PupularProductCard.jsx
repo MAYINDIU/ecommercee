@@ -1,4 +1,5 @@
-import React from "react";
+import axios from "axios";
+import React, { useState } from "react";
 import { Link } from "react-router-dom";
 import Compair from "../icons/Compair";
 import QuickViewIco from "../icons/QuickViewIco";
@@ -6,6 +7,50 @@ import ThinLove from "../icons/ThinLove";
 
 export default function PupularProductCard({ datas }) {
     const single_data = [datas];
+    const [selected, setSelected] = useState(false);
+    const customer_ip = JSON.parse(localStorage.getItem("user_ip"));
+    const userProfile = JSON.parse(localStorage.getItem("user"));
+    const userdata = userProfile?.user;
+
+
+    // Add To Cart
+    const handleAddToCart = async () => {
+        const data = {
+            customer_ip: customer_ip?.user_ip,
+            product_id: datas?.id,
+            quantity: 1,
+        };
+        console.log(data);
+        try {
+            const response = await axios.post(
+                `https://habib.munihaelectronics.com/public/api/addToCartProduct`,
+                data
+            );
+            console.log(response);
+        } catch (error) {
+            console.log(error);
+        }
+    };
+
+    // Add Wish List
+    const handleWishList = async (product_id) => {
+        const data = {
+            product_id,
+            user_id: userdata?.id,
+        };
+        console.log(data);
+        try {
+            const response = await axios.post(
+                `https://habib.munihaelectronics.com/public/api/addWishList`,
+                data
+            );
+            setSelected(!selected);
+            console.log(response);
+        } catch (error) {
+            console.log(error);
+        }
+    };
+
     return (
         <div
             className="product-card-style-one-two w-full h-full bg-white relative group overflow-hidden"
@@ -22,7 +67,7 @@ export default function PupularProductCard({ datas }) {
             <div className="product-card-details flex justify-center h-[102px] items-center  relative">
                 {/* add to card button */}
                 <div className="absolute w-[204px] h-[54px] left-[80px] -bottom-20 group-hover:bottom-[65px] transition-all duration-300 ease-in-out">
-                    <button type="button" className="yellow-btn">
+                    <button onClick={handleAddToCart} type="button" className="yellow-btn rounded">
                         <div>
                             <span>Add To Cart</span>
                         </div>
@@ -53,11 +98,17 @@ export default function PupularProductCard({ datas }) {
                         <QuickViewIco />
                     </span>
                 </Link>
-                <a href="#">
-                    <span className="w-10 h-10 flex justify-center items-center bg-[#CCECEB] rounded">
+                <Link to="" onClick={() => handleWishList(datas?.id)}>
+                    <span
+                        className={
+                            selected
+                                ? "w-10 h-10 flex justify-center items-center bg-[#0336FF] rounded"
+                                : "w-10 h-10 flex justify-center items-center bg-[#CCECEB] rounded"
+                        }
+                    >
                         <ThinLove />
                     </span>
-                </a>
+                </Link>
                 <a href="#">
                     <span className="w-10 h-10 flex justify-center items-center bg-[#CCECEB] rounded">
                         <Compair />

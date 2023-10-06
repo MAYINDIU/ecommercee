@@ -8,6 +8,7 @@ export default function ProductView({ className, reportHandler }) {
   const location = useLocation();
   const customer_ip = JSON.parse(localStorage.getItem("user_ip"));
   const details = location?.state;
+  console.log(details);
   const productDetailsByFind = details.find((d) => d?.id !== customer_ip);
   console.log(productDetailsByFind);
   const productsImg = details[0]?.productImages;
@@ -144,10 +145,10 @@ export default function ProductView({ className, reportHandler }) {
 
           <div data-aos="fade-up" className="flex space-x-2 items-center mb-7">
             <span className="text-sm font-500 text-qgray line-through mt-2">
-              {details[0]?.current_purchase_cost}
+              €{details[0]?.current_purchase_cost}
             </span>
             <span className="text-2xl font-500 text-qred">
-              {details[0]?.current_sale_price}
+              €{details[0]?.current_sale_price}
             </span>
           </div>
 
@@ -304,14 +305,14 @@ export default function ProductView({ className, reportHandler }) {
               <span className="text-qblack">Category :</span> Kitchen
             </p>
             <p className="text-[13px] text-qgray leading-7">
-              <span className="text-qblack">Tags :</span> Beer, Foamer
+              <span className="text-qblack">Keyword :</span> Beer, Foamer
             </p>
             <p className="text-[13px] text-qgray leading-7">
               <span className="text-qblack">SKU:</span> KE-91039
             </p>
           </div>
 
-          <div
+          {/* <div
             data-aos="fade-up"
             className="flex space-x-2 items-center mb-[20px]"
           >
@@ -391,7 +392,7 @@ export default function ProductView({ className, reportHandler }) {
                 </svg>
               </span>
             </div>
-          </div>
+          </div> */}
         </div>
       </div>
     </div>

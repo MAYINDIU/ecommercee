@@ -1,5 +1,4 @@
 import Star from "../Helpers/icons/Star";
-import InputCom from "../Helpers/InputCom";
 import LoaderStyleOne from "../Helpers/Loaders/LoaderStyleOne";
 import StarRating from "../Helpers/StarRating";
 
@@ -133,7 +132,7 @@ export default function Reviews({
 
         <div className="w-full review-form ">
           <div className="sm:flex sm:space-x-[30px] items-center mb-5">
-            <div className="sm:w-1/3 w-full">
+            {/* <div className="sm:w-1/3 w-full">
               <InputCom
                 label="name*"
                 placeholder=""
@@ -165,7 +164,7 @@ export default function Reviews({
                 value={phone}
                 inputHandler={phoneHandler}
               />
-            </div>
+            </div> */}
           </div>
           <div className="w-full mb-[30px]">
             <h6 className="input-label text-qgray capitalize text-[13px] font-normal block mb-2 ">
@@ -182,11 +181,11 @@ export default function Reviews({
             ></textarea>
           </div>
 
-          <div className="flex justify-end">
+          <div className="flex justify-end ">
             <button
               onClick={reviewAction}
               type="button"
-              className="black-btn w-[300px] h-[50px]  flex justify-center"
+              className="black-btn bg-qh2-green rounded w-[300px] h-[50px]  flex justify-center"
             >
               <span className="flex space-x-1 items-center h-full">
                 <span className="text-sm font-semibold">Submit Review</span>

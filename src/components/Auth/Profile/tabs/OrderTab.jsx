@@ -1,11 +1,13 @@
+import axios from "axios";
 import React, { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
-import swal from "sweetalert";
 
 export default function OrderTab() {
   const [orderList, setOrderList] = useState([]);
   const userProfile = JSON.parse(localStorage.getItem("user"));
   const userId = userProfile?.user?.id;
+  const [cancelOrder, setCanceOrder] = useState({});
+  const [isClick, setIsClick] = useState(false);
 
   useEffect(() => {
     fetch(
@@ -15,25 +17,19 @@ export default function OrderTab() {
       .then((data) => setOrderList(data));
   }, []);
 
-  // Cancel Order
-  const handleCancelOrder = (oId) => {
-    const confirm = window.confirm("Are you want do delete?");
+  //handle cancel order Only accepted in Pending order
+  const handleCancelOrder = async (oId, status) => {
+    const confirm = window.confirm("Are You sure to cancel order?");
     if (confirm) {
-      const url = ` http://habib.munihaelectronics.com/public/api/single_order_delete/${oId}`;
-      fetch(url, {
-        method: "DELETE",
-      }).then((res) => res.json());
-      const remaining = orderList.filter((p) => p.id !== oId);
-      setOrderList(remaining);
-
-      swal({
-        title: "Successfully Deleted",
-        text: "Success",
-        icon: "success",
-      });
+      try {
+        const response = await axios.get(
+          `https://habib.munihaelectronics.com/public/api/ordercancel/${oId}`
+        );
+      } catch (error) {
+        console.log(error);
+      }
     }
   };
-
   return (
     <>
       <div className="relative w-full overflow-x-auto sm:rounded-lg">
@@ -62,20 +58,43 @@ export default function OrderTab() {
                     {l?.created_at}
                   </span>
                 </td>
-                <td className="text-center py-4 px-2">
-                  <span className="text-sm rounded  text-green-500 bg-green-100 p-2">
+                <td className="py-4 px-2">
+                  <button
+                    className={`text-sm rounded w-32 ${l?.status === 0
+                      ? "text-white bg-qred disabled:opacity-25"
+                      : l?.status === 7
+                        ? "bg-green-600 text-white "
+                        : "text-green-500"
+                      } bg-green-100 p-2`}
+                    disabled
+                  >
                     {l?.status === 1
                       ? "Pending"
                       : l?.status === 2
                         ? "Processing"
                         : l?.status === 3
                           ? "On the Way"
-                          : "Complete"}
+                          : l?.status === 7
+                            ? "Completed"
+                            : "Order Canceled"}
+                  </button>
+                  <span>
+                    {l.status === 1 ? (
+                      <button
+                        title="Cancel pending order ?"
+                        className={`text-qred text-sm fony-bold ml-2`}
+                        onClick={() => handleCancelOrder(l?.id, l?.status)}
+                      >
+                        Cancel
+                      </button>
+                    ) : (
+                      ""
+                    )}
                   </span>
                 </td>
                 <td className="text-center py-4 px-2">
                   <span className="text-base text-qblack whitespace-nowrap px-2 ">
-                    {l?.total_amount}
+                    €{l?.total_amount}
                   </span>
                 </td>
                 <td className="text-center py-4">
@@ -87,14 +106,14 @@ export default function OrderTab() {
                       View Details
                     </button>
                   </Link>
-                  <button
+                  {/* <button
                     onClick={() => handleCancelOrder(l?.id)}
                     title="Cancel order ?"
                     type="button"
                     className=" ml-2 w-[86px] h-[36px] bg-qred text-white rounded"
                   >
                     Cancel
-                  </button>
+                  </button> */}
                 </td>
               </tr>
             ))}

@@ -1,7 +1,8 @@
 import { useEffect, useState } from "react";
+import { ThreeCircles } from "react-loader-spinner";
 
 export default function ProductsTable({ className }) {
-
+  const [spinner, setSpinner] = useState(false);
   const user = JSON.parse(localStorage.getItem("user"));
   const userInfo = user?.user;
   const uId = userInfo?.id;
@@ -20,9 +21,13 @@ export default function ProductsTable({ className }) {
 
   // Fetch wishlist All Information
   useEffect(() => {
+    setSpinner(true);
     fetch(`https://habib.munihaelectronics.com/public/api/show_wishlist/${uId}`)
       .then((res) => res.json())
-      .then((data) => setwList(data));
+      .then((data) => {
+        setwList(data)
+        setSpinner(false)  // Hide loading screen 
+      });
   }, []);
 
   // Delete single Wish List
@@ -79,6 +84,17 @@ export default function ProductsTable({ className }) {
               <td className="py-4 whitespace-nowrap  text-center">total</td>
               <td className="py-4 whitespace-nowrap text-right w-[114px] block"></td>
             </tr>
+            <div className="flex justify-center ml-42  mb-2 ">
+              <ThreeCircles
+                height="50"
+                width="50"
+                color="#004D40"
+                ariaLabel="circles-loading"
+                wrapperStyle={{}}
+                wrapperClass=""
+                visible={spinner}
+              />
+            </div>
             {/* table heading end */}
             {wlist?.map((wl, i) => (
               <tr key={i} className="bg-white border-b hover:bg-gray-50">
@@ -116,7 +132,7 @@ export default function ProductsTable({ className }) {
 
                 <td className="text-center py-4 px-2">
                   <div className="flex space-x-1 items-center justify-center">
-                    <span className="text-[15px] font-normal">{wl?.current_sale_price}</span>
+                    <span className="text-[15px] font-normal">€{wl?.current_sale_price}</span>
                   </div>
                 </td>
                 <td className=" py-4">
@@ -133,7 +149,7 @@ export default function ProductsTable({ className }) {
                 </td>
                 <td className="text-right py-4">
                   <div className="flex space-x-1 items-center justify-center">
-                    <span className="text-[15px] font-normal">{+wl?.current_sale_price * wl?.quantity}</span>
+                    <span className="text-[15px] font-normal">€{+wl?.current_sale_price * wl?.quantity}</span>
 
                   </div>
                 </td>

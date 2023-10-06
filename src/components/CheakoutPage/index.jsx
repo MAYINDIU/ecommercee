@@ -16,6 +16,7 @@ export default function CheakoutPage() {
   console.log(userdata);
   const [checked, setChecked] = useState(false);
   const [checkedPaymentMethod, setCheckedPaymentMethod] = useState(false);
+  const [billingAddress, setBillingAddress] = useState("");
   const [shippingAddress, setShippingAddress] = useState("");
   const [billingCity, setBillingCity] = useState("");
   const [shippingCity, setShippingCity] = useState("");
@@ -34,7 +35,9 @@ export default function CheakoutPage() {
   //Place Order
   const handlePlaceOrder = async (e) => {
     e.preventDefault();
-    if (billingCity === "") {
+    if (billingAddress === "") {
+      toast("Billing address is required !!");
+    } else if (billingCity === "") {
       toast("Billing city is required !!");
     } else if (billingPostalCode === "") {
       toast("Billing postal code is required !!");
@@ -44,8 +47,8 @@ export default function CheakoutPage() {
       const data = {
         user_id: userdata?.id,
         total_amount: location?.state?.grandTotal,
-        billing_address: userdata?.address,
-        shipping_address: shippingAddress ? shippingAddress : userdata?.address,
+        billing_address: userdata?.address ? userdata?.address : billingAddress,
+        shipping_address: shippingAddress ? shippingAddress : billingAddress,
         billing_city: billingCity,
         shipping_city: shippingCity ? shippingCity : billingCity,
         billing_postal_code: billingPostalCode,
@@ -101,28 +104,6 @@ export default function CheakoutPage() {
         </div>
         <div className="checkout-main-content w-full">
           <div className="container-x mx-auto">
-            <div className="w-full sm:mb-10 mb-5">
-              <div className="sm:flex sm:space-x-[18px] s">
-                <div className="sm:w-1/2 w-full mb-5 h-[70px]">
-                  <a href="#">
-                    <div className="w-full h-full bg-[#F6F6F6] text-qblack flex justify-center items-center">
-                      <span className="text-[15px] font-medium">
-                        Log into your Account
-                      </span>
-                    </div>
-                  </a>
-                </div>
-                <div className="flex-1 h-[70px]">
-                  <a href="#">
-                    <div className="w-full h-full bg-[#F6F6F6] text-qblack flex justify-center items-center">
-                      <span className="text-[15px] font-medium">
-                        Enter Coupon Code
-                      </span>
-                    </div>
-                  </a>
-                </div>
-              </div>
-            </div>
             <div className="w-full lg:flex lg:space-x-[30px]">
               <div className="lg:w-1/2 w-full">
                 <h1 className="sm:text-2xl text-xl text-qblack font-medium mb-5">
@@ -196,19 +177,23 @@ export default function CheakoutPage() {
                     <div className=" mb-6">
                       <div className="w-full">
                         <input
-                          className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+                          className={`shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline ${userdata?.address !== userdata?.address
+                            ? "border-qred"
+                            : "border-gray-100"
+                            }`}
                           label="Address*"
                           placeholder="your address here"
                           inputClasses="w-full h-[50px]"
-                          defaultValue={userdata?.address}
+                          value={userdata?.address}
+                          onChange={(e) => setBillingAddress(e.target.value)}
                         />
                       </div>
                     </div>
                     <div className="flex space-x-5 items-center mb-6">
                       <select
                         onChange={(e) => setBillingCity(e.target.value)}
-                        className="border h-8 rounded-none focus:border-none w-full max-w-xs mx-auto"
-                        required
+                        className={`border h-8 rounded focus:border-none w-full max-w-xs mx-auto ${billingCity === "" ? "border-qred" : "border-gray-100"
+                          }`}
                       >
                         <option>----Select----</option>
                         <option>Dhaka</option>
@@ -220,8 +205,11 @@ export default function CheakoutPage() {
                       </select>
                       <div className="flex-1">
                         <input
-                          className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
-                          label="Postcode / ZIP*"
+                          className={`shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline ${billingPostalCode === ""
+                            ? "border-qred"
+                            : "border-gray-100"
+                            }`}
+                          label="Postcode / ZIP*  "
                           placeholder="Postal code"
                           inputClasses="w-full h-[50px]"
                           onChange={(e) => setBillingPostalCode(e.target.value)}

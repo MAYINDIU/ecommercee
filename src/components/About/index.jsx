@@ -1,13 +1,8 @@
 import { useRef } from "react";
 import { Link } from "react-router-dom";
-import BlogCard from "../Helpers/Cards/BlogCard";
 import PageTitle from "../Helpers/PageTitle";
-import SimpleSlider from "../Helpers/SliderCom";
-import Star from "../Helpers/icons/Star";
 import Layout from "../Partials/LayoutHomeTwo";
 
-import blog from "../../data/blogs.json";
-import DataIteration from "../Helpers/DataIteration";
 
 export default function About() {
   const settings = {
@@ -105,7 +100,7 @@ export default function About() {
           </div>
         </div>
 
-        <div className="customer-feedback w-full bg-white py-[60px]">
+        {/* <div className="customer-feedback w-full bg-white py-[60px]">
           <div className="title flex justify-center mb-5">
             <h1 className="text-[30px] font-semibold text-qblack">
               Customers Feedback
@@ -493,8 +488,8 @@ export default function About() {
               </div>
             </div>
           </div>
-        </div>
-        <div className="container-x mx-auto my-[60px]">
+        </div> */}
+        {/* <div className="container-x mx-auto my-[60px]">
           <div
             data-aos="fade-down"
             className="best-services w-full bg-qyellow flex flex-col space-y-10 lg:space-y-0 lg:flex-row lg:justify-between lg:items-center lg:h-[110px] px-10 lg:py-0 py-10"
@@ -695,9 +690,9 @@ export default function About() {
               </div>
             </div>
           </div>
-        </div>
+        </div> */}
 
-        <div className="blog-post-wrapper w-full mb-[30px]">
+        {/* <div className="blog-post-wrapper w-full mb-[30px]">
           <div className="container-x mx-auto">
             <div className="blog-post-title flex justify-center items-cente mb-[30px]">
               <h1 className="text-3xl font-semibold text-qblack">
@@ -721,7 +716,7 @@ export default function About() {
               </div>
             </div>
           </div>
-        </div>
+        </div> */}
       </div>
     </Layout>
   );

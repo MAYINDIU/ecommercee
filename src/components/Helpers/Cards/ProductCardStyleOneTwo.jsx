@@ -72,8 +72,8 @@ export default function ProductCardStyleOneTwo({ datas }) {
 
       <div className="product-card-details flex justify-center h-[102px] items-center  relative">
         {/* add to card button */}
-        <div className="absolute w-[204px] h-[54px] left-[80px] -bottom-20 group-hover:bottom-[65px] transition-all duration-300 ease-in-out">
-          <button onClick={handleAddToCart} type="button" className="yellow-btn">
+        <div className="absolute  w-[204px] h-[54px] left-[80px] -bottom-20 group-hover:bottom-[65px] transition-all duration-300 ease-in-out">
+          <button onClick={handleAddToCart} type="button" className="yellow-btn rounded">
             <div>
               <span>Add To Cart </span>
             </div>

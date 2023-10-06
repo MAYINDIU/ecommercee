@@ -1,9 +1,8 @@
 export default function DiscountBanner({ className }) {
   return (
     <div
-      className={`discount-banner w-full h-[307px] bg-cover flex justify-center items-center ${
-        className || ""
-      }`}
+      className={`discount-banner w-full h-[307px] bg-cover flex justify-center items-center ${className || ""
+        }`}
       style={{
         background: `url(${process.env.PUBLIC_URL}/assets/images/discount-banner-2.jpg) no-repeat`,
         backgroundSize: "cover",
@@ -12,12 +11,11 @@ export default function DiscountBanner({ className }) {
       <div>
         <div data-aos="fade-up">
           <h1 className="sm:text-3xl text-xl font-700 text-qblack mb-2 text-center">
-            Get <span className="mx-1 text-qyellow">20%</span> Off Discount
-            Coupon
+            <span className="mx-1 text-qyellow">Subscribe our Newsletter</span>
           </h1>
-          <p className="text-center sm:text-[18px] text-sm font-400">
-            by Subscribe our Newsletter
-          </p>
+          {/* <p className="text-center sm:text-[18px] text-sm font-400">
+            Subscribe our Newsletter
+          </p> */}
         </div>
         <div
           data-aos="fade-right"
@@ -59,7 +57,7 @@ export default function DiscountBanner({ className }) {
             type="button"
             className="sm:w-[158px] w-[80px]  h-full bg-qyellow text-sm font-600"
           >
-            Get the Coupon
+            Subscribe
           </button>
         </div>
       </div>

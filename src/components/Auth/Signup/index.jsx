@@ -10,10 +10,18 @@ export default function Signup() {
   const [checked, setValue] = useState(false);
   const [userData, setUserData] = useState("");
   console.log(userData);
+
+  // for matching password
+  const [matchPass, setMatchPass] = useState("");
+  const [cMatchPass, setCMatchPass] = useState("");
+
   const [agree, setAgree] = useState(false);
 
   const navigate = useNavigate();
-  const from = location.state?.from?.pathname || "/profile";
+  const from = "/profile";
+
+  localStorage.setItem("user", JSON.stringify(userData));
+
   const rememberMe = () => {
     setValue(!checked);
   };
@@ -24,9 +32,8 @@ export default function Signup() {
     const email = event.target.email.value;
     const password = event.target.password.value;
     const name = event.target.name.value;
-    // const phone = event.target.phone.value;
+    const cpassword = event.target.cpassword.value;
     const addItem = { email, password, name };
-    // console.log(addItem);
 
     const url = "https://habib.munihaelectronics.com/public/api/signup";
     fetch(url, {
@@ -40,15 +47,9 @@ export default function Signup() {
       .then((data) => setUserData(data));
   };
   useEffect(() => {
-    if (status === 200) {
-      // navigate(`/profile`);
+    if (userData?.status === 200) {
       navigate(from, { replace: true });
     }
-    // else if(status?.message === 'User not found') {
-    //     alert('Please type proper user id & pass');
-    //     setSpinner(false);
-    //     //  toast.error(`Opps!Please type proper emp code & password`);
-    // }
   });
   if (userData.msg === "This email already exists") {
     toast(userError);
@@ -128,17 +129,22 @@ export default function Signup() {
                         // label="Email Address*"
                         name="password"
                         type="password"
-                      // onChange={(e) => setPassword(e.target.value)}
+                        onChange={(e) => setMatchPass(e.target.value)}
                       />
-
                       <input
+                        required
                         className="shadow appearance-none border rounded w-full py-2 md:py-4 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
                         placeholder="Confirm Password"
                         // label="Phone*"
                         name="cpassword"
                         type="password"
-                      />
+                        onChange={(e) => setCMatchPass(e.target.value)}
+                      />{" "}
                     </div>
+
+                    <p className="text-qred text-sm ml-72 md:ml-64">
+                      {matchPass !== cMatchPass ? "Pass didn't match" : ""}
+                    </p>
 
                     <div className="flex space-x-2 items-center mb-3">
                       <div>
@@ -161,7 +167,10 @@ export default function Signup() {
                         <button
                           disabled={!agree}
                           type="submit"
-                          className="bg-qh2-green rounded text-sm text-white w-full h-[50px] font-semibold flex justify-center bg-purple items-center"
+                          className={`${!agree
+                              ? "disabled:opacity-50 text-white bg-qh2-green"
+                              : "bg-qh2-green text-white"
+                            }  rounded text-sm text-white w-full h-[50px] font-semibold flex justify-center bg-purple items-center`}
                         >
                           <span>Create Account</span>
                         </button>
