@@ -1,7 +1,9 @@
+import { useEffect, useState } from "react";
 import InputRange from "react-input-range";
 import "react-input-range/lib/css/index.css";
+import { ThreeCircles } from "react-loader-spinner";
+import { Link, useParams } from "react-router-dom";
 import Checkbox from "../Helpers/Checkbox";
-
 export default function ProductsFilter({
   filters,
   checkboxHandler,
@@ -13,464 +15,235 @@ export default function ProductsFilter({
   filterToggle,
   filterToggleHandler,
 }) {
+  const { categoryId } = useParams();
+  const [open, setOpen] = useState(0);
+  const [habib, setHabib] = useState([]);
+  const [spinner, setSpinner] = useState(false);
+
+  const [isWalletVisible, setIsWalletVisible] = useState(0);
+
+  const toggleWallet = (id) => {
+    setIsWalletVisible(id);
+  };
+  const toggleWalletClose = () => {
+    setIsWalletVisible(0);
+  };
+
+
+
+  useEffect(() => {
+    setSpinner(true);
+    fetch("https://habib.munihaelectronics.com/public/api/product/category")
+      .then((res) => res.json())
+      .then((data) => {
+        setHabib(data)
+        setSpinner(false)  // Hide loading screen 
+      });
+  }, []);
+  const singleCatagory = habib?.find((c) => c.id == categoryId);
+
+
   return (
     <>
       <div
-        className={`filter-widget w-full fixed lg:relative left-0 top-0 h-screen z-10 lg:h-auto overflow-y-scroll lg:overflow-y-auto bg-white px-[30px] pt-[40px] ${
-          className || ""
-        }  ${filterToggle ? "block" : "hidden lg:block"}`}
+        className={`filter-widget w-full fixed lg:relative left-0 top-0 h-screen z-10 lg:h-auto overflow-y-scroll lg:overflow-y-auto bg-white px-[30px] pt-[40px] ${className || ""
+          }  ${filterToggle ? "block" : "hidden lg:block"}`}
       >
         <div className="filter-subject-item pb-10 border-b border-qgray-border">
           <div className="subject-title mb-[30px]">
             <h1 className="text-black text-base font-500">
-              Product categories
+              Product Categories
             </h1>
           </div>
-          <div className="filter-items">
-            <ul>
-              <li className="item flex justify-between items-center mb-5">
-                <div className="flex space-x-[14px] items-center">
-                  <div>
-                    <Checkbox
-                      id="mobileLaptop"
-                      name="mobileLaptop"
-                      handleChange={(e) => checkboxHandler(e)}
-                      checked={filters.mobileLaptop}
-                    />
-                  </div>
-                  <div>
-                    <label
-                      htmlFor="mobileLaptop"
-                      className="text-xs font-black font-400 capitalize"
-                    >
-                      Mobile & Laptops
-                    </label>
-                  </div>
-                </div>
-                <div>
-                  <span className="cursor-pointer">
-                    <svg
-                      width="10"
-                      height="10"
-                      viewBox="0 0 10 10"
-                      fill="none"
-                      xmlns="http://www.w3.org/2000/svg"
-                    >
-                      <rect y="4" width="10" height="2" fill="#C4C4C4" />
-                      <rect
-                        x="6"
-                        width="10"
-                        height="2"
-                        transform="rotate(90 6 0)"
-                        fill="#C4C4C4"
-                      />
-                    </svg>
-                  </span>
-                </div>
-              </li>
-              <li className="item flex justify-between items-center mb-5">
-                <div className="flex space-x-[14px] items-center">
-                  <div>
-                    <Checkbox
-                      id="gaming"
-                      name="gaming"
-                      handleChange={(e) => checkboxHandler(e)}
-                      checked={filters.gaming}
-                    />
-                  </div>
-                  <div>
-                    <label
-                      htmlFor="gaming"
-                      className="text-xs font-black font-400 capitalize"
-                    >
-                      Gaming Entertainment
-                    </label>
-                  </div>
-                </div>
-                <div>
-                  <span className="cursor-pointer">
-                    <svg
-                      width="10"
-                      height="10"
-                      viewBox="0 0 10 10"
-                      fill="none"
-                      xmlns="http://www.w3.org/2000/svg"
-                    >
-                      <rect y="4" width="10" height="2" fill="#C4C4C4" />
-                      <rect
-                        x="6"
-                        width="10"
-                        height="2"
-                        transform="rotate(90 6 0)"
-                        fill="#C4C4C4"
-                      />
-                    </svg>
-                  </span>
-                </div>
-              </li>
-              <li className="item flex justify-between items-center mb-5">
-                <div className="flex space-x-[14px] items-center">
-                  <div>
-                    <Checkbox
-                      id="imageVideo"
-                      name="imageVideo"
-                      handleChange={(e) => checkboxHandler(e)}
-                      checked={filters.imageVideo}
-                    />
-                  </div>
-                  <div>
-                    <label
-                      htmlFor="imageVideo"
-                      className="text-xs font-black font-400 capitalize"
-                    >
-                      Image & Video
-                    </label>
-                  </div>
-                </div>
-                <div>
-                  <span className="cursor-pointer">
-                    <svg
-                      width="10"
-                      height="10"
-                      viewBox="0 0 10 10"
-                      fill="none"
-                      xmlns="http://www.w3.org/2000/svg"
-                    >
-                      <rect y="4" width="10" height="2" fill="#C4C4C4" />
-                      <rect
-                        x="6"
-                        width="10"
-                        height="2"
-                        transform="rotate(90 6 0)"
-                        fill="#C4C4C4"
-                      />
-                    </svg>
-                  </span>
-                </div>
-              </li>
-              <li className="item flex justify-between items-center mb-5">
-                <div className="flex space-x-[14px] items-center">
-                  <div>
-                    <Checkbox
-                      id="vehicles"
-                      name="vehicles"
-                      handleChange={(e) => checkboxHandler(e)}
-                      checked={filters.vehicles}
-                    />
-                  </div>
-                  <div>
-                    <label
-                      htmlFor="vehicles"
-                      className="text-xs font-black font-400 capitalize"
-                    >
-                      Vehicles
-                    </label>
-                  </div>
-                </div>
-                <div>
-                  <span className="cursor-pointer">
-                    <svg
-                      width="10"
-                      height="10"
-                      viewBox="0 0 10 10"
-                      fill="none"
-                      xmlns="http://www.w3.org/2000/svg"
-                    >
-                      <rect y="4" width="10" height="2" fill="#C4C4C4" />
-                      <rect
-                        x="6"
-                        width="10"
-                        height="2"
-                        transform="rotate(90 6 0)"
-                        fill="#C4C4C4"
-                      />
-                    </svg>
-                  </span>
-                </div>
-              </li>
-              <li className="item flex justify-between items-center mb-5">
-                <div className="flex space-x-[14px] items-center">
-                  <div>
-                    <Checkbox
-                      id="furnitures"
-                      name="furnitures"
-                      handleChange={(e) => checkboxHandler(e)}
-                      checked={filters.furnitures}
-                    />
-                  </div>
-                  <div>
-                    <label
-                      htmlFor="furnitures"
-                      className="text-xs font-black font-400 capitalize"
-                    >
-                      Furnitures
-                    </label>
-                  </div>
-                </div>
-                <div>
-                  <span className="cursor-pointer">
-                    <svg
-                      width="10"
-                      height="10"
-                      viewBox="0 0 10 10"
-                      fill="none"
-                      xmlns="http://www.w3.org/2000/svg"
-                    >
-                      <rect y="4" width="10" height="2" fill="#C4C4C4" />
-                      <rect
-                        x="6"
-                        width="10"
-                        height="2"
-                        transform="rotate(90 6 0)"
-                        fill="#C4C4C4"
-                      />
-                    </svg>
-                  </span>
-                </div>
-              </li>
-              <li className="item flex justify-between items-center mb-5">
-                <div className="flex space-x-[14px] items-center">
-                  <div>
-                    <Checkbox
-                      id="sport"
-                      name="sport"
-                      handleChange={(e) => checkboxHandler(e)}
-                      checked={filters.sport}
-                    />
-                  </div>
-                  <div>
-                    <label
-                      htmlFor="sport"
-                      className="text-xs font-black font-400 capitalize"
-                    >
-                      Sport
-                    </label>
-                  </div>
-                </div>
-                <div>
-                  <span className="cursor-pointer">
-                    <svg
-                      width="10"
-                      height="10"
-                      viewBox="0 0 10 10"
-                      fill="none"
-                      xmlns="http://www.w3.org/2000/svg"
-                    >
-                      <rect y="4" width="10" height="2" fill="#C4C4C4" />
-                      <rect
-                        x="6"
-                        width="10"
-                        height="2"
-                        transform="rotate(90 6 0)"
-                        fill="#C4C4C4"
-                      />
-                    </svg>
-                  </span>
-                </div>
-              </li>
-              <li className="item flex justify-between items-center mb-5">
-                <div className="flex space-x-[14px] items-center">
-                  <div>
-                    <Checkbox
-                      id="foodDrinks"
-                      name="foodDrinks"
-                      handleChange={(e) => checkboxHandler(e)}
-                      checked={filters.foodDrinks}
-                    />
-                  </div>
-                  <div>
-                    <label
-                      htmlFor="foodDrinks"
-                      className="text-xs font-black font-400 capitalize"
-                    >
-                      Food & Drinks
-                    </label>
-                  </div>
-                </div>
-                <div>
-                  <span className="cursor-pointer">
-                    <svg
-                      width="10"
-                      height="10"
-                      viewBox="0 0 10 10"
-                      fill="none"
-                      xmlns="http://www.w3.org/2000/svg"
-                    >
-                      <rect y="4" width="10" height="2" fill="#C4C4C4" />
-                      <rect
-                        x="6"
-                        width="10"
-                        height="2"
-                        transform="rotate(90 6 0)"
-                        fill="#C4C4C4"
-                      />
-                    </svg>
-                  </span>
-                </div>
-              </li>
-              <li className="item flex justify-between items-center mb-5">
-                <div className="flex space-x-[14px] items-center">
-                  <div>
-                    <Checkbox
-                      id="fashion"
-                      name="fashion"
-                      handleChange={(e) => checkboxHandler(e)}
-                      checked={filters.fashion}
-                    />
-                  </div>
-                  <div>
-                    <label
-                      htmlFor="fashion"
-                      className="text-xs font-black font-400 capitalize"
-                    >
-                      Fashion Accessories
-                    </label>
-                  </div>
-                </div>
-                <div>
-                  <span className="cursor-pointer">
-                    <svg
-                      width="10"
-                      height="10"
-                      viewBox="0 0 10 10"
-                      fill="none"
-                      xmlns="http://www.w3.org/2000/svg"
-                    >
-                      <rect y="4" width="10" height="2" fill="#C4C4C4" />
-                      <rect
-                        x="6"
-                        width="10"
-                        height="2"
-                        transform="rotate(90 6 0)"
-                        fill="#C4C4C4"
-                      />
-                    </svg>
-                  </span>
-                </div>
-              </li>
-              <li className="item flex justify-between items-center mb-5">
-                <div className="flex space-x-[14px] items-center">
-                  <div>
-                    <Checkbox
-                      id="toilet"
-                      name="toilet"
-                      handleChange={(e) => checkboxHandler(e)}
-                      checked={filters.toilet}
-                    />
-                  </div>
-                  <div>
-                    <label
-                      htmlFor="toilet"
-                      className="text-xs font-black font-400 capitalize"
-                    >
-                      Toilet & Sanitation
-                    </label>
-                  </div>
-                </div>
-                <div>
-                  <span className="cursor-pointer">
-                    <svg
-                      width="10"
-                      height="10"
-                      viewBox="0 0 10 10"
-                      fill="none"
-                      xmlns="http://www.w3.org/2000/svg"
-                    >
-                      <rect y="4" width="10" height="2" fill="#C4C4C4" />
-                      <rect
-                        x="6"
-                        width="10"
-                        height="2"
-                        transform="rotate(90 6 0)"
-                        fill="#C4C4C4"
-                      />
-                    </svg>
-                  </span>
-                </div>
-              </li>
-              <li className="item flex justify-between items-center mb-5">
-                <div className="flex space-x-[14px] items-center">
-                  <div>
-                    <Checkbox
-                      id="makeupCorner"
-                      name="makeupCorner"
-                      handleChange={(e) => checkboxHandler(e)}
-                      checked={filters.makeupCorner}
-                    />
-                  </div>
-                  <div>
-                    <label
-                      htmlFor="makeupCorner"
-                      className="text-xs font-black font-400 capitalize"
-                    >
-                      Makeup Corner
-                    </label>
-                  </div>
-                </div>
-                <div>
-                  <span className="cursor-pointer">
-                    <svg
-                      width="10"
-                      height="10"
-                      viewBox="0 0 10 10"
-                      fill="none"
-                      xmlns="http://www.w3.org/2000/svg"
-                    >
-                      <rect y="4" width="10" height="2" fill="#C4C4C4" />
-                      <rect
-                        x="6"
-                        width="10"
-                        height="2"
-                        transform="rotate(90 6 0)"
-                        fill="#C4C4C4"
-                      />
-                    </svg>
-                  </span>
-                </div>
-              </li>
-              <li className="item flex justify-between items-center mb-5">
-                <div className="flex space-x-[14px] items-center">
-                  <div>
-                    <Checkbox
-                      id="babyItem"
-                      name="babyItem"
-                      handleChange={(e) => checkboxHandler(e)}
-                      checked={filters.babyItem}
-                    />
-                  </div>
-                  <div>
-                    <label
-                      htmlFor="babyItem"
-                      className="text-xs font-black font-400 capitalize"
-                    >
-                      Baby Items
-                    </label>
-                  </div>
-                </div>
-                <div>
-                  <span className="cursor-pointer">
-                    <svg
-                      width="10"
-                      height="10"
-                      viewBox="0 0 10 10"
-                      fill="none"
-                      xmlns="http://www.w3.org/2000/svg"
-                    >
-                      <rect y="4" width="10" height="2" fill="#C4C4C4" />
-                      <rect
-                        x="6"
-                        width="10"
-                        height="2"
-                        transform="rotate(90 6 0)"
-                        fill="#C4C4C4"
-                      />
-                    </svg>
-                  </span>
-                </div>
-              </li>
-            </ul>
+          <div className="flex justify-center mb-2 ">
+            <ThreeCircles
+              height="40"
+              width="40"
+              color="#004D40"
+              ariaLabel="circles-loading"
+              wrapperStyle={{}}
+              wrapperClass=""
+              visible={spinner}
+            />
           </div>
+          {/* <div
+            className={`nav-widget-wrapper w-full  h-[60px] relative z-30  ${className || ""
+              }`}
+          >
+            <div className="container-x mx-auto h-full">
+              <div className="w-full h-full relative">
+                <div className="w-full h-full flex justify-between items-center">
+                  <div className="category-and-nav flex xl:space-x-7 space-x-3 items-center">
+                    <div className="category w-[150px] h-[40px] bg-white px-5 rounded-t-md mt-[6px] relative">
+                      <button
+                        onClick={handler}
+                        type="button"
+                        className="w-full h-full flex justify-between items-center"
+                      >
+                        <div className="flex space-x-1 items-center">
+
+                          <span className="text-sm font-400 text-qblacktext">
+                            Shirt
+                          </span>
+
+                        </div>
+                        <div>
+                          <Arrow
+                            width="5.78538"
+                            height="1.28564"
+                            className="fill-current text-qblacktext"
+                          />
+                        </div>
+                      </button>
+
+                      {categoryToggle && (
+                        <div
+                          className="fixed top-0 left-0 w-full h-full -z-10"
+                          onClick={handler}
+                        ></div>
+                      )}
+
+                      <div
+                        className="category-dropdown w-full absolute left-0 top-[53px] overflow-hidden"
+                        style={{ height: `${elementsSize} ` }}
+                      >
+                        <ul className="categories-list">
+                          <Link to="/all-products" >
+                            <li className="category-item rounded">
+                              <a href="#">
+                                <div className=" flex justify-between items-center px-5 h-10 bg-white hover:bg-qh2-green transition-all duration-300 ease-in-out cursor-pointer text-qblack hover:text-white">
+                                  <div className="flex items-center space-x-6">
+                                    <span className="text-xs font-400">
+                                      Test
+                                    </span>
+                                  </div>
+                                  <div>
+                                    <span>
+                                      <svg
+                                        className="fill-current"
+                                        width="6"
+                                        height="9"
+                                        viewBox="0 0 6 9"
+                                        fill="none"
+                                        xmlns="http://www.w3.org/2000/svg"
+                                      >
+                                        <rect
+                                          x="1.49805"
+                                          y="0.818359"
+                                          width="5.78538"
+                                          height="1.28564"
+                                          transform="rotate(45 1.49805 0.818359)"
+                                        />
+                                        <rect
+                                          x="5.58984"
+                                          y="4.90918"
+                                          width="5.78538"
+                                          height="1.28564"
+                                          transform="rotate(135 5.58984 4.90918)"
+                                        />
+                                      </svg>
+                                    </span>
+                                  </div>
+                                </div>
+                              </a>
+                            </li>
+                          </Link>
+                          <Link to="/all-products" >
+                            <li className="category-item rounded">
+                              <a href="#">
+                                <div className=" flex justify-between items-center px-5 h-10 bg-white hover:bg-qh2-green transition-all duration-300 ease-in-out cursor-pointer text-qblack hover:text-white">
+                                  <div className="flex items-center space-x-6">
+                                    <span className="text-xs font-400">
+                                      Test
+                                    </span>
+                                  </div>
+                                  <div>
+                                    <span>
+                                      <svg
+                                        className="fill-current"
+                                        width="6"
+                                        height="9"
+                                        viewBox="0 0 6 9"
+                                        fill="none"
+                                        xmlns="http://www.w3.org/2000/svg"
+                                      >
+                                        <rect
+                                          x="1.49805"
+                                          y="0.818359"
+                                          width="5.78538"
+                                          height="1.28564"
+                                          transform="rotate(45 1.49805 0.818359)"
+                                        />
+                                        <rect
+                                          x="5.58984"
+                                          y="4.90918"
+                                          width="5.78538"
+                                          height="1.28564"
+                                          transform="rotate(135 5.58984 4.90918)"
+                                        />
+                                      </svg>
+                                    </span>
+                                  </div>
+                                </div>
+                              </a>
+                            </li>
+                          </Link>
+                        </ul>
+                      </div>
+                    </div>
+
+                  </div>
+
+                </div>
+              </div>
+            </div>
+          </div> */}
+          {habib?.map((caterogy) => (
+            <div>
+              <div
+                // className={`p-2 my-1 hover:bg-qh2-green hover:text-white cursor-pointer transition duration-75 ease-in-out rounded flex justify-between px-5 ${isWalletVisible ? 'bg-green-800 text-white' : ''}`}
+                className={`p-2 my-1 hover:bg-qh2-green hover:text-white cursor-pointer transition duration-75 ease-in-out rounded flex justify-between px-5 `}
+
+              >
+                <Link to={`/all-products/${caterogy.id}`}>
+                  <div >
+                    {caterogy?.name}
+                  </div>
+                </Link>
+                <div>
+                  {isWalletVisible === `${caterogy?.id}` ? (
+                    <i className="fa-solid fa-minus " onClick={() => toggleWalletClose()} />
+                  ) : (
+                    <i className="fa-solid fa-plus " onClick={() => toggleWallet(`${caterogy?.id}`)} />
+                  )}
+                </div>
+              </div>
+
+              {isWalletVisible === `${caterogy?.id}` && (
+
+                <ul className="ml-4">
+                  {caterogy?.subcategory?.map((sub) => (
+                    <Link to={`/all-products/${sub.id}`}>
+                      <li
+                        className={`p-2 my-1 text-sm text-italic hover:bg-qh2-green hover:text-white cursor-pointer flex justify-between transition duration-75 ease-in-out rounded px-5  `}>
+                        {sub?.name}
+                        <i className="fa-solid fa-angle-right  " />
+                      </li>
+                    </Link>
+                  ))}
+                </ul>
+              )}
+
+            </div>
+          ))}
+
+
+
+
+
+
         </div>
+
         <div className="filter-subject-item pb-10 border-b border-qgray-border mt-10">
           <div className="subject-title mb-[30px]">
             <h1 className="text-black text-base font-500">Price Range</h1>
@@ -665,51 +438,46 @@ export default function ProductsFilter({
             <div className="flex space-x-[5px] flex-wrap">
               <span
                 onClick={() => filterstorage("64GB")}
-                className={` font-400 border border-qgray-border text-xs px-[14px] py-[6px] cursor-pointer mb-[5px] ${
-                  storage === "64GB"
-                    ? "bg-qyellow text-qblack border-none"
-                    : " text-qgray "
-                }`}
+                className={` font-400 border border-qgray-border text-xs px-[14px] py-[6px] cursor-pointer mb-[5px] ${storage === "64GB"
+                  ? "bg-qyellow text-qblack border-none"
+                  : " text-qgray "
+                  }`}
               >
                 64GB
               </span>
               <span
                 onClick={() => filterstorage("128GB")}
-                className={` font-400 border border-qgray-border text-xs px-[14px] py-[6px] cursor-pointer mb-[5px] ${
-                  storage === "128GB"
-                    ? "bg-qyellow text-qblack border-none"
-                    : " text-qgray "
-                }`}
+                className={` font-400 border border-qgray-border text-xs px-[14px] py-[6px] cursor-pointer mb-[5px] ${storage === "128GB"
+                  ? "bg-qyellow text-qblack border-none"
+                  : " text-qgray "
+                  }`}
               >
                 128GB
               </span>
               <span
                 onClick={() => filterstorage("256GB")}
-                className={` font-400 border border-qgray-border text-xs px-[14px] py-[6px] cursor-pointer mb-[5px] ${
-                  storage === "256GB"
-                    ? "bg-qyellow text-qblack border-none"
-                    : " text-qgray "
-                }`}
+                className={` font-400 border border-qgray-border text-xs px-[14px] py-[6px] cursor-pointer mb-[5px] ${storage === "256GB"
+                  ? "bg-qyellow text-qblack border-none"
+                  : " text-qgray "
+                  }`}
               >
                 256GB
               </span>
               <span
                 onClick={() => filterstorage("512GB")}
-                className={` font-400 border border-qgray-border text-xs px-[14px] py-[6px] cursor-pointer mb-[5px] ${
-                  storage === "512GB"
-                    ? "bg-qyellow text-qblack border-none"
-                    : " text-qgray "
-                }`}
+                className={` font-400 border border-qgray-border text-xs px-[14px] py-[6px] cursor-pointer mb-[5px] ${storage === "512GB"
+                  ? "bg-qyellow text-qblack border-none"
+                  : " text-qgray "
+                  }`}
               >
                 512GB
               </span>
               <span
                 onClick={() => filterstorage("1024GB")}
-                className={` font-400 border border-qgray-border text-xs px-[14px] py-[6px] cursor-pointer mb-[5px] ${
-                  storage === "1024GB"
-                    ? "bg-qyellow text-qblack border-none"
-                    : " text-qgray "
-                }`}
+                className={` font-400 border border-qgray-border text-xs px-[14px] py-[6px] cursor-pointer mb-[5px] ${storage === "1024GB"
+                  ? "bg-qyellow text-qblack border-none"
+                  : " text-qgray "
+                  }`}
               >
                 1024GB
               </span>

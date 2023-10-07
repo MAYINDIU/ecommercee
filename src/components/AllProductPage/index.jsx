@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import "react-input-range/lib/css/index.css";
 import { ThreeCircles } from "react-loader-spinner";
-import { useLocation } from "react-router-dom";
+import { useParams } from "react-router-dom";
 import productDatas from "../../data/products.json";
 import BreadcrumbCom from "../BreadcrumbCom";
 import ProductCardStyleOne from "../Helpers/Cards/ProductCardStyleOne";
@@ -9,34 +9,39 @@ import DataIteration from "../Helpers/DataIteration";
 import Layout from "../Partials/LayoutHomeTwo";
 import ProductsFilter from "./ProductsFilter";
 
+const filterObj = {
+  mobileLaptop: false,
+  gaming: false,
+  imageVideo: false,
+  vehicles: false,
+  furnitures: false,
+  sport: false,
+  foodDrinks: false,
+  fashion: false,
+  toilet: false,
+  makeupCorner: false,
+  babyItem: false,
+  apple: false,
+  samsung: false,
+  walton: false,
+  oneplus: false,
+  vivo: false,
+  oppo: false,
+  xiomi: false,
+  others: false,
+  sizeS: false,
+  sizeM: false,
+  sizeL: false,
+  sizeXL: false,
+  sizeXXL: false,
+  sizeFit: false,
+};
+
 export default function AllProductPage() {
-  const [filters, setFilter] = useState({
-    mobileLaptop: false,
-    gaming: false,
-    imageVideo: false,
-    vehicles: false,
-    furnitures: false,
-    sport: false,
-    foodDrinks: false,
-    fashion: false,
-    toilet: false,
-    makeupCorner: false,
-    babyItem: false,
-    apple: false,
-    samsung: false,
-    walton: false,
-    oneplus: false,
-    vivo: false,
-    oppo: false,
-    xiomi: false,
-    others: false,
-    sizeS: false,
-    sizeM: false,
-    sizeL: false,
-    sizeXL: false,
-    sizeXXL: false,
-    sizeFit: false,
-  });
+  const { categoryId, subId } = useParams();
+  console.log(categoryId);
+  const [filters, setFilter] = useState(filterObj);
+  const [subProducts, setSubProducts] = useState([]);
 
   const checkboxHandler = (e) => {
     const { name } = e.target;
@@ -46,58 +51,44 @@ export default function AllProductPage() {
     }));
   };
   const [volume, setVolume] = useState({ min: 200, max: 500 });
-  const [spinner, setSpinner] = useState(false);
+
   const [storage, setStorage] = useState(null);
   const filterStorage = (value) => {
     setStorage(value);
   };
   const [filterToggle, setToggle] = useState(false);
-
-  const location = useLocation();
-  const cat_id = location?.state;
-
+  const [spinner, setSpinner] = useState(false);
   // Get Daa from search field
-  const searchLocation = useLocation();
-  console.log("State product", searchLocation);
-  const searchOutput = searchLocation?.state;
+  // const searchLocation = useLocation();
+  // const searchOutput = searchLocation?.state;
   // console.log(searchOutput);
 
   const { products } = productDatas;
   const [Habib, setHabib] = useState([]);
 
-  const catwiseproduct = `http://habib.munihaelectronics.com/public/api/home/single-category-all-products/${cat_id}`;
-  const allproducts = `http://habib.munihaelectronics.com/public/api/home/all-product`;
+  useEffect(() => {
+    setSpinner(true);
+    let fetchUrl = `http://habib.munihaelectronics.com/public/api/home/all-product`;
+    if (categoryId) {
+      fetchUrl = `http://habib.munihaelectronics.com/public/api/home/single-category-all-products/${categoryId}`;
+    }
+    console.log("url", fetchUrl);
+    fetch(fetchUrl)
+      .then((res) => res.json())
+      .then((data) => {
+        setHabib(data)
+        setSpinner(false)  // Hide loading screen 
+      });
+  }, [categoryId]);
 
-  if (cat_id === null) {
-    //All products
-    useEffect(() => {
-      setSpinner(true);
-      fetch(allproducts)
-        .then((res) => res.json())
-        .then((data) => {
-          setHabib(data)
-          setSpinner(false)  // Hide loading screen 
-        });
-
-
-    }, []);
-  } else {
-    //All products
-    useEffect(() => {
-      setSpinner(true);
-      fetch(catwiseproduct)
-        .then((res) => res.json())
-        .then((data) => {
-          setHabib(data)
-          setSpinner(false)  // Hide loading screen 
-        });
-    }, []);
-
-  }
+  useEffect(() => {
+    let fetchUrl = `https://habib.munihaelectronics.com/api/home/singleSubCategorywiseAllproducts/${categoryId}`;
+    fetch(fetchUrl)
+      .then((res) => res.json())
+      .then((data) => setSubProducts(data?.products));
+  }, [categoryId]);
 
   const habibDatas = Habib?.products;
-  const habibDatass = searchOutput?.products;
-  console.log(habibDatass);
 
   return (
     <>
@@ -189,8 +180,7 @@ export default function AllProductPage() {
                 </div>
                 <div className="grid xl:grid-cols-3 sm:grid-cols-2 grid-cols-1  xl:gap-[30px] gap-5 mb-[40px]">
                   <DataIteration
-                    // datas={searchOutput ? searchOutput : habibDatas}
-                    datas={habibDatas}
+                    datas={subProducts ? subProducts : habibDatas}
                     startLength={0}
                     endLength={6}
                   >
@@ -201,19 +191,16 @@ export default function AllProductPage() {
                     )}
                   </DataIteration>
                 </div>
-                {/* 
+
                 <div className="w-full h-[164px] overflow-hidden mb-[40px]">
                   <img
                     src={`${process.env.PUBLIC_URL}/assets/images/ads-6.png`}
                     alt=""
                     className="w-full h-full object-contain"
                   />
-                </div> */}
-
-
+                </div>
                 <div className="grid xl:grid-cols-3 sm:grid-cols-2 grid-cols-1 xl:gap-[30px] gap-5 mb-[40px]">
                   <DataIteration
-                    // datas={searchOutput ? searchOutput : habibDatas}
                     datas={habibDatas}
                     startLength={6}
                     endLength={15}

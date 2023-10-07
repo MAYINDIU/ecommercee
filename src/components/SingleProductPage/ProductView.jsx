@@ -75,10 +75,10 @@ export default function ProductView({ className, reportHandler }) {
               alt=""
               className="object-contain"
             />
-
-            <div className="w-[80px] h-[80px] rounded-full bg-qyellow text-qblack flex justify-center items-center text-xl font-medium absolute left-[30px] top-[30px]">
+            {/* discount er jonno */}
+            {/* <div className="w-[80px] h-[80px] rounded-full bg-qyellow text-qblack flex justify-center items-center text-xl font-medium absolute left-[30px] top-[30px]">
               <span>-50%</span>
-            </div>
+            </div> */}
           </div>
           <div className="flex gap-2 flex-wrap">
             <div

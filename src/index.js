@@ -1,9 +1,12 @@
 import AOS from "aos";
 import "aos/dist/aos.css";
+import 'flowbite';
 import ReactDOM from "react-dom/client";
 import { BrowserRouter } from "react-router-dom";
+import 'tw-elements';
 import App from "./App";
 import "./index.css";
+
 
 AOS.init();
 
